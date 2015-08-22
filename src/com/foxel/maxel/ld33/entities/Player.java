@@ -25,12 +25,15 @@ public class Player extends Entity {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		image = new Image(Constants.TEMP_PLAYER_LOC);
-		x = map.getPlayerStart().x; 
-		y = map.getPlayerStart().y;
 		
+		image = new Image(Constants.TEMP_PLAYER_LOC);
+		x = map.getPlayerStart().x;
+		y = map.getPlayerStart().y;
+
 		System.out.println(x);
-		collider = new Rectangle( (x * TILESIZE) + TILESIZE/2, (y * TILESIZE) + TILESIZE/2, image.getWidth(), image.getHeight());
+		
+		collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y * TILESIZE) + TILESIZE / 2,
+				image.getWidth(), image.getHeight());
 
 	}
 
@@ -78,10 +81,6 @@ public class Player extends Entity {
 		if (map.isTileFree(collider)) {
 			x += move.x;
 			y += move.y;
-			//collider.setLocation(x * TILESIZE, y * TILESIZE);
-		} else {
-			x -= move.x;
-			y -= move.y;
 		}
 	}
 
@@ -90,5 +89,6 @@ public class Player extends Entity {
 
 		return new Vector2f(image.getWidth(), image.getHeight());
 	}
+	
 
 }

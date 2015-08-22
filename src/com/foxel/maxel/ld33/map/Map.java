@@ -1,5 +1,6 @@
 package com.foxel.maxel.ld33.map;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
@@ -26,7 +27,8 @@ public class Map implements TileBasedMap {
 
 		for (int x = 0; x < map.getWidth(); ++x) {
 			for (int y = 0; y < map.getWidth(); ++y) {
-				int tileID = map.getTileId(x, y, 0);
+				int tileID = map.getTileId(x, y, 0); // Collisions detected from
+														// wall tile layer
 				String value = map.getTileProperty(tileID, "blocked", "false");
 				if ("true".equals(value)) {
 					blockedMap[x][y] = 1;
@@ -36,12 +38,12 @@ public class Map implements TileBasedMap {
 			}
 		}
 
-//		printBlocked();
+		// printBlocked();
 
 	}
 
 	private void printBlocked() {
-		//TODO remove after debuggin
+		// TODO remove after debuggin
 		for (int i = 0; i < map.getHeight(); ++i) {
 			for (int j = 0; j < map.getWidth(); ++j) {
 				System.out.print(blockedMap[j][i]);
@@ -50,8 +52,29 @@ public class Map implements TileBasedMap {
 		}
 	}
 
-	public void render() throws SlickException {
-		map.render(0, 0);
+	public void renderWallLayer() throws SlickException {
+		// map.render(0, 0, 0);
+		map.render(0, 0,0);
+
+	}
+
+	public void renderAbovePlayer(int[] data, Graphics g) {
+		/*public void render(int x,
+                   int y,
+                   int sx,
+                   int sy,
+                   int width,
+                   int height,
+                   int l,
+                   boolean lineByLine)*/ 
+		map.render(data[0], data[1], data[2],data[3],data[4], data[5], 1, false);
+		g.fill(new Rectangle(0, (data[3] * TILESIZE) + data[5], TILESIZE, TILESIZE));
+		
+	}
+
+	public void renderBelowPlayer(int[] data) {
+		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1, false);
+//		g.fill(new Rectangle(0, data[3] + data[5] * TILESIZE, TILESIZE, TILESIZE));
 	}
 
 	public boolean isTileFree(Rectangle collider) {
@@ -107,7 +130,8 @@ public class Map implements TileBasedMap {
 	public Vector2f getPlayerStart() {
 		return new Vector2f(map.getObjectX(0, 0) / TILESIZE, map.getObjectY(0, 0) / TILESIZE);
 	}
-	public Vector2f getTenantStart(){
-		return new Vector2f(map.getObjectX(0,1)/TILESIZE, map.getObjectY(0,1)/TILESIZE); 
+
+	public Vector2f getTenantStart() {
+		return new Vector2f(map.getObjectX(0, 1) / TILESIZE, map.getObjectY(0, 1) / TILESIZE);
 	}
 }
