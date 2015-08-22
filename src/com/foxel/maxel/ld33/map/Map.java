@@ -1,6 +1,5 @@
 package com.foxel.maxel.ld33.map;
 
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
@@ -54,27 +53,20 @@ public class Map implements TileBasedMap {
 
 	public void renderWallLayer() throws SlickException {
 		// map.render(0, 0, 0);
-		map.render(0, 0,0);
+		map.render(0, 0, 0);
 
 	}
 
-	public void renderAbovePlayer(int[] data, Graphics g) {
-		/*public void render(int x,
-                   int y,
-                   int sx,
-                   int sy,
-                   int width,
-                   int height,
-                   int l,
-                   boolean lineByLine)*/ 
-		map.render(data[0], data[1], data[2],data[3],data[4], data[5], 1, false);
-		g.fill(new Rectangle(0, (data[3] * TILESIZE) + data[5], TILESIZE, TILESIZE));
-		
-	}
-
-	public void renderBelowPlayer(int[] data) {
+	public void renderAboveEntity(int[] data) {
+		/*
+		 * public void render(int x, int y, int sx, int sy, int width, int
+		 * height, int l, boolean lineByLine)
+		 */
 		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1, false);
-//		g.fill(new Rectangle(0, data[3] + data[5] * TILESIZE, TILESIZE, TILESIZE));
+	}
+
+	public void renderBelowEntity(int[] data) {
+		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1, false);
 	}
 
 	public boolean isTileFree(Rectangle collider) {

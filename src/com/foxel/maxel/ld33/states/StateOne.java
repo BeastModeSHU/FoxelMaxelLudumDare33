@@ -43,19 +43,18 @@ public class StateOne extends BasicGameState {
 		tenant = new Tenant(map);
 		tenant.init(gc, sbg);
 
-		zSort = new SortZAxis(player, map, camera);
+		zSort = new SortZAxis(player, map);
 
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		camera.translate(g, player);
-		
+
 		map.renderWallLayer();
-		map.renderBelowPlayer(zSort.getBelowPlayer());
+		map.renderBelowEntity(zSort.getBelowPlayer());
 		player.render(gc, sbg, g);
-		map.renderAbovePlayer(zSort.getAbovePlayer(),g);
-		
+		map.renderAboveEntity(zSort.getAbovePlayer());
 
 	}
 
