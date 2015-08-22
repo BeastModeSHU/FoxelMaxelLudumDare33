@@ -61,24 +61,24 @@ public class Tenant extends Entity {
 		pathIndex = 0;
 
 		for (int i = 0; i < path.getLength(); ++i) {
-			 System.out.println("X = " + path.getX(i) + " - Y = " +
-			 path.getY(i));
+			System.out.println("X = " + path.getX(i) + " - Y = " + path.getY(i));
 		}
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		if (idle)
-			g.drawImage(downIdle, x * TILESIZE, y * TILESIZE);
+			g.drawImage(mainIdle, (x * TILESIZE) - mainIdle.getWidth()/2 , (y * TILESIZE) + mainIdle.getHeight()/2);
 		else
-			g.drawAnimation(main, x * TILESIZE, y * TILESIZE);
+			g.drawAnimation(main, (x * TILESIZE) - main.getCurrentFrame().getWidth()/2, 
+					(y * TILESIZE) + main.getCurrentFrame().getHeight()/2);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		Vector2f move = getPathVector();
 
-//		System.out.println("X = " + move.x + " - Y = " + move.y);
+		// System.out.println("X = " + move.x + " - Y = " + move.y);
 
 		if (move.x == 0 && move.y == 0)
 			idle = true;
@@ -86,14 +86,14 @@ public class Tenant extends Entity {
 			idle = false;
 
 		if (Math.abs(move.x * 0.003f * delta) > Math.abs(move.y * 0.003f * delta)) {
-		
-			if(move.x < 0 )
+
+			if (move.x < 0)
 				main = left;
 			else
 				main = right;
 		} else {
 
-			if(move.y < 0)
+			if (move.y < 0)
 				main = up;
 			else
 				main = down;
@@ -108,7 +108,6 @@ public class Tenant extends Entity {
 		Vector2f pathLocation = new Vector2f(path.getX(pathIndex), path.getY(pathIndex));
 		Vector2f pathVector = new Vector2f();
 
-
 		if (pathIndex < (path.getLength() - 1) && pathLocation.distance(entityLocation) < 0.004f) {
 			++pathIndex;
 			pathLocation.x = path.getX(pathIndex);
@@ -118,7 +117,6 @@ public class Tenant extends Entity {
 		pathVector.x = pathLocation.x - entityLocation.x;
 		pathVector.y = pathLocation.y - entityLocation.y;
 
-		System.out.println(entityLocation.x + " -  " + entityLocation.y);
 		if (pathVector.x > 0.f || pathVector.x < 0.f)
 			pathVector.x = pathVector.x / Math.abs(pathVector.x);
 		if (pathVector.y > 0.f || pathVector.y < 0.f)
@@ -144,7 +142,8 @@ public class Tenant extends Entity {
 	@Override
 	protected void moveEntity(Vector2f move, int delta) {
 
-//		System.out.println("X = " + move.x * 0.003f * delta + " - Y = " + move.y * 0.003f * delta);
+		// System.out.println("X = " + move.x * 0.003f * delta + " - Y = " +
+		// move.y * 0.003f * delta);
 		x += move.x * 0.003f * delta;
 		y += move.y * 0.003f * delta;
 	}
