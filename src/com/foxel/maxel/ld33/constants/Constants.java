@@ -6,4 +6,5 @@ public class Constants {
 	public static final int SCREEN_HEIGHT = 480;
 	public static final String WINDOW_TITLE = "LD33!";
 	public static final int STATE_ONE_ID = 1;
+	public static final int TILESIZE = 64;
 }
