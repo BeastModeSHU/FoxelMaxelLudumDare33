@@ -3,6 +3,7 @@ package com.foxel.maxel.ld33.entities;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -17,7 +18,9 @@ public abstract class Entity {
 	protected final int TILESIZE;
 	protected float x, y;
 	protected Map map;
-
+	protected Rectangle collider;
+	
+	
 	public Entity(Map map) {
 		this.map = map;
 		this.TILESIZE = Constants.TILESIZE;
@@ -31,7 +34,7 @@ public abstract class Entity {
 
 	public abstract Vector2f getEntityDimensions();
 	
-	protected abstract void moveEntity(Vector2f move); 
+	protected abstract void moveEntity(Vector2f move, int delta); 
 	
 	public Vector2f getPixelLocation() {
 		return new Vector2f(x * TILESIZE, y * TILESIZE);
