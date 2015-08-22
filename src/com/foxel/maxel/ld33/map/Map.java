@@ -36,7 +36,7 @@ public class Map implements TileBasedMap {
 			}
 		}
 
-//		printBlocked();
+	//printBlocked();
 
 	}
 
@@ -109,5 +109,17 @@ public class Map implements TileBasedMap {
 	}
 	public Vector2f getTenantStart(){
 		return new Vector2f(map.getObjectX(0,1)/TILESIZE, map.getObjectY(0,1)/TILESIZE); 
+	}
+	
+	public Vector2f getSpot(String name) {
+		Vector2f spot = new Vector2f(0, 0);
+		int group = 1;
+		for (int i = 0; i < map.getObjectCount(group); i++) {
+			if (map.getObjectName(group, i).equals(name)) {
+				spot = new Vector2f(map.getObjectX(group, i) / TILESIZE, map.getObjectY(group, i) / TILESIZE);
+			}
+		}
+		
+		return spot;
 	}
 }

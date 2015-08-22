@@ -5,6 +5,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
+import com.foxel.maxel.ld33.entities.Entity;
 import com.foxel.maxel.ld33.entities.Player;
 
 public class Camera {
@@ -23,7 +24,7 @@ public class Camera {
 
 	}
 
-	public void translate(Graphics g, Player player) {
+	public void translate(Graphics g, Entity player) {
 		// if the players x position (in the world) minus the screen size over 2
 		// + half the size of the player
 		// is lees than 0, set the viewport x to 0

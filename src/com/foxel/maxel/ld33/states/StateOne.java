@@ -45,7 +45,7 @@ public class StateOne extends BasicGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		camera.translate(g, player);
+		camera.translate(g, tenant);
 		map.render();
 		player.render(gc, sbg, g);
 		tenant.render(gc, sbg, g);
