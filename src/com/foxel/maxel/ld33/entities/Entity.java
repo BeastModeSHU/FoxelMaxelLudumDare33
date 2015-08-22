@@ -41,7 +41,7 @@ public abstract class Entity {
 	}
 
 	public Vector2f getTileLocation() {
-		return new Vector2f(x, y);
+		return new Vector2f( Math.round(x), Math.round(y));
 	}
 	
 }

@@ -14,6 +14,7 @@ import com.foxel.maxel.ld33.entities.Player;
 import com.foxel.maxel.ld33.entities.Tenant;
 import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.resources.Camera;
+import com.foxel.maxel.ld33.resources.SortZAxis;
 
 public class StateOne extends BasicGameState {
 
@@ -22,8 +23,9 @@ public class StateOne extends BasicGameState {
 	private Map map;
 	private Camera camera;
 	private Player player;
-	private Tenant tenant; 
-	
+	private Tenant tenant;
+	private SortZAxis zSort;
+
 	public StateOne(int STATE_ID) {
 		this.STATE_ID = STATE_ID;
 	}
@@ -37,27 +39,30 @@ public class StateOne extends BasicGameState {
 		camera = new Camera(map.getWidth(), map.getHeight());
 		player = new Player(map);
 		player.init(gc, sbg);
-		
-		tenant = new Tenant(map); 
+
+		tenant = new Tenant(map);
 		tenant.init(gc, sbg);
+
+		zSort = new SortZAxis(player, map);
 
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		camera.translate(g, tenant);
-		map.render();
+
+		camera.translate(g, player);
+		map.renderWallLayer();
+		map.renderBelowEntity(zSort.getBelowPlayer());
 		player.render(gc, sbg, g);
-		tenant.render(gc, sbg, g);
+		map.renderAboveEntity(zSort.getAbovePlayer());
 
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
+		if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
 			gc.exit();
 		player.update(gc, sbg, delta);
-		tenant.update(gc, sbg, delta);
 	}
 
 	@Override
