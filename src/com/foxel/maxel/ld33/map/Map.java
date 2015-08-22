@@ -1,7 +1,5 @@
 package com.foxel.maxel.ld33.map;
 
-import java.util.ArrayList;
-
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
