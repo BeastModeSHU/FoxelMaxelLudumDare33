@@ -13,6 +13,7 @@ import org.newdawn.slick.util.pathfinding.Path;
 
 import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.map.Map;
+import com.foxel.maxel.ld33.resources.Action;
 
 public class Tenant extends Entity {
 	/*
@@ -25,8 +26,14 @@ public class Tenant extends Entity {
 	private SpriteSheet sprites;
 	private Animation main, left, right, up, down;
 	private Image mainIdle, leftIdle, rightIdle, upIdle, downIdle;
-	private boolean idle = true;
+	private boolean idle = false;
 	private String direction = "DOWN";
+	private float movementSpeed = Constants.TENANT_MOVE_SPEED;
+	
+	private Action[] schedule;
+	private Action currentAction;
+	private int actionTimer = 0;
+	private int actionTime = 0;
 
 	public Tenant(Map map) {
 		super(map);
@@ -55,60 +62,103 @@ public class Tenant extends Entity {
 		y = map.getTenantStart().y;
 
 		pathFinder = new AStarPathFinder(map, 100, false);
-		path = pathFinder.findPath(null, (int) (x), (int) (y), (int) (map.getPlayerStart().x),
-				(int) (map.getPlayerStart().y));
-
 		pathIndex = 0;
-
-		for (int i = 0; i < path.getLength(); ++i) {
-			System.out.println("X = " + path.getX(i) + " - Y = " + path.getY(i));
-		}
+		
+		schedule = new Action[]{new Action(0, 2f, map.getSpot("fridge")), new Action(1, 5f, map.getSpot("bed"))};
+		currentAction = schedule[0];
+		actionTime = (int) (currentAction.time * 1000f);
+		getActionPath();
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		if (idle)
-			g.drawImage(mainIdle, (x * TILESIZE) - mainIdle.getWidth()/2 , (y * TILESIZE) + mainIdle.getHeight()/2);
+			g.drawImage(mainIdle, x * TILESIZE, y * TILESIZE - 32);
 		else
-			g.drawAnimation(main, (x * TILESIZE) - main.getCurrentFrame().getWidth()/2, 
-					(y * TILESIZE) + main.getCurrentFrame().getHeight()/2);
+			g.drawAnimation(main, x * TILESIZE, y * TILESIZE - 32);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		Vector2f move = getPathVector();
+		if (!idle)
+		{
+			Vector2f move = getPathVector();
 
-		// System.out.println("X = " + move.x + " - Y = " + move.y);
-
-		if (move.x == 0 && move.y == 0)
-			idle = true;
-		else
-			idle = false;
-
-		if (Math.abs(move.x * 0.003f * delta) > Math.abs(move.y * 0.003f * delta)) {
-
-			if (move.x < 0)
-				main = left;
-			else
-				main = right;
-		} else {
-
-			if (move.y < 0)
-				main = up;
-			else
-				main = down;
+//			System.out.println("X = " + move.x + " - Y = " + move.y);
+			
+			//Check if the tenant is idle
+			if (move.x == 0 && move.y == 0)
+				idle = true;
+			else {
+				idle = false;
+				
+				//Check which direction the tenant is moving and animate correctly
+				if (Math.abs(move.x * 0.003f * delta) > Math.abs(move.y * 0.003f * delta)) {
+					if (move.x < 0) {
+						main = left;
+						mainIdle = leftIdle;
+						direction = "left";
+					}
+					else {
+						main = right;
+						mainIdle = rightIdle;
+						direction = "right";
+					}
+				} else {
+					if (move.y < 0) {
+						main = up;
+						mainIdle = upIdle;
+						direction = "up";
+					}
+					else {
+						main = down;
+						mainIdle = downIdle;
+						direction = "down";
+					}
+				}
+			}
+			
+			//Move entity by move vector
+			moveTowards(move, new Vector2f(path.getX(pathIndex), path.getY(pathIndex)), delta);
 		}
+		else
+		{
+			actionTimer += delta;
+			if (actionTimer > actionTime)
+			{
+				getNextAction();
+			}
+		}
+		
+		//Update main animation
 		main.update(delta);
-		moveEntity(move, delta);
+	}
+	
+	private void getNextAction() {
+		int index = currentAction.index + 1;
+		if (index >= schedule.length) index = 0;
+		
+		currentAction = schedule[index];
+		actionTimer = 0;
+		actionTime = (int) (currentAction.time * 1000f);
+		idle = false;
+		
+		getActionPath();
+	}
+	
+	private void getActionPath() {
+		path = pathFinder.findPath(null, (int) (x), (int) (y), (int) (currentAction.position.x),
+				(int) (currentAction.position.y));
+		pathIndex = 0;
 	}
 
 	private Vector2f getPathVector() {
-
-		Vector2f entityLocation = new Vector2f(Math.round(x), Math.round(y));
+		Vector2f entityLocation = new Vector2f(x, y);
 		Vector2f pathLocation = new Vector2f(path.getX(pathIndex), path.getY(pathIndex));
 		Vector2f pathVector = new Vector2f();
 
-		if (pathIndex < (path.getLength() - 1) && pathLocation.distance(entityLocation) < 0.004f) {
+
+		if (pathIndex < (path.getLength() - 1) && pathLocation.distance(entityLocation) < 0.1f) {
 			++pathIndex;
 			pathLocation.x = path.getX(pathIndex);
 			pathLocation.y = path.getY(pathIndex);
@@ -117,6 +167,7 @@ public class Tenant extends Entity {
 		pathVector.x = pathLocation.x - entityLocation.x;
 		pathVector.y = pathLocation.y - entityLocation.y;
 
+		//System.out.println(entityLocation.x + " -  " + entityLocation.y);
 		if (pathVector.x > 0.f || pathVector.x < 0.f)
 			pathVector.x = pathVector.x / Math.abs(pathVector.x);
 		if (pathVector.y > 0.f || pathVector.y < 0.f)
@@ -142,10 +193,22 @@ public class Tenant extends Entity {
 	@Override
 	protected void moveEntity(Vector2f move, int delta) {
 
-		// System.out.println("X = " + move.x * 0.003f * delta + " - Y = " +
-		// move.y * 0.003f * delta);
-		x += move.x * 0.003f * delta;
-		y += move.y * 0.003f * delta;
+//		System.out.println("X = " + move.x * 0.003f * delta + " - Y = " + move.y * 0.003f * delta);
+	}
+	
+	private void moveTowards(Vector2f move, Vector2f dest, int delta)
+	{
+		float deltaX = Math.abs(dest.x - x);
+		float deltaY = Math.abs(dest.y - y);
+		
+		float moveXBy = move.x * movementSpeed * delta / 1000f;
+		float moveYBy = move.y * movementSpeed * delta / 1000f;
+		
+		if (moveXBy > deltaX) moveXBy = move.x * deltaX;
+		if (moveYBy > deltaY) moveYBy = move.y * deltaY;
+		
+		x += moveXBy;
+		y += moveYBy;
 	}
 
 }

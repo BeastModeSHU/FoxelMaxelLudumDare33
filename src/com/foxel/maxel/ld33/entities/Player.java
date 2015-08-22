@@ -70,17 +70,20 @@ public class Player extends Entity {
 
 	@Override
 	protected void moveEntity(Vector2f move, int delta) {
-
 		move = move.normalise();
 
-		move.x *= (delta / 100.f) * MOVE_SPEED;
-		move.y *= (delta / 100.f) * MOVE_SPEED;
+		move.x *= (delta / 1000.f) * MOVE_SPEED;
+		move.y *= (delta / 1000.f) * MOVE_SPEED;
 
-		collider.setLocation((x + move.x) * TILESIZE, (y + move.y) * TILESIZE);
+		float newX = (x + move.x) * TILESIZE;
+		float newY = (y + move.y) * TILESIZE;
+		collider.setLocation(newX, newY);
 
 		if (map.isTileFree(collider)) {
 			x += move.x;
 			y += move.y;
+			collider.setLocation(x * TILESIZE, y * TILESIZE);
+
 		}
 	}
 

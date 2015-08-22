@@ -18,8 +18,13 @@
    H4sIAAAAAAAAC2NgQAXMBPj4wEDpJRUwE2k+MwPxasl1B6304pPHJofLr7j8T8v4wQdItZcZB3swAQCdclCbhAMAAA==
   </data>
  </layer>
- <objectgroup name="Object Layer 1" width="15" height="15">
+ <objectgroup name="Object Layer 1" width="0" height="0">
   <object x="128" y="768" width="64" height="64"/>
   <object x="640" y="128" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="tenant_spots" width="15" height="15">
+  <object name="fridge" type="spot" x="704" y="768" width="64" height="64"/>
+  <object name="bed" type="spot" x="128" y="128" width="64" height="64"/>
+  <object name="chair" type="spot" x="128" y="512" width="64" height="64"/>
  </objectgroup>
 </map>
