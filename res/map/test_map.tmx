@@ -15,5 +15,6 @@
  </layer>
  <objectgroup name="Object Layer 1" width="15" height="15">
   <object x="128" y="768" width="64" height="64"/>
+  <object x="768" y="128" width="39" height="49"/>
  </objectgroup>
 </map>

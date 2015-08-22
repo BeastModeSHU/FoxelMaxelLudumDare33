@@ -38,11 +38,12 @@ public class Map implements TileBasedMap {
 			}
 		}
 
-		printBlocked();
+//		printBlocked();
 
 	}
 
 	private void printBlocked() {
+		//TODO remove after debuggin
 		for (int i = 0; i < map.getHeight(); ++i) {
 			for (int j = 0; j < map.getWidth(); ++j) {
 				System.out.print(blockedMap[j][i]);
@@ -106,6 +107,9 @@ public class Map implements TileBasedMap {
 	}
 
 	public Vector2f getPlayerStart() {
-		return new Vector2f(map.getObjectX(0, 0), map.getObjectY(0, 0));
+		return new Vector2f(map.getObjectX(0, 0) / TILESIZE, map.getObjectY(0, 0) / TILESIZE);
+	}
+	public Vector2f getTenantStart(){
+		return new Vector2f(map.getObjectX(0,1)/TILESIZE, map.getObjectY(0,1)/TILESIZE); 
 	}
 }

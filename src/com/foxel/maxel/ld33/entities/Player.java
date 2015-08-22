@@ -26,8 +26,8 @@ public class Player extends Entity {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		image = new Image(Constants.TEMP_PLAYER_LOC);
-		x = map.getPlayerStart().x / TILESIZE;
-		y = map.getPlayerStart().y / TILESIZE;
+		x = map.getPlayerStart().x; 
+		y = map.getPlayerStart().y;
 		
 		System.out.println(x);
 		collider = new Rectangle( (x * TILESIZE) + TILESIZE/2, (y * TILESIZE) + TILESIZE/2, image.getWidth(), image.getHeight());

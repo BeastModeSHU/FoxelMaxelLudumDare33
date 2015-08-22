@@ -11,6 +11,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import com.foxel.maxel.ld33.entities.Entity;
 import com.foxel.maxel.ld33.entities.Player;
+import com.foxel.maxel.ld33.entities.Tenant;
 import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.resources.Camera;
 
@@ -21,7 +22,8 @@ public class StateOne extends BasicGameState {
 	private Map map;
 	private Camera camera;
 	private Player player;
-
+	private Tenant tenant; 
+	
 	public StateOne(int STATE_ID) {
 		this.STATE_ID = STATE_ID;
 	}
@@ -35,6 +37,9 @@ public class StateOne extends BasicGameState {
 		camera = new Camera(map.getWidth(), map.getHeight());
 		player = new Player(map);
 		player.init(gc, sbg);
+		
+		tenant = new Tenant(map); 
+		tenant.init(gc, sbg);
 
 	}
 
@@ -43,6 +48,7 @@ public class StateOne extends BasicGameState {
 		camera.translate(g, player);
 		map.render();
 		player.render(gc, sbg, g);
+		tenant.render(gc, sbg, g);
 
 	}
 
@@ -51,6 +57,7 @@ public class StateOne extends BasicGameState {
 		if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
 			gc.exit();
 		player.update(gc, sbg, delta);
+		tenant.update(gc, sbg, delta);
 	}
 
 	@Override
