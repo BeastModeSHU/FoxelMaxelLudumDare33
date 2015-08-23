@@ -60,11 +60,13 @@ public class Map implements TileBasedMap {
 		 * public void render(int x, int y, int sx, int sy, int width, int
 		 * height, int l, boolean lineByLine)
 		 */
-		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1, false);
+		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1,
+				false);
 	}
 
 	public void renderBelowEntity(int[] data) {
-		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1, false);
+		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1,
+				false);
 	}
 
 	public boolean isTileFree(Rectangle collider) {
@@ -72,8 +74,22 @@ public class Map implements TileBasedMap {
 		for (int i = 0; i < map.getHeight(); ++i) {
 			for (int j = 0; j < map.getWidth(); ++j) {
 				if (blockedMap[j][i] == 1) {
-					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE)
-							.intersects(collider))
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE,
+							TILESIZE).intersects(collider))
+						isFree = false;
+				}
+			}
+		}
+		return isFree;
+	}
+
+	public boolean isPointFree(float[] point) {
+		boolean isFree = true;
+		for (int i = 0; i < map.getHeight(); ++i) {
+			for (int j = 0; j < map.getWidth(); ++j) {
+				if (blockedMap[j][i] == 1) {
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE,
+							TILESIZE).contains(point[0], point[1]))
 						isFree = false;
 				}
 			}
@@ -118,22 +134,25 @@ public class Map implements TileBasedMap {
 	}
 
 	public Vector2f getPlayerStart() {
-		return new Vector2f(map.getObjectX(0, 0) / TILESIZE, map.getObjectY(0, 0) / TILESIZE);
+		return new Vector2f(map.getObjectX(0, 0) / TILESIZE, map.getObjectY(0,
+				0) / TILESIZE);
 	}
 
 	public Vector2f getTenantStart() {
-		return new Vector2f(map.getObjectX(0, 1) / TILESIZE, map.getObjectY(0, 1) / TILESIZE);
+		return new Vector2f(map.getObjectX(0, 1) / TILESIZE, map.getObjectY(0,
+				1) / TILESIZE);
 	}
-	
+
 	public Vector2f getSpot(String name) {
 		Vector2f spot = new Vector2f(0, 0);
 		int group = 1;
 		for (int i = 0; i < map.getObjectCount(group); i++) {
 			if (map.getObjectName(group, i).equals(name)) {
-				spot = new Vector2f(map.getObjectX(group, i) / TILESIZE, map.getObjectY(group, i) / TILESIZE);
+				spot = new Vector2f(map.getObjectX(group, i) / TILESIZE,
+						map.getObjectY(group, i) / TILESIZE);
 			}
 		}
-		
+
 		return spot;
 	}
 }

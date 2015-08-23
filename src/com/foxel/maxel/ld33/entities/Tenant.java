@@ -17,6 +17,7 @@ import org.newdawn.slick.util.pathfinding.Path;
 import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.resources.Action;
+import com.foxel.maxel.ld33.resources.XMLData;
 
 public class Tenant extends Entity {
 	/*
@@ -31,12 +32,14 @@ public class Tenant extends Entity {
 	private Animation main, left, right, up, down;
 	private Image mainIdle, leftIdle, rightIdle, upIdle, downIdle;
 	private boolean idle = false;
-	private String direction = "DOWN";
+	private float PI = (float) Math.PI;
+	public float angle = 0f;
 	private float movementSpeed = Constants.TENANT_MOVE_SPEED;
 	
 	private ArrayList<Action> schedule;
 	private Action currentAction;
 	private int currentActionIndex;
+	private boolean overrideTrigger = false;
 	private ArrayList<Action> overrideActions;
 	private int actionTimer = 0;
 	private int actionTime = 0;
@@ -75,10 +78,10 @@ public class Tenant extends Entity {
 		pathFinder = new AStarPathFinder(map, 100, false);
 		pathIndex = 0;
 		
-		schedule = new ArrayList<Action>();
+		schedule = XMLData.getSchedule("lad");
 		overrideActions = new ArrayList<Action>();
-		schedule.add(new Action(2f, map.getSpot("fridge"), false));
-		schedule.add(new Action(5f, map.getSpot("bed"), false));
+		//schedule.add(new Action(2f, map.getSpot("fridge"), false));
+		//schedule.add(new Action(5f, map.getSpot("bed"), false));
 		currentAction = schedule.get(0);
 		actionTime = (int) (currentAction.time * 1000f);
 		getActionPath();
@@ -86,6 +89,7 @@ public class Tenant extends Entity {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		
 		if (idle)
 			g.drawImage(mainIdle, x * TILESIZE, y * TILESIZE - 32);
 		else
@@ -112,23 +116,23 @@ public class Tenant extends Entity {
 					if (move.x < 0) {
 						main = left;
 						mainIdle = leftIdle;
-						direction = "left";
+						angle = PI;
 					}
 					else {
 						main = right;
 						mainIdle = rightIdle;
-						direction = "right";
+						angle = 0f;
 					}
 				} else {
 					if (move.y < 0) {
 						main = up;
 						mainIdle = upIdle;
-						direction = "up";
+						angle = PI * 1.5f;
 					}
 					else {
 						main = down;
 						mainIdle = downIdle;
-						direction = "down";
+						angle = PI / 2f;
 					}
 				}
 			}
@@ -143,8 +147,19 @@ public class Tenant extends Entity {
 			actionTimer += delta;
 			if (actionTimer > actionTime)
 			{
-				getNextAction();
+				if (overrideActions.size() > 0)
+					getNextOverride();
+				else {
+					if (currentAction.override)
+						currentActionIndex--;
+					getNextAction();
+				}
 			}
+		}
+		
+		if (overrideTrigger)
+		{
+			getNextOverride();
 		}
 		
 		//Update main animation
@@ -152,27 +167,44 @@ public class Tenant extends Entity {
 	}
 	
 	private void getNextAction() {
+		
 		currentActionIndex++;
 		if (currentActionIndex >= schedule.size()) currentActionIndex = 0;
-		
 		currentAction = schedule.get(currentActionIndex);
-		actionTimer = 0;
-		actionTime = (int) (currentAction.time * 1000f);
 		idle = false;
-		
 		getActionPath();
+		resetActionTimer();
+	}
+	
+	private void getNextOverride() {
+		
+		overrideTrigger = false;
+		currentAction = overrideActions.get(0);
+		overrideActions.remove(0);
+		idle = false;
+		getActionPath();
+		resetActionTimer();
 	}
 	
 	private void getActionPath() {
-		System.out.println("Moving from " + x + ", " + y + " to " + currentAction.position.x + ", " + currentAction.position.y);
-		path = pathFinder.findPath(null, (int) (x), (int) (y), (int) (currentAction.position.x),
-				(int) (currentAction.position.y));
-		if (path == null)
-			getNextAction();
-		pathIndex = 0;
+		
+		if (Math.abs(x - currentAction.position.x) <= .5f && Math.abs(y - currentAction.position.y) <= 0.5f) {
+			idle = true;
+		} else {
+			path = pathFinder.findPath(null, (int) (x), (int) (y), (int) (currentAction.position.x),
+					(int) (currentAction.position.y));
+			pathIndex = 0;
+		}
+	}
+	
+	private void resetActionTimer() {
+		
+		actionTimer = 0;
+		actionTime = (int) (currentAction.time * 1000f);
 	}
 
 	private Vector2f getPathVector() {
+		
 		Vector2f entityLocation = new Vector2f(x, y);
 		Vector2f pathLocation = new Vector2f(path.getX(pathIndex), path.getY(pathIndex));
 		Vector2f pathVector = new Vector2f();
@@ -187,7 +219,6 @@ public class Tenant extends Entity {
 		pathVector.x = pathLocation.x - entityLocation.x;
 		pathVector.y = pathLocation.y - entityLocation.y;
 
-		//System.out.println(entityLocation.x + " -  " + entityLocation.y);
 		if (pathVector.x > 0.f || pathVector.x < 0.f)
 			pathVector.x = pathVector.x / Math.abs(pathVector.x);
 		if (pathVector.y > 0.f || pathVector.y < 0.f)
@@ -216,8 +247,8 @@ public class Tenant extends Entity {
 //		System.out.println("X = " + move.x * 0.003f * delta + " - Y = " + move.y * 0.003f * delta);
 	}
 	
-	private void moveTowards(Vector2f move, Vector2f dest, int delta)
-	{
+	private void moveTowards(Vector2f move, Vector2f dest, int delta) {
+		
 		float deltaX = Math.abs(dest.x - x);
 		float deltaY = Math.abs(dest.y - y);
 		
@@ -231,15 +262,16 @@ public class Tenant extends Entity {
 		y += moveYBy;
 	}
 	
-	public void distract(Vector2f source)
-	{
+	public void distract(Vector2f source) {
+		
 		if (source.x != currentAction.position.x && source.y != currentAction.position.y)
 		{
 			source.x /= tileSize;
 			source.y /= tileSize;
-			//overrideActions.add(new Action(5f, source, true));
-			currentAction = new Action(5f, source, true);
-			getActionPath();
+			overrideActions.clear();
+			overrideTrigger = true;
+			overrideActions.add(new Action(0.5f, new Vector2f(x, y), true));
+			overrideActions.add(new Action(4f, source, true));
 		}
 	}
 }

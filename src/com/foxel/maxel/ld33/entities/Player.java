@@ -30,7 +30,6 @@ public class Player extends Entity {
 	public Player(Map map) {
 		super(map);
 		this.MOVE_SPEED = Constants.MOVE_SPEED;
-
 	}
 
 	@Override
@@ -47,9 +46,6 @@ public class Player extends Entity {
 
 
 		System.out.println(x);
-		
-		collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y * TILESIZE) + TILESIZE / 2,
-				image.getWidth(), image.getHeight());
 		
 		interactables = new ArrayList<Interactable>();
 
