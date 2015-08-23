@@ -10,27 +10,31 @@ import org.newdawn.slick.state.StateBasedGame;
 import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.entities.Entity;
 import com.foxel.maxel.ld33.entities.Player;
+import com.foxel.maxel.ld33.map.Interactable;
 import com.foxel.maxel.ld33.map.Map;
 
 public class Renderer {
 	/*
-	 * ### MACE ###
-	 * Will z-sort the map & entity list and render each thing at the right location
+	 * ### MACE ### Will z-sort the map & entity list and render each thing at
+	 * the right location
 	 */
 	private Player player;
 	private Map map;
 	private ArrayList<Entity> renderable;
+	private ArrayList<Interactable> interactables;
 	private final int TILESIZE;
 	private final int CEILING_LAYER;
 	private final int MAP_SECTION_WIDTH = 15;
 	private final int MAP_SECTION_HEIGHT = 1;
 
-	public Renderer(Player player, Map map, ArrayList<Entity> renderable) {
+	public Renderer(Player player, Map map, ArrayList<Entity> renderable,
+			ArrayList<Interactable> interactables) {
 		this.player = player;
 		this.map = map;
 		this.renderable = renderable;
 		this.TILESIZE = Constants.TILESIZE;
 		this.CEILING_LAYER = Constants.CEILING_LAYER_ID;
+		this.interactables = interactables;
 	}
 
 	public void sortRenderableByZ() {
@@ -52,7 +56,7 @@ public class Renderer {
 				if (renderable.get(j + 1).equals(player)) {
 					num2 = renderable.get(j + 1).getPixelLocation().y
 							+ renderable.get(j + 1).getEntityDimensions().y;
-				}else{ 
+				} else {
 					num2 = renderable.get(j + 1).getPixelLocation().y
 							+ renderable.get(j + 1).getEntityDimensions().y - 48.f;
 				}
@@ -76,6 +80,9 @@ public class Renderer {
 		// Will handle map rendering & renderable rendering
 		map.renderFloorLayer();
 		map.renderWallLayer();
+		for(Interactable i : interactables){ 
+			i.render(g);
+		}
 		sortRenderableByZ();
 		renderMapLayers(gc, sbg, g);
 	}
@@ -105,7 +112,6 @@ public class Renderer {
 					MAP_SECTION_HEIGHT, CEILING_LAYER);
 
 		}
-		System.out.println();
 	}
 
 }

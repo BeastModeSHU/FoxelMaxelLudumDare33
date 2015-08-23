@@ -25,7 +25,6 @@ import com.foxel.maxel.ld33.resources.VisionCone;
 import com.foxel.maxel.ld33.resources.XMLData;
 import com.foxel.maxel.ld33.rendering.Renderer;
 
-
 public class StateOne extends BasicGameState {
 
 	private final int STATE_ID;
@@ -34,13 +33,11 @@ public class StateOne extends BasicGameState {
 	private Camera camera;
 	private Player player;
 	private ArrayList<Interactable> interactables;
-	private ArrayList<Interactable> playerInteractables;
-	private Tenant tenant;	
+	private Tenant tenant;
 	private VisionCone vis;
 	private Polygon[] polys;
 	private Image tex;
 	private Renderer renderer;
-
 
 	public StateOne(int STATE_ID) {
 		this.STATE_ID = STATE_ID;
@@ -48,7 +45,7 @@ public class StateOne extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		
+
 		renderable = new ArrayList<Entity>();
 
 		map = new Map();
@@ -56,31 +53,33 @@ public class StateOne extends BasicGameState {
 		XMLData.init(map);
 		camera = new Camera(map.getWidth(), map.getHeight());
 
-		player = new Player(map);
+		player = new Player(map, Constants.ENTITY_PLAYER);
 		player.init(gc, sbg);
 
-		tenant = new Tenant(map, 2, 2);
+		tenant = new Tenant(map,  Constants.ENTITY_TENANT, 2, 2);
 		tenant.init(gc, sbg);
 
-		Tenant snep = new Tenant(map, 10, 10);
+		Tenant snep = new Tenant(map, Constants.ENTITY_TENANT, 10, 10 );
 		snep.init(gc, sbg);
-
 
 		renderable.add(player);
 		renderable.add(tenant);
 		renderable.add(snep);
 
-		//zSort = new SortZAxis(player, map);
+		// zSort = new SortZAxis(player, map);
 
 		interactables = new ArrayList<Interactable>();
-		
-		vis = new VisionCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y, tenant.angle, (float)(Math.PI / 2), 30, 32f, 4f, map);
-		polys = vis.updateCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y, tenant.angle);
+
+		vis = new VisionCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y,
+				tenant.angle, (float) (Math.PI / 2), 30, 32f, 4f, map);
+		polys = vis.updateCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y,
+				tenant.angle);
 		tex = new Image(Constants.VISIONCONE_LOC, false, Image.FILTER_NEAREST);
 
 		interactables = map.getInteractables();
-		
-		renderer = new Renderer(player, map, renderable);
+
+		renderer = new Renderer(player, map, renderable, interactables);
+		System.out.println(interactables.size());
 
 	}
 
@@ -88,7 +87,7 @@ public class StateOne extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
 		camera.translate(g, player);
-		renderer.render(gc,sbg, g);
+		renderer.render(gc, sbg, g);
 
 	}
 
@@ -97,40 +96,41 @@ public class StateOne extends BasicGameState {
 		if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
 			gc.exit();
 
-
 		for (int i = 0; i < renderable.size(); ++i) {
-				renderable.get(i).update(gc, sbg, delta);
+			renderable.get(i).update(gc, sbg, delta);
 		}
 		checkInteractables();
-		
-		polys = vis.updateCone(tenant.getPixelLocation().x + 32f, tenant.getPixelLocation().y + 32f, tenant.angle);
+
+		polys = vis.updateCone(tenant.getPixelLocation().x + 32f,
+				tenant.getPixelLocation().y + 32f, tenant.angle);
 	}
 
 	private void checkInteractables() {
-		player.interactables.clear();
 		for (int i = 0; i < interactables.size(); i++) {
-			Interactable boop = interactables.get(i);
-			if (boop.getActivationCircle().intersects(player.collider))
-				player.interactables.add(boop);
-			if (boop.activated) {
-				boop.confirmActivation();
-				if (boop.id.equals("noisemaker")) {
-					distractTenants(new Vector2f(boop.x, boop.y),
-							((NoiseMaker) (boop)).distractionCircle);
+			if (interactables.get(i).getActivationCircle().intersects(player.getCollider())) {
+				switch (interactables.get(i).getClass().getSimpleName()) {
+				case Constants.NOISEMAKER_OBJECT:
+					NoiseMaker temp = (NoiseMaker) (interactables.get(i));
+					distractTenants(temp.getLocation(), temp.getDistractionCircle());
+					break;
+				case Constants.HIDINGSPOT_OBJECT:
+					break;
 				}
 			}
+
 		}
 	}
 
 	private void distractTenants(Vector2f source, Circle collider) {
 		// TODO Fix function to cehck if an entity is a tenant, then to check
 		// for colliders
-		for (int i = 0; i < renderable.size(); i++) {
-
-			/*
-			 * if (collider.intersects(tenants.get(i).collider))
-			 * tenants.get(i).distract(source);
-			 */
+		for (int i = 0; i < renderable.size(); ++i) {
+			if (renderable.get(i).getClass().getSimpleName().equals(Constants.ENTITY_TENANT)) {
+				Tenant temp = (Tenant) renderable.get(i);
+				if (collider.intersects(temp.getCollider())) {
+					temp.distract(source);
+				}
+			}
 		}
 	}
 

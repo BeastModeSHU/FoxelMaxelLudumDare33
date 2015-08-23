@@ -12,13 +12,13 @@ public class NoiseMaker extends Interactable {
 	/*
 	 * Interactable object in the game which will distract enemies
 	 */
-	public Circle distractionCircle;
+	private Circle distractionCircle;
 	private Image image;
+	private final int MAX_RANGE = 200;
 
-	public NoiseMaker(int x, int y, float range) {
-		super(x, y);
-		distractionCircle = new Circle(x, y, range);
-		id = "noisemaker";
+	public NoiseMaker(int x, int y, String ID) {
+		super(x, y, ID);
+		distractionCircle = new Circle(x, y, MAX_RANGE);
 		try {
 			image = new SpriteSheet(Constants.TILESET_LOCATION, TILESIZE, TILESIZE).getSubImage(5,
 					0);
@@ -33,7 +33,8 @@ public class NoiseMaker extends Interactable {
 
 	@Override
 	public void render(Graphics g) throws SlickException {
-		g.drawImage(image, x, y);
+		g.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2); //Render the radio centre at the point 
+		
 		g.draw(distractionCircle);
 
 	}

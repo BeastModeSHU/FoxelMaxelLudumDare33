@@ -169,11 +169,10 @@ public class Map implements TileBasedMap {
 		for (int i = 0; i < map.getObjectCount(interact); ++i) {
 			switch (map.getObjectName(interact, i)) {
 			case Constants.NOISEMAKER_OBJECT:
-				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i),
-						400f));
+				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i), Constants.NOISEMAKER_OBJECT));
 				break;
 			case Constants.HIDINGSPOT_OBJECT:
-				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i)));
+				//list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i)));
 				break;
 			}
 

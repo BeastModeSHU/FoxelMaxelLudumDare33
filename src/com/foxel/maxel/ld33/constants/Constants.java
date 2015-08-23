@@ -14,9 +14,11 @@ public class Constants {
 	public static final int WALL_LAYER_ID = 1;
 	public static final int CEILING_LAYER_ID = 2;
 	public static final int INTERACTABLES_OBJECT_LAYER = 2;
-	public static final String NOISEMAKER_OBJECT = "noisemaker";
-	public static final String HIDINGSPOT_OBJECT = "hideable";
-
+	public static final String NOISEMAKER_OBJECT = "NoiseMaker";
+	public static final String HIDINGSPOT_OBJECT = "HidingPlace";
+	public static final String ENTITY_PLAYER = "Player";
+	public static final String ENTITY_TENANT = "Tenant";
+	
 	public static final String TEST_MAP_LOC = "res//map//test_map.tmx";
 	public static final String TEMP_PLAYER_LOC = "res//player//temp_player.png";
 	public static final String TEMP_TENANT_LOC = "res//tenants//temp_tenant.png";

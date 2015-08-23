@@ -22,14 +22,11 @@ public class Player extends Entity {
 	 * Player Class -> Handles all player interactions with the game
 	 */
 	private final float MOVE_SPEED; // Players moveement speed
-	public ArrayList<Interactable> interactables; // List of all interactable
-													// objects in game
-
 	private SpriteSheet sprites; // animation sprites
 	private Animation animation;
 
-	public Player(Map map) {
-		super(map);
+	public Player(Map map, String ENTITTY_TYPE) {
+		super(map, ENTITTY_TYPE);
 		this.MOVE_SPEED = Constants.MOVE_SPEED;
 	}
 
@@ -45,8 +42,6 @@ public class Player extends Entity {
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
-		
-		interactables = new ArrayList<Interactable>();
 
 		collider = new Rectangle((x * TILESIZE), (y * TILESIZE),
 				animation.getCurrentFrame().getWidth(), animation.getCurrentFrame().getHeight());
@@ -78,12 +73,6 @@ public class Player extends Entity {
 
 		if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
 			move.y = MOVE_SPEED;
-		}
-
-		if (input.isKeyPressed(Input.KEY_X)) {
-			if (interactables.size() > 0) {
-				interactables.get(0).activate();
-			}
 		}
 
 		moveEntity(move, delta);
