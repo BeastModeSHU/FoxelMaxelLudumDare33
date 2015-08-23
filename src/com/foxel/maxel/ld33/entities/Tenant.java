@@ -232,4 +232,10 @@ public class Tenant extends Entity {
 			getActionPath();
 		}
 	}
+
+	@Override
+	public float getMaxY() {
+		return ((y * TILESIZE) - 48 + main.getCurrentFrame().getHeight());
+
+	}
 }

@@ -15,17 +15,16 @@
  </layer>
  <layer name="wall_layer" width="15" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NiYGBgogCjA2LEaKGXGEANvbj8jsud+MIKl15s5pDqHnx6SbGX2DAjxb/EmENNvYTiilp6ycUA+3AUHIQDAAA=
+   H4sIAAAAAAAAC2NiYGBgogCjA2LEaKGXGEANvbj8jsud+MIKl15s5hByE6l6ibWX2DAjxb/EmENNvYTiilp6ycUAUx0q3YQDAAA=
   </data>
  </layer>
  <layer name="ceiling_layer" width="15" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NmwATMRIgxE6mOFL3EAGroRcbUUk9IDle4EDKfGvYSG2akhg8hcwaLXmzpjxb2kosBthnYaoQDAAA=
+   H4sIAAAAAAAAC2NmwATMRIgxE6mOFL3EAGroRcbUUk9IDpc8IbOpYS+xYUZq+BAyZ7DoxZb+aGEvuRgA7D8fSoQDAAA=
   </data>
  </layer>
- <objectgroup name="player_start" width="0" height="0" visible="0">
-  <object x="128" y="768" width="64" height="64"/>
-  <object x="640" y="128" width="64" height="64"/>
+ <objectgroup name="player_start" width="0" height="0">
+  <object x="128" y="64" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="tenant_spots" width="15" height="15" visible="0">
   <object name="fridge" type="spot" x="704" y="768" width="64" height="64"/>

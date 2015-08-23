@@ -12,6 +12,7 @@ public class Constants {
 	public static final float ACTIVATION_RANGE = 100f;
 	public static final int FLOOR_LAYER_ID = 0;
 	public static final int WALL_LAYER_ID = 1;
+	public static final int CEILING_LAYER_ID = 2;
 	public static final int INTERACTABLES_OBJECT_LAYER = 2;
 	public static final String NOISEMAKER_OBJECT = "noisemaker";
 	public static final String HIDINGSPOT_OBJECT = "hideable";

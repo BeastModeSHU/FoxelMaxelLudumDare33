@@ -62,26 +62,12 @@ public class Map implements TileBasedMap {
 		map.render(0,0,WALL_LAYER_ID);
 	}
 
-	public void renderLayerSection(int[] mapSection) {
+	public void renderLayerSection(int x, int y, int startX, int startY, int width, int height, int layer) {
 		/*
 		 * Function which will render a portion of the ceiling tiles to allow
-		 * for split rendering for z-sorting 0 = x, 1 = y, 2 = startX, 3 =
-		 * startY, 4 = width, 5 = height
-		 */
-		map.render(mapSection[0], mapSection[1], mapSection[2], mapSection[3], mapSection[4],
-				mapSection[5]);
-	}
-
-	public void renderAboveEntity(int[] data) {
-		/*
-		 * public void render(int x, int y, int sx, int sy, int width, int
-		 * height, int l, boolean lineByLine)
-		 */
-		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1, false);
-	}
-
-	public void renderBelowEntity(int[] data) {
-		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1, false);
+		 * for split rendering for z-sorting */
+		
+		map.render(x, y, startX, startY, width, height, layer, false);
 	}
 
 	public boolean isTileFree(Rectangle collider) {

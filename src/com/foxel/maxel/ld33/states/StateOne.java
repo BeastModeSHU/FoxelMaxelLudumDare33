@@ -72,30 +72,13 @@ public class StateOne extends BasicGameState {
 
 		camera.translate(g, player);
 		renderer.render(gc,sbg, g);
-		/*
-		map.renderWallLayer();
-		
-		for (Interactable i : interactables) {
-			i.render(g);
-		}
-		map.renderBelowEntity(zSort.getBelowPlayer());
-		zSort.sortRenderableByZ(renderable);
-		for (int i = 0; i < renderable.size(); ++i) {
-			renderable.get(i).render(gc, sbg, g);
-		}
-		map.renderAboveEntity(zSort.getAbovePlayer());
-		 */
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
 			gc.exit();
-		// player.update(gc, sbg, delta);
-		/*
-		 * for (int i = 0; i < tenants.size(); i++) { tenants.get(i).update(gc,
-		 * sbg, delta); }
-		 */
+
 
 		for (int i = 0; i < renderable.size(); ++i) {
 				renderable.get(i).update(gc, sbg, delta);

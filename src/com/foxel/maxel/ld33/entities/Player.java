@@ -56,7 +56,6 @@ public class Player extends Entity {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
-		System.out.println("I am rendering");
 	}
 
 	@Override
@@ -196,4 +195,10 @@ public class Player extends Entity {
 	private void updateAnimation(int delta) {
 		animation.update(delta);
 	}
+	@Override
+	public float getMaxY(){
+		return ((y * TILESIZE) + animation.getCurrentFrame().getHeight());
+		
+	}
+	
 }
