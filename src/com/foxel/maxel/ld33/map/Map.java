@@ -36,6 +36,7 @@ public class Map implements TileBasedMap {
 				}
 			}
 		}
+
 	}
 
 	private void printBlocked() {
