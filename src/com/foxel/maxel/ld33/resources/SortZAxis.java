@@ -62,7 +62,7 @@ public class SortZAxis {
 		int x = 0;
 		int y = (counter - 1);
 		int width = 15;
-		int height = 15 - (counter);
+		int height = 16 - (counter);
 
 		return new int[] { x, y * Constants.TILESIZE, x, y, width, height };
 	}
