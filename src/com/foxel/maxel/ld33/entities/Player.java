@@ -18,19 +18,19 @@ import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.map.Interactable;
 
 public class Player extends Entity {
+	/*
+	 * Player Class -> Handles all player interactions with the game
+	 */
+	private final float MOVE_SPEED; // Players moveement speed
+	public ArrayList<Interactable> interactables; // List of all interactable
+													// objects in game
 
-	private final float MOVE_SPEED;
-
-	private Image image;
-	public ArrayList<Interactable> interactables;
-
-	private SpriteSheet sprites;
+	private SpriteSheet sprites; // animation sprites
 	private Animation animation;
 
 	public Player(Map map) {
 		super(map);
 		this.MOVE_SPEED = Constants.MOVE_SPEED;
-
 	}
 
 	@Override
@@ -45,22 +45,12 @@ public class Player extends Entity {
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
-
 		System.out.println(x);
-		
-		collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y * TILESIZE) + TILESIZE / 2,
-				image.getWidth(), image.getHeight());
-		
+
 		interactables = new ArrayList<Interactable>();
 
-		collider = new Rectangle((x * TILESIZE), (y * TILESIZE),
-				animation.getCurrentFrame().getWidth(), animation.getCurrentFrame().getHeight());
-		/*
-		 * collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y *
-		 * TILESIZE) + TILESIZE / 2, image.getWidth(), image.getHeight());
-		 */
-
-
+		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), animation.getCurrentFrame()
+				.getWidth(), animation.getCurrentFrame().getHeight());
 	}
 
 	@Override
@@ -72,8 +62,9 @@ public class Player extends Entity {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 
 		Input input = gc.getInput();
-		Vector2f move = new Vector2f();
+		Vector2f move = new Vector2f(); // Player moveement vector
 
+		// Player controls
 		if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
 			move.x = -MOVE_SPEED;
 		}
@@ -89,7 +80,7 @@ public class Player extends Entity {
 		if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
 			move.y = MOVE_SPEED;
 		}
-		
+
 		if (input.isKeyPressed(Input.KEY_X)) {
 			if (interactables.size() > 0) {
 				interactables.get(0).activate();
@@ -102,6 +93,7 @@ public class Player extends Entity {
 
 	@Override
 	protected void moveEntity(Vector2f move, int delta) {
+
 		move = move.normalise();
 
 		move.x *= (delta / 1000.f) * MOVE_SPEED;
@@ -118,11 +110,79 @@ public class Player extends Entity {
 		collider.setLocation(newX, newY);
 
 		if (map.isTileFree(collider)) {
+			// If the location is free move onto it
 			x += move.x;
 			y += move.y;
-			collider.setLocation((x * TILESIZE) , (y * TILESIZE));
+			collider.setLocation((x * TILESIZE), (y * TILESIZE));
+		} else {
+			// else wall slide
+			Vector2f tempMove = moveBy(move);
+			x += tempMove.x;
+			y += tempMove.y;
 
 		}
+	}
+
+	private Vector2f moveBy(Vector2f move) {
+
+		Vector2f moveByVector = new Vector2f(); // Vector to be returned at the
+												// end, initialised as (0,0)
+		Vector2f absMove = new Vector2f(Math.abs(move.x), Math.abs(move.y)); // Absolute
+																				// values
+																				// of
+																				// the
+																				// move
+																				// vector
+		Vector2f tempMove = new Vector2f(absMove.x * TILESIZE, absMove.y * TILESIZE); // Move
+																						// vector
+																						// scaled
+																						// up
+																						// to
+																						// pixels
+
+		boolean isLeft = false, isRight = false, isUp = false, isDown = false; // Booleans
+																				// to
+																				// check
+																				// each
+																				// direction
+		float oldX = collider.getX(), oldY = collider.getY(); // Colliders old
+																// location (in
+																// the wall) is
+																// checked
+
+		// Try left
+		collider.setLocation((oldX - tempMove.x), oldY);
+		if (map.isTileFree(collider))
+			isLeft = true;
+
+		// Try right
+		collider.setLocation((oldX + tempMove.x), oldY);
+		if (map.isTileFree(collider))
+			isRight = true;
+
+		// Try up
+		collider.setLocation(oldX, (oldY - tempMove.y));
+		if (map.isTileFree(collider))
+			isUp = true;
+
+		// Try down
+		collider.setLocation(oldX, (oldY + tempMove.y));
+		if (map.isTileFree(collider))
+			isDown = true;
+
+		if (isLeft)
+			moveByVector.x = -absMove.x * 2;
+
+		if (isRight)
+			moveByVector.x = absMove.x * 2;
+
+		if (isUp)
+			moveByVector.y = -absMove.y * 2;
+
+		if (isDown)
+			moveByVector.y = absMove.y * 2;
+
+		return moveByVector;
 	}
 
 	@Override
@@ -132,8 +192,13 @@ public class Player extends Entity {
 				.getHeight());
 	}
 
-
 	private void updateAnimation(int delta) {
 		animation.update(delta);
 	}
+	@Override
+	public float getMaxY(){
+		return ((y * TILESIZE) + animation.getCurrentFrame().getHeight());
+		
+	}
+	
 }

@@ -6,7 +6,6 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 
 import com.foxel.maxel.ld33.entities.Entity;
-import com.foxel.maxel.ld33.entities.Player;
 
 public class Camera {
 
