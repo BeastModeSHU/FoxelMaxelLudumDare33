@@ -10,12 +10,12 @@
  </tileset>
  <layer name="floor_layer" width="15" height="15" opacity="0.9">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NiYGBgogAzImFCfGTxwaKXWIzP38Sox6aHFHPoqZdUN6OrJzWsqB1H+ORJ0ctEol5yMQAvYR8ShAMAAA==
+   H4sIAAAAAAAAC2NiYGBgogAzImFCfGTxwaKXWIzP38Sop9RebOK00ovPzbjEkNVT4m9ahBUx/iaUrojRSy4GAFJYiSaEAwAA
   </data>
  </layer>
  <layer name="ceiling_layer" width="15" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgQAXMBPj4wEDpJRUwE2k+MwPxasl1B6304pPHJofLr7j8T8v4wQdItZcZB3swAQCdclCbhAMAAA==
+   H4sIAAAAAAAAC2NmQAXMBPjI4oTU0ksvsYAZDZOqnlJ7sYnTSi8+N+MSQ1ZPib9pEVbI8qToZcbBpoVecjEAQQIwgYQDAAA=
   </data>
  </layer>
  <objectgroup name="Object Layer 1" width="0" height="0">

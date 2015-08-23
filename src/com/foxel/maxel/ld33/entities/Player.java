@@ -1,5 +1,7 @@
 package com.foxel.maxel.ld33.entities;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -11,11 +13,13 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.map.Map;
+import com.foxel.maxel.ld33.map.Interactable;
 
 public class Player extends Entity {
 
 	private final float MOVE_SPEED;
 	private Image image;
+	public ArrayList<Interactable> interactables;
 
 	public Player(Map map) {
 		super(map);
@@ -34,7 +38,8 @@ public class Player extends Entity {
 		
 		collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y * TILESIZE) + TILESIZE / 2,
 				image.getWidth(), image.getHeight());
-
+		
+		interactables = new ArrayList<Interactable>();
 	}
 
 	@Override
@@ -64,8 +69,16 @@ public class Player extends Entity {
 		if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
 			move.y = MOVE_SPEED;
 		}
+		
+		if (input.isKeyPressed(Input.KEY_X)) {
+			if (interactables.size() > 0) {
+				interactables.get(0).activate();
+			}
+		}
 
 		moveEntity(move, delta);
+		
+		//System.out.println(interactables.size());
 	}
 
 	@Override
@@ -92,6 +105,4 @@ public class Player extends Entity {
 
 		return new Vector2f(image.getWidth(), image.getHeight());
 	}
-	
-
 }
