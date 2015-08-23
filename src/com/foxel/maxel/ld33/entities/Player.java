@@ -1,10 +1,12 @@
 package com.foxel.maxel.ld33.entities;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
@@ -15,7 +17,8 @@ import com.foxel.maxel.ld33.map.Map;
 public class Player extends Entity {
 
 	private final float MOVE_SPEED;
-	private Image image;
+	private SpriteSheet sprites;
+	private Animation animation;
 
 	public Player(Map map) {
 		super(map);
@@ -25,22 +28,28 @@ public class Player extends Entity {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		
-		image = new Image(Constants.TEMP_PLAYER_LOC);
+
+		sprites = new SpriteSheet(
+				new Image(Constants.PLAYER_SPRITESHEET_LOC).getScaledCopy(64.f / 96.f), TILESIZE,
+				TILESIZE);
+
+		animation = new Animation(sprites, 0, 0, 3, 0, true, 180, false);
+
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
-		System.out.println(x);
-		
-		collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y * TILESIZE) + TILESIZE / 2,
-				image.getWidth(), image.getHeight());
+		collider = new Rectangle((x * TILESIZE), (y * TILESIZE),
+				animation.getCurrentFrame().getWidth(), animation.getCurrentFrame().getHeight());
+		/*
+		 * collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y *
+		 * TILESIZE) + TILESIZE / 2, image.getWidth(), image.getHeight());
+		 */
 
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		g.drawImage(image, x * TILESIZE, y * TILESIZE);
-		g.draw(collider);
+		g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
 	}
 
 	@Override
@@ -66,6 +75,7 @@ public class Player extends Entity {
 		}
 
 		moveEntity(move, delta);
+
 	}
 
 	@Override
@@ -75,14 +85,20 @@ public class Player extends Entity {
 		move.x *= (delta / 1000.f) * MOVE_SPEED;
 		move.y *= (delta / 1000.f) * MOVE_SPEED;
 
+		if (move.x != 0 || move.y != 0)
+			updateAnimation(delta);
+		else
+			animation.setCurrentFrame(0);
+
 		float newX = (x + move.x) * TILESIZE;
 		float newY = (y + move.y) * TILESIZE;
+
 		collider.setLocation(newX, newY);
 
 		if (map.isTileFree(collider)) {
 			x += move.x;
 			y += move.y;
-			collider.setLocation(x * TILESIZE, y * TILESIZE);
+			collider.setLocation((x * TILESIZE) , (y * TILESIZE));
 
 		}
 	}
@@ -90,8 +106,11 @@ public class Player extends Entity {
 	@Override
 	public Vector2f getEntityDimensions() {
 
-		return new Vector2f(image.getWidth(), image.getHeight());
+		return new Vector2f(animation.getCurrentFrame().getWidth(), animation.getCurrentFrame()
+				.getHeight());
 	}
-	
 
+	private void updateAnimation(int delta) {
+		animation.update(delta);
+	}
 }
