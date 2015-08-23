@@ -45,27 +45,23 @@ public class Player extends Entity {
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
-
 		System.out.println(x);
-		
-		collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y * TILESIZE) + TILESIZE / 2,
-				image.getWidth(), image.getHeight());
-		
+
 		interactables = new ArrayList<Interactable>();
 
-		collider = new Rectangle((x * TILESIZE), (y * TILESIZE),
-				animation.getCurrentFrame().getWidth(), animation.getCurrentFrame().getHeight());
+		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), animation.getCurrentFrame()
+				.getWidth(), animation.getCurrentFrame().getHeight());
 		/*
 		 * collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y *
 		 * TILESIZE) + TILESIZE / 2, image.getWidth(), image.getHeight());
 		 */
-
 
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
+		g.fill(collider);
 	}
 
 	@Override
@@ -89,7 +85,7 @@ public class Player extends Entity {
 		if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
 			move.y = MOVE_SPEED;
 		}
-		
+
 		if (input.isKeyPressed(Input.KEY_X)) {
 			if (interactables.size() > 0) {
 				interactables.get(0).activate();
@@ -120,9 +116,57 @@ public class Player extends Entity {
 		if (map.isTileFree(collider)) {
 			x += move.x;
 			y += move.y;
-			collider.setLocation((x * TILESIZE) , (y * TILESIZE));
+			collider.setLocation((x * TILESIZE), (y * TILESIZE));
+		} else {
+			Vector2f tempMove = moveBy(move);
+			// System.out.println(tempMove);
+			x += tempMove.x;
+			y += tempMove.y;
 
 		}
+	}
+
+	private Vector2f moveBy(Vector2f move) {
+		Vector2f moveByVector = new Vector2f();
+		Vector2f absMove = new Vector2f(Math.abs(move.x), Math.abs(move.y));
+		Vector2f tempMove = new Vector2f(absMove.x * TILESIZE, absMove.y * TILESIZE);
+
+		boolean isLeft = false, isRight = false, isUp = false, isDown = false;
+		float oldX = collider.getX(), oldY = collider.getY();
+
+		// Try left
+		collider.setLocation((oldX - tempMove.x), oldY);
+		if (map.isTileFree(collider))
+			isLeft = true;
+
+		// Try right
+		collider.setLocation((oldX + tempMove.x), oldY);
+		if (map.isTileFree(collider))
+			isRight = true;
+
+		// Try up
+		collider.setLocation(oldX, (oldY - tempMove.y));
+		if (map.isTileFree(collider))
+			isUp = true;
+
+		// Try down
+		collider.setLocation(oldX, (oldY + tempMove.y));
+		if (map.isTileFree(collider))
+			isDown = true;
+
+		if (isLeft)
+			moveByVector.x = -absMove.x * 2;
+
+		if (isRight)
+			moveByVector.x = absMove.x * 2;
+
+		if (isUp)
+			moveByVector.y = -absMove.y * 2;
+
+		if (isDown)
+			moveByVector.y = absMove.y * 2;
+
+		return moveByVector;
 	}
 
 	@Override
@@ -131,7 +175,6 @@ public class Player extends Entity {
 		return new Vector2f(animation.getCurrentFrame().getWidth(), animation.getCurrentFrame()
 				.getHeight());
 	}
-
 
 	private void updateAnimation(int delta) {
 		animation.update(delta);

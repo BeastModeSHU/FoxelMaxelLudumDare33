@@ -11,7 +11,6 @@ import com.foxel.maxel.ld33.constants.Constants;
 
 public class Map implements TileBasedMap {
 
-	// private ArrayList<Rectangle> mapColliders;
 	private int blockedMap[][]; // / 0 = not blocked, 1 = blocked
 	private final int TILESIZE;
 	private TiledMap map;
@@ -50,16 +49,11 @@ public class Map implements TileBasedMap {
 	}
 
 	public void renderWallLayer() throws SlickException {
-		// map.render(0, 0, 0);
 		map.render(0, 0, 0);
 
 	}
 
 	public void renderAboveEntity(int[] data) {
-		/*
-		 * public void render(int x, int y, int sx, int sy, int width, int
-		 * height, int l, boolean lineByLine)
-		 */
 		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1, false);
 	}
 
