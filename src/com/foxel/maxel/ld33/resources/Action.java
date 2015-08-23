@@ -6,7 +6,7 @@ public class Action
 {
 	public float time;
 	public Vector2f position;
-	public boolean override;
+	public boolean override = false;
 	
 	public Action(float time, Vector2f position, boolean override)
 	{

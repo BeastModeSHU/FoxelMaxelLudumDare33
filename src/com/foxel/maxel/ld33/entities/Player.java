@@ -47,9 +47,6 @@ public class Player extends Entity {
 
 		System.out.println(x);
 		
-		collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y * TILESIZE) + TILESIZE / 2,
-				image.getWidth(), image.getHeight());
-		
 		interactables = new ArrayList<Interactable>();
 
 		collider = new Rectangle((x * TILESIZE), (y * TILESIZE),
