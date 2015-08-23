@@ -1,5 +1,7 @@
 package com.foxel.maxel.ld33.map;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
@@ -15,9 +17,12 @@ public class Map implements TileBasedMap {
 	private int blockedMap[][]; // / 0 = not blocked, 1 = blocked
 	private final int TILESIZE;
 	private TiledMap map;
+	private final int FLOOR_LAYER_ID, WALL_LAYER_ID;
 
 	public Map() {
 		this.TILESIZE = Constants.TILESIZE;
+		this.FLOOR_LAYER_ID = Constants.FLOOR_LAYER_ID;
+		this.WALL_LAYER_ID = Constants.WALL_LAYER_ID;
 	}
 
 	public void init() throws SlickException {
@@ -26,8 +31,10 @@ public class Map implements TileBasedMap {
 
 		for (int x = 0; x < map.getWidth(); ++x) {
 			for (int y = 0; y < map.getWidth(); ++y) {
-				int tileID = map.getTileId(x, y, 0); // Collisions detected from
-														// wall tile layer
+				int tileID = map.getTileId(x, y, WALL_LAYER_ID); // Collisions
+																	// detected
+																	// from
+				// wall tile layer
 				String value = map.getTileProperty(tileID, "blocked", "false");
 				if ("true".equals(value)) {
 					blockedMap[x][y] = 1;
@@ -49,24 +56,22 @@ public class Map implements TileBasedMap {
 		}
 	}
 
+	public void renderFloorLayer() throws SlickException {
+		map.render(0, 0, FLOOR_LAYER_ID);
+	}
+
 	public void renderWallLayer() throws SlickException {
-		// map.render(0, 0, 0);
-		map.render(0, 0, 0);
-
+		map.render(0, 0, WALL_LAYER_ID);
 	}
 
-	public void renderAboveEntity(int[] data) {
+	public void renderLayerSection(int x, int y, int startX, int startY, int width, int height,
+			int layer) {
 		/*
-		 * public void render(int x, int y, int sx, int sy, int width, int
-		 * height, int l, boolean lineByLine)
+		 * Function which will render a portion of the ceiling tiles to allow
+		 * for split rendering for z-sorting
 		 */
-		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1,
-				false);
-	}
 
-	public void renderBelowEntity(int[] data) {
-		map.render(data[0], data[1], data[2], data[3], data[4], data[5], 1,
-				false);
+		map.render(x, y, startX, startY, width, height, layer, false);
 	}
 
 	public boolean isTileFree(Rectangle collider) {
@@ -74,8 +79,8 @@ public class Map implements TileBasedMap {
 		for (int i = 0; i < map.getHeight(); ++i) {
 			for (int j = 0; j < map.getWidth(); ++j) {
 				if (blockedMap[j][i] == 1) {
-					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE,
-							TILESIZE).intersects(collider))
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE)
+							.intersects(collider))
 						isFree = false;
 				}
 			}
@@ -88,8 +93,22 @@ public class Map implements TileBasedMap {
 		for (int i = 0; i < map.getHeight(); ++i) {
 			for (int j = 0; j < map.getWidth(); ++j) {
 				if (blockedMap[j][i] == 1) {
-					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE,
-							TILESIZE).contains(point[0], point[1]))
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE).contains(
+							point[0], point[1]))
+						isFree = false;
+				}
+			}
+		}
+		return isFree;
+	}
+
+	public boolean isPointFree(Vector2f point) {
+		boolean isFree = true;
+		for (int i = 0; i < map.getHeight(); ++i) {
+			for (int j = 0; j < map.getWidth(); ++j) {
+				if (blockedMap[j][i] == 1) {
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE).contains(
+							point.x, point.y))
 						isFree = false;
 				}
 			}
@@ -134,13 +153,11 @@ public class Map implements TileBasedMap {
 	}
 
 	public Vector2f getPlayerStart() {
-		return new Vector2f(map.getObjectX(0, 0) / TILESIZE, map.getObjectY(0,
-				0) / TILESIZE);
+		return new Vector2f(map.getObjectX(0, 0) / TILESIZE, map.getObjectY(0, 0) / TILESIZE);
 	}
 
 	public Vector2f getTenantStart() {
-		return new Vector2f(map.getObjectX(0, 1) / TILESIZE, map.getObjectY(0,
-				1) / TILESIZE);
+		return new Vector2f(map.getObjectX(0, 1) / TILESIZE, map.getObjectY(0, 1) / TILESIZE);
 	}
 
 	public Vector2f getSpot(String name) {
@@ -148,11 +165,32 @@ public class Map implements TileBasedMap {
 		int group = 1;
 		for (int i = 0; i < map.getObjectCount(group); i++) {
 			if (map.getObjectName(group, i).equals(name)) {
-				spot = new Vector2f(map.getObjectX(group, i) / TILESIZE,
-						map.getObjectY(group, i) / TILESIZE);
+				spot = new Vector2f(map.getObjectX(group, i) / TILESIZE, map.getObjectY(group, i)
+						/ TILESIZE);
 			}
 		}
 
 		return spot;
 	}
+
+	public ArrayList<Interactable> getInteractables() {
+		ArrayList<Interactable> list = new ArrayList<Interactable>();
+		int interact = Constants.INTERACTABLES_OBJECT_LAYER;
+
+		for (int i = 0; i < map.getObjectCount(interact); ++i) {
+			switch (map.getObjectName(interact, i)) {
+			case Constants.NOISEMAKER_OBJECT:
+				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i),
+						400f));
+				break;
+			case Constants.HIDINGSPOT_OBJECT:
+				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i)));
+				break;
+			}
+
+		}
+		return list;
+
+	}
+
 }

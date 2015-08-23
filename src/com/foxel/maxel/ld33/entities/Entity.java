@@ -43,5 +43,5 @@ public abstract class Entity {
 	public Vector2f getTileLocation() {
 		return new Vector2f( Math.round(x), Math.round(y));
 	}
-	
+	public abstract float getMaxY(); 
 }

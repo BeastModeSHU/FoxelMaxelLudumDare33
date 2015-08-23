@@ -35,7 +35,6 @@ public class Tenant extends Entity {
 	private float PI = (float) Math.PI;
 	public float angle = 0f;
 	private float movementSpeed = Constants.TENANT_MOVE_SPEED;
-	
 	private ArrayList<Action> schedule;
 	private Action currentAction;
 	private int currentActionIndex;
@@ -55,14 +54,14 @@ public class Tenant extends Entity {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
 		sprites = new SpriteSheet(new Image(Constants.TENANT_SPRITESHEET_LOC), TILESIZE, 96);
-
+		// Loading Tenant idle images
 		leftIdle = sprites.getSubImage(10, 0);
 		rightIdle = sprites.getSubImage(15, 0);
 		upIdle = sprites.getSubImage(5, 0);
 		downIdle = sprites.getSubImage(0, 0);
 
 		mainIdle = downIdle;
-
+		// Loading all animations
 		left = new Animation(sprites, 11, 0, 14, 0, true, 180, false);
 		right = new Animation(sprites, 16, 0, 19, 0, true, 180, false);
 		up = new Animation(sprites, 6, 0, 9, 0, true, 180, false);
@@ -70,15 +69,15 @@ public class Tenant extends Entity {
 
 		main = down;
 
-		//x = map.getTenantStart().x;
-		//y = map.getTenantStart().y;
-		
 		collider = new Rectangle(x, y, 64, 96);
 
 		pathFinder = new AStarPathFinder(map, 100, false);
 		pathIndex = 0;
+
 		
 		schedule = XMLData.getSchedule("lad");
+
+//		schedule = new ArrayList<Action>();
 		overrideActions = new ArrayList<Action>();
 		//schedule.add(new Action(2f, map.getSpot("fridge"), false));
 		//schedule.add(new Action(5f, map.getSpot("bed"), false));
@@ -97,8 +96,7 @@ public class Tenant extends Entity {
 	}
 
 	@Override
-	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
-	{
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (!idle)
 		{
 			Vector2f move = getPathVector();
@@ -165,7 +163,6 @@ public class Tenant extends Entity {
 		//Update main animation
 		main.update(delta);
 	}
-	
 	private void getNextAction() {
 		
 		currentActionIndex++;
@@ -176,6 +173,7 @@ public class Tenant extends Entity {
 		resetActionTimer();
 	}
 	
+	
 	private void getNextOverride() {
 		
 		overrideTrigger = false;
@@ -185,7 +183,7 @@ public class Tenant extends Entity {
 		getActionPath();
 		resetActionTimer();
 	}
-	
+
 	private void getActionPath() {
 		
 		if (Math.abs(x - currentAction.position.x) <= .5f && Math.abs(y - currentAction.position.y) <= 0.5f) {
@@ -208,7 +206,6 @@ public class Tenant extends Entity {
 		Vector2f entityLocation = new Vector2f(x, y);
 		Vector2f pathLocation = new Vector2f(path.getX(pathIndex), path.getY(pathIndex));
 		Vector2f pathVector = new Vector2f();
-
 
 		if (pathIndex < (path.getLength() - 1) && pathLocation.distance(entityLocation) < 0.1f) {
 			++pathIndex;
@@ -244,9 +241,9 @@ public class Tenant extends Entity {
 	@Override
 	protected void moveEntity(Vector2f move, int delta) {
 
-//		System.out.println("X = " + move.x * 0.003f * delta + " - Y = " + move.y * 0.003f * delta);
+		// System.out.println("X = " + move.x * 0.003f * delta + " - Y = " +
+		// move.y * 0.003f * delta);
 	}
-	
 	private void moveTowards(Vector2f move, Vector2f dest, int delta) {
 		
 		float deltaX = Math.abs(dest.x - x);
@@ -273,5 +270,11 @@ public class Tenant extends Entity {
 			overrideActions.add(new Action(0.5f, new Vector2f(x, y), true));
 			overrideActions.add(new Action(4f, source, true));
 		}
+	}
+
+	@Override
+	public float getMaxY() {
+		return ((y * TILESIZE) - 48 + main.getCurrentFrame().getHeight());
+
 	}
 }
