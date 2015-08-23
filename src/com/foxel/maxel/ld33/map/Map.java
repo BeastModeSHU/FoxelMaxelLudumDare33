@@ -56,7 +56,13 @@ public class Map implements TileBasedMap {
 		map.render(0, 0, 0);
 
 	}
-
+	public void renderLayerSection(){
+		/* 
+		 * Function which will render a portion of the ceiling tiles 
+		 * to allow for split rendering for z-sorting
+		 */
+	} 
+	
 	public void renderAboveEntity(int[] data) {
 		/*
 		 * public void render(int x, int y, int sx, int sy, int width, int
@@ -94,7 +100,7 @@ public class Map implements TileBasedMap {
 				}
 			}
 		}
-		return false;
+		return isFree;
 	}
 
 	public int getWidth() {

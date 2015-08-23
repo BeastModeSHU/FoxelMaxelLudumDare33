@@ -9,7 +9,9 @@ import org.newdawn.slick.geom.Circle;
 import com.foxel.maxel.ld33.constants.Constants;
 
 public class NoiseMaker extends Interactable {
-
+	/*
+	 * Interactable object in the game which will distract enemies
+	 */
 	public Circle distractionCircle;
 	private Image image;
 

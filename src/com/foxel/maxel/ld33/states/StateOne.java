@@ -29,10 +29,8 @@ public class StateOne extends BasicGameState {
 	private Map map;
 	private Camera camera;
 	private Player player;
-	private NoiseMaker bep;
 	private ArrayList<Interactable> interactables;
 	private Tenant tenant;
-	private ArrayList<Tenant> tenants;
 	private SortZAxis zSort;
 
 	public StateOne(int STATE_ID) {
@@ -46,26 +44,24 @@ public class StateOne extends BasicGameState {
 		map = new Map();
 		map.init();
 		camera = new Camera(map.getWidth(), map.getHeight());
+
 		player = new Player(map);
 		player.init(gc, sbg);
 
-		tenants = new ArrayList<Tenant>();
 		tenant = new Tenant(map, 2, 2);
 		tenant.init(gc, sbg);
-		tenants.add(tenant);
 
 		Tenant snep = new Tenant(map, 10, 10);
 		snep.init(gc, sbg);
-		tenants.add(snep);
+
+		renderable.add(player);
+		renderable.add(tenant);
+		renderable.add(snep);
 
 		zSort = new SortZAxis(player, map);
 
 		interactables = new ArrayList<Interactable>();
 		interactables = map.getInteractables();
-
-		/*
-		 * bep = new NoiseMaker(3, 4, 400f); interactables.add(bep);
-		 */
 
 	}
 
@@ -78,11 +74,11 @@ public class StateOne extends BasicGameState {
 			i.render(g);
 		}
 		map.renderBelowEntity(zSort.getBelowPlayer());
-		player.render(gc, sbg, g);
-		map.renderAboveEntity(zSort.getAbovePlayer());
-		for (int i = 0; i < tenants.size(); i++) {
-			tenants.get(i).render(gc, sbg, g);
+		zSort.sortRenderableByZ(renderable);
+		for (int i = 0; i < renderable.size(); ++i) {
+			renderable.get(i).render(gc, sbg, g);
 		}
+		map.renderAboveEntity(zSort.getAbovePlayer());
 
 	}
 
@@ -90,11 +86,15 @@ public class StateOne extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
 			gc.exit();
-		player.update(gc, sbg, delta);
-		for (int i = 0; i < tenants.size(); i++) {
-			tenants.get(i).update(gc, sbg, delta);
-		}
+		// player.update(gc, sbg, delta);
+		/*
+		 * for (int i = 0; i < tenants.size(); i++) { tenants.get(i).update(gc,
+		 * sbg, delta); }
+		 */
 
+		for (int i = 0; i < renderable.size(); ++i) {
+			renderable.get(i).update(gc, sbg, delta);
+		}
 		checkInteractables();
 	}
 
@@ -115,9 +115,14 @@ public class StateOne extends BasicGameState {
 	}
 
 	private void distractTenants(Vector2f source, Circle collider) {
-		for (int i = 0; i < tenants.size(); i++) {
-			if (collider.intersects(tenants.get(i).collider))
-				tenants.get(i).distract(source);
+		// TODO Fix function to cehck if an entity is a tenant, then to check
+		// for colliders
+		for (int i = 0; i < renderable.size(); i++) {
+
+			/*
+			 * if (collider.intersects(tenants.get(i).collider))
+			 * tenants.get(i).distract(source);
+			 */
 		}
 	}
 

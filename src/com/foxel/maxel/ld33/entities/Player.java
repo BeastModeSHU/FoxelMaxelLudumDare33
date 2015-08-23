@@ -18,19 +18,19 @@ import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.map.Interactable;
 
 public class Player extends Entity {
+	/*
+	 * Player Class -> Handles all player interactions with the game
+	 */
+	private final float MOVE_SPEED; // Players moveement speed
+	public ArrayList<Interactable> interactables; // List of all interactable
+													// objects in game
 
-	private final float MOVE_SPEED;
-
-	private Image image;
-	public ArrayList<Interactable> interactables;
-
-	private SpriteSheet sprites;
+	private SpriteSheet sprites; // animation sprites
 	private Animation animation;
 
 	public Player(Map map) {
 		super(map);
 		this.MOVE_SPEED = Constants.MOVE_SPEED;
-
 	}
 
 	@Override
@@ -51,25 +51,20 @@ public class Player extends Entity {
 
 		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), animation.getCurrentFrame()
 				.getWidth(), animation.getCurrentFrame().getHeight());
-		/*
-		 * collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y *
-		 * TILESIZE) + TILESIZE / 2, image.getWidth(), image.getHeight());
-		 */
-
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
-		g.fill(collider);
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 
 		Input input = gc.getInput();
-		Vector2f move = new Vector2f();
+		Vector2f move = new Vector2f(); // Player moveement vector
 
+		// Player controls
 		if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
 			move.x = -MOVE_SPEED;
 		}
@@ -98,6 +93,7 @@ public class Player extends Entity {
 
 	@Override
 	protected void moveEntity(Vector2f move, int delta) {
+
 		move = move.normalise();
 
 		move.x *= (delta / 1000.f) * MOVE_SPEED;
@@ -114,12 +110,13 @@ public class Player extends Entity {
 		collider.setLocation(newX, newY);
 
 		if (map.isTileFree(collider)) {
+			// If the location is free move onto it
 			x += move.x;
 			y += move.y;
 			collider.setLocation((x * TILESIZE), (y * TILESIZE));
 		} else {
+			// else wall slide
 			Vector2f tempMove = moveBy(move);
-			// System.out.println(tempMove);
 			x += tempMove.x;
 			y += tempMove.y;
 
@@ -127,12 +124,31 @@ public class Player extends Entity {
 	}
 
 	private Vector2f moveBy(Vector2f move) {
-		Vector2f moveByVector = new Vector2f();
-		Vector2f absMove = new Vector2f(Math.abs(move.x), Math.abs(move.y));
-		Vector2f tempMove = new Vector2f(absMove.x * TILESIZE, absMove.y * TILESIZE);
 
-		boolean isLeft = false, isRight = false, isUp = false, isDown = false;
-		float oldX = collider.getX(), oldY = collider.getY();
+		Vector2f moveByVector = new Vector2f(); // Vector to be returned at the
+												// end, initialised as (0,0)
+		Vector2f absMove = new Vector2f(Math.abs(move.x), Math.abs(move.y)); // Absolute
+																				// values
+																				// of
+																				// the
+																				// move
+																				// vector
+		Vector2f tempMove = new Vector2f(absMove.x * TILESIZE, absMove.y * TILESIZE); // Move
+																						// vector
+																						// scaled
+																						// up
+																						// to
+																						// pixels
+
+		boolean isLeft = false, isRight = false, isUp = false, isDown = false; // Booleans
+																				// to
+																				// check
+																				// each
+																				// direction
+		float oldX = collider.getX(), oldY = collider.getY(); // Colliders old
+																// location (in
+																// the wall) is
+																// checked
 
 		// Try left
 		collider.setLocation((oldX - tempMove.x), oldY);
