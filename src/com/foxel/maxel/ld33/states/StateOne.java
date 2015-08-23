@@ -20,7 +20,7 @@ import com.foxel.maxel.ld33.map.Interactable;
 import com.foxel.maxel.ld33.map.NoiseMaker;
 import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.resources.Camera;
-import com.foxel.maxel.ld33.resources.SortZAxis;
+import com.foxel.maxel.ld33.rendering.Renderer;
 
 public class StateOne extends BasicGameState {
 
@@ -31,7 +31,7 @@ public class StateOne extends BasicGameState {
 	private Player player;
 	private ArrayList<Interactable> interactables;
 	private Tenant tenant;
-	private SortZAxis zSort;
+	private Renderer renderer;
 
 	public StateOne(int STATE_ID) {
 		this.STATE_ID = STATE_ID;
@@ -58,10 +58,12 @@ public class StateOne extends BasicGameState {
 		renderable.add(tenant);
 		renderable.add(snep);
 
-		zSort = new SortZAxis(player, map);
+		//zSort = new SortZAxis(player, map);
 
 		interactables = new ArrayList<Interactable>();
 		interactables = map.getInteractables();
+		
+		renderer = new Renderer(player, map, renderable);
 
 	}
 
@@ -69,7 +71,10 @@ public class StateOne extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
 		camera.translate(g, player);
+		renderer.render(gc,sbg, g);
+		/*
 		map.renderWallLayer();
+		
 		for (Interactable i : interactables) {
 			i.render(g);
 		}
@@ -79,7 +84,7 @@ public class StateOne extends BasicGameState {
 			renderable.get(i).render(gc, sbg, g);
 		}
 		map.renderAboveEntity(zSort.getAbovePlayer());
-
+		 */
 	}
 
 	@Override
@@ -93,7 +98,7 @@ public class StateOne extends BasicGameState {
 		 */
 
 		for (int i = 0; i < renderable.size(); ++i) {
-			renderable.get(i).update(gc, sbg, delta);
+				renderable.get(i).update(gc, sbg, delta);
 		}
 		checkInteractables();
 	}

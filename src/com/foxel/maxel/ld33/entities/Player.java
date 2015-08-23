@@ -56,6 +56,7 @@ public class Player extends Entity {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
+		System.out.println("I am rendering");
 	}
 
 	@Override

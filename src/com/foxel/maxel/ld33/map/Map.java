@@ -17,9 +17,12 @@ public class Map implements TileBasedMap {
 	private int blockedMap[][]; // / 0 = not blocked, 1 = blocked
 	private final int TILESIZE;
 	private TiledMap map;
+	private final int FLOOR_LAYER_ID, WALL_LAYER_ID;
 
 	public Map() {
 		this.TILESIZE = Constants.TILESIZE;
+		this.FLOOR_LAYER_ID = Constants.FLOOR_LAYER_ID;
+		this.WALL_LAYER_ID = Constants.WALL_LAYER_ID;
 	}
 
 	public void init() throws SlickException {
@@ -28,7 +31,7 @@ public class Map implements TileBasedMap {
 
 		for (int x = 0; x < map.getWidth(); ++x) {
 			for (int y = 0; y < map.getWidth(); ++y) {
-				int tileID = map.getTileId(x, y, 0); // Collisions detected from
+				int tileID = map.getTileId(x, y, WALL_LAYER_ID); // Collisions detected from
 														// wall tile layer
 				String value = map.getTileProperty(tileID, "blocked", "false");
 				if ("true".equals(value)) {
@@ -51,18 +54,24 @@ public class Map implements TileBasedMap {
 		}
 	}
 
-	public void renderWallLayer() throws SlickException {
-		// map.render(0, 0, 0);
-		map.render(0, 0, 0);
-
+	public void renderFloorLayer() throws SlickException {
+		map.render(0, 0, FLOOR_LAYER_ID);
 	}
-	public void renderLayerSection(){
-		/* 
-		 * Function which will render a portion of the ceiling tiles 
-		 * to allow for split rendering for z-sorting
+
+	public void renderWallLayer() throws SlickException{
+		map.render(0,0,WALL_LAYER_ID);
+	}
+
+	public void renderLayerSection(int[] mapSection) {
+		/*
+		 * Function which will render a portion of the ceiling tiles to allow
+		 * for split rendering for z-sorting 0 = x, 1 = y, 2 = startX, 3 =
+		 * startY, 4 = width, 5 = height
 		 */
-	} 
-	
+		map.render(mapSection[0], mapSection[1], mapSection[2], mapSection[3], mapSection[4],
+				mapSection[5]);
+	}
+
 	public void renderAboveEntity(int[] data) {
 		/*
 		 * public void render(int x, int y, int sx, int sy, int width, int
