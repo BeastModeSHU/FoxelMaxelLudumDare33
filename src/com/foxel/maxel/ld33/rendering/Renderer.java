@@ -1,7 +1,6 @@
 package com.foxel.maxel.ld33.rendering;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -16,14 +15,15 @@ import com.foxel.maxel.ld33.map.Map;
 public class Renderer {
 	/*
 	 * ### MACE ###
-	 * 
-	 * XXX DO NOT FORMAT CLASS XXX
+	 * Will z-sort the map & entity list and render each thing at the right location
 	 */
 	private Player player;
 	private Map map;
 	private ArrayList<Entity> renderable;
 	private final int TILESIZE;
 	private final int CEILING_LAYER;
+	private final int MAP_SECTION_WIDTH = 15;
+	private final int MAP_SECTION_HEIGHT = 1;
 
 	public Renderer(Player player, Map map, ArrayList<Entity> renderable) {
 		this.player = player;
@@ -33,7 +33,6 @@ public class Renderer {
 		this.CEILING_LAYER = Constants.CEILING_LAYER_ID;
 	}
 
-
 	public void sortRenderableByZ() {
 		int j = 0;
 		boolean swapped = true; // set flag to true to begin first pass
@@ -41,9 +40,22 @@ public class Renderer {
 		while (swapped) {
 			swapped = false; // set flag to false awaiting a possible swap
 			for (j = 0; j < renderable.size() - 1; j++) {
-				float num1 = renderable.get(j).getPixelLocation().y
-						+ renderable.get(j).getEntityDimensions().y, num2 = renderable.get(j + 1)
-						.getPixelLocation().y + renderable.get(j + 1).getEntityDimensions().y;
+				float num1, num2;
+
+				if (renderable.get(j).equals(player)) {
+					num1 = renderable.get(j).getPixelLocation().y
+							+ renderable.get(j).getEntityDimensions().y;
+				} else {
+					num1 = renderable.get(j).getPixelLocation().y
+							+ renderable.get(j).getEntityDimensions().y - 48.f;
+				}
+				if (renderable.get(j + 1).equals(player)) {
+					num2 = renderable.get(j + 1).getPixelLocation().y
+							+ renderable.get(j + 1).getEntityDimensions().y;
+				}else{ 
+					num2 = renderable.get(j + 1).getPixelLocation().y
+							+ renderable.get(j + 1).getEntityDimensions().y - 48.f;
+				}
 				if (num1 > num2) // change to > for ascending sort
 				{
 					swapEntities(j, (j + 1));
@@ -75,22 +87,23 @@ public class Renderer {
 
 		for (int i = 0; i < height; ++i) {
 
-			int currentLayerY = ( i * TILESIZE) + TILESIZE; 
+			int currentLayerY = (i * TILESIZE) + TILESIZE;
 			int counter = lastIndex;
 			boolean found = true;
 			while (found && counter < renderable.size()) {
 
 				if (renderable.get(counter).getMaxY() < currentLayerY) {
 					renderable.get(counter).render(gc, sbg, g);
-					++lastIndex;			
-				}else{ 
+					++lastIndex;
+				} else {
 					found = false;
 				}
 				++counter;
 			}
 
-			map.renderLayerSection(0, currentLayerY - TILESIZE, 0, i, 15, 1, CEILING_LAYER);
-			System.out.println("Render Map Layer");
+			map.renderLayerSection(0, currentLayerY - TILESIZE, 0, i, MAP_SECTION_WIDTH,
+					MAP_SECTION_HEIGHT, CEILING_LAYER);
+
 		}
 		System.out.println();
 	}

@@ -45,17 +45,6 @@ public class Map implements TileBasedMap {
 		}
 
 	}
-
-	private void printBlocked() {
-		// TODO remove after debuggin
-		for (int i = 0; i < map.getHeight(); ++i) {
-			for (int j = 0; j < map.getWidth(); ++j) {
-				System.out.print(blockedMap[j][i]);
-			}
-			System.out.println();
-		}
-	}
-
 	public void renderFloorLayer() throws SlickException {
 		map.render(0, 0, FLOOR_LAYER_ID);
 	}
