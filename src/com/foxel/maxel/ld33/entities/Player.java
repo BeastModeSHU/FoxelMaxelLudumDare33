@@ -1,5 +1,7 @@
 package com.foxel.maxel.ld33.entities;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -13,10 +15,15 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.map.Map;
+import com.foxel.maxel.ld33.map.Interactable;
 
 public class Player extends Entity {
 
 	private final float MOVE_SPEED;
+
+	private Image image;
+	public ArrayList<Interactable> interactables;
+
 	private SpriteSheet sprites;
 	private Animation animation;
 
@@ -38,12 +45,21 @@ public class Player extends Entity {
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
+
+		System.out.println(x);
+		
+		collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y * TILESIZE) + TILESIZE / 2,
+				image.getWidth(), image.getHeight());
+		
+		interactables = new ArrayList<Interactable>();
+
 		collider = new Rectangle((x * TILESIZE), (y * TILESIZE),
 				animation.getCurrentFrame().getWidth(), animation.getCurrentFrame().getHeight());
 		/*
 		 * collider = new Rectangle((x * TILESIZE) + TILESIZE / 2, (y *
 		 * TILESIZE) + TILESIZE / 2, image.getWidth(), image.getHeight());
 		 */
+
 
 	}
 
@@ -72,6 +88,12 @@ public class Player extends Entity {
 
 		if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
 			move.y = MOVE_SPEED;
+		}
+		
+		if (input.isKeyPressed(Input.KEY_X)) {
+			if (interactables.size() > 0) {
+				interactables.get(0).activate();
+			}
 		}
 
 		moveEntity(move, delta);
@@ -109,6 +131,7 @@ public class Player extends Entity {
 		return new Vector2f(animation.getCurrentFrame().getWidth(), animation.getCurrentFrame()
 				.getHeight());
 	}
+
 
 	private void updateAnimation(int delta) {
 		animation.update(delta);

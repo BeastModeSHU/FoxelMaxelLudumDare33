@@ -18,7 +18,7 @@ public abstract class Entity {
 	protected final int TILESIZE;
 	protected float x, y;
 	protected Map map;
-	protected Rectangle collider;
+	public Rectangle collider;
 	
 	
 	public Entity(Map map) {

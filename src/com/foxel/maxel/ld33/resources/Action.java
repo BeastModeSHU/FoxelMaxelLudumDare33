@@ -2,15 +2,16 @@ package com.foxel.maxel.ld33.resources;
 
 import org.newdawn.slick.geom.Vector2f;
 
-public class Action {
-	public int index;
+public class Action
+{
 	public float time;
 	public Vector2f position;
+	public boolean override;
 	
-	public Action(int index, float time, Vector2f position)
+	public Action(float time, Vector2f position, boolean override)
 	{
-		this.index = index;
 		this.time = time;
 		this.position = position;
+		this.override = override;
 	}
 }

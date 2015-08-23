@@ -1,11 +1,14 @@
 package com.foxel.maxel.ld33.entities;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.pathfinding.AStarPathFinder;
@@ -23,6 +26,7 @@ public class Tenant extends Entity {
 	private AStarPathFinder pathFinder;
 	private Path path;
 	private int pathIndex;
+	private int tileSize;
 	private SpriteSheet sprites;
 	private Animation main, left, right, up, down;
 	private Image mainIdle, leftIdle, rightIdle, upIdle, downIdle;
@@ -30,13 +34,18 @@ public class Tenant extends Entity {
 	private String direction = "DOWN";
 	private float movementSpeed = Constants.TENANT_MOVE_SPEED;
 	
-	private Action[] schedule;
+	private ArrayList<Action> schedule;
 	private Action currentAction;
+	private int currentActionIndex;
+	private ArrayList<Action> overrideActions;
 	private int actionTimer = 0;
 	private int actionTime = 0;
 
-	public Tenant(Map map) {
+	public Tenant(Map map, float x, float y) {
 		super(map);
+		tileSize = Constants.TILESIZE;
+		this.x = x;
+		this.y = y;
 	}
 
 	@Override
@@ -58,14 +67,19 @@ public class Tenant extends Entity {
 
 		main = down;
 
-		x = map.getTenantStart().x;
-		y = map.getTenantStart().y;
+		//x = map.getTenantStart().x;
+		//y = map.getTenantStart().y;
+		
+		collider = new Rectangle(x, y, 64, 96);
 
 		pathFinder = new AStarPathFinder(map, 100, false);
 		pathIndex = 0;
 		
-		schedule = new Action[]{new Action(0, 2f, map.getSpot("fridge")), new Action(1, 5f, map.getSpot("bed"))};
-		currentAction = schedule[0];
+		schedule = new ArrayList<Action>();
+		overrideActions = new ArrayList<Action>();
+		schedule.add(new Action(2f, map.getSpot("fridge"), false));
+		schedule.add(new Action(5f, map.getSpot("bed"), false));
+		currentAction = schedule.get(0);
 		actionTime = (int) (currentAction.time * 1000f);
 		getActionPath();
 	}
@@ -79,7 +93,8 @@ public class Tenant extends Entity {
 	}
 
 	@Override
-	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException
+	{
 		if (!idle)
 		{
 			Vector2f move = getPathVector();
@@ -120,6 +135,8 @@ public class Tenant extends Entity {
 			
 			//Move entity by move vector
 			moveTowards(move, new Vector2f(path.getX(pathIndex), path.getY(pathIndex)), delta);
+			
+			collider.setLocation(x * TILESIZE, y * TILESIZE);
 		}
 		else
 		{
@@ -135,10 +152,10 @@ public class Tenant extends Entity {
 	}
 	
 	private void getNextAction() {
-		int index = currentAction.index + 1;
-		if (index >= schedule.length) index = 0;
+		currentActionIndex++;
+		if (currentActionIndex >= schedule.size()) currentActionIndex = 0;
 		
-		currentAction = schedule[index];
+		currentAction = schedule.get(currentActionIndex);
 		actionTimer = 0;
 		actionTime = (int) (currentAction.time * 1000f);
 		idle = false;
@@ -147,8 +164,11 @@ public class Tenant extends Entity {
 	}
 	
 	private void getActionPath() {
+		System.out.println("Moving from " + x + ", " + y + " to " + currentAction.position.x + ", " + currentAction.position.y);
 		path = pathFinder.findPath(null, (int) (x), (int) (y), (int) (currentAction.position.x),
 				(int) (currentAction.position.y));
+		if (path == null)
+			getNextAction();
 		pathIndex = 0;
 	}
 
@@ -210,5 +230,16 @@ public class Tenant extends Entity {
 		x += moveXBy;
 		y += moveYBy;
 	}
-
+	
+	public void distract(Vector2f source)
+	{
+		if (source.x != currentAction.position.x && source.y != currentAction.position.y)
+		{
+			source.x /= tileSize;
+			source.y /= tileSize;
+			//overrideActions.add(new Action(5f, source, true));
+			currentAction = new Action(5f, source, true);
+			getActionPath();
+		}
+	}
 }
