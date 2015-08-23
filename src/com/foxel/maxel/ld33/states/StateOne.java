@@ -56,10 +56,10 @@ public class StateOne extends BasicGameState {
 		player = new Player(map, Constants.ENTITY_PLAYER);
 		player.init(gc, sbg);
 
-		tenant = new Tenant(map,  Constants.ENTITY_TENANT, 2, 2);
+		tenant = new Tenant(map, Constants.ENTITY_TENANT, 2, 2);
 		tenant.init(gc, sbg);
 
-		Tenant snep = new Tenant(map, Constants.ENTITY_TENANT, 10, 10 );
+		Tenant snep = new Tenant(map, Constants.ENTITY_TENANT, 10, 10);
 		snep.init(gc, sbg);
 
 		renderable.add(player);
@@ -99,7 +99,9 @@ public class StateOne extends BasicGameState {
 		for (int i = 0; i < renderable.size(); ++i) {
 			renderable.get(i).update(gc, sbg, delta);
 		}
-		checkInteractables();
+
+		if (gc.getInput().isKeyPressed(Input.KEY_X))
+			checkInteractables();
 
 		polys = vis.updateCone(tenant.getPixelLocation().x + 32f,
 				tenant.getPixelLocation().y + 32f, tenant.angle);
@@ -126,7 +128,9 @@ public class StateOne extends BasicGameState {
 		// for colliders
 		for (int i = 0; i < renderable.size(); ++i) {
 			if (renderable.get(i).getClass().getSimpleName().equals(Constants.ENTITY_TENANT)) {
+
 				Tenant temp = (Tenant) renderable.get(i);
+				System.out.println(source);
 				if (collider.intersects(temp.getCollider())) {
 					temp.distract(source);
 				}

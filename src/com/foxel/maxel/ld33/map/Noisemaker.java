@@ -33,7 +33,7 @@ public class NoiseMaker extends Interactable {
 
 	@Override
 	public void render(Graphics g) throws SlickException {
-		g.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2); //Render the radio centre at the point 
+		g.drawImage(image, x, y); //Render the radio centre at the point 
 		
 		g.draw(distractionCircle);
 
