@@ -31,7 +31,7 @@ public class Tenant extends Entity {
 	private Animation main, left, right, up, down;
 	private Image mainIdle, leftIdle, rightIdle, upIdle, downIdle;
 	private boolean idle = false;
-	private String direction = "DOWN";
+	private String direction = "down";
 	private float movementSpeed = Constants.TENANT_MOVE_SPEED;
 	
 	private ArrayList<Action> schedule;

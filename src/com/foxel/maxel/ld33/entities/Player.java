@@ -30,7 +30,6 @@ public class Player extends Entity {
 	public Player(Map map) {
 		super(map);
 		this.MOVE_SPEED = Constants.MOVE_SPEED;
-
 	}
 
 	@Override
