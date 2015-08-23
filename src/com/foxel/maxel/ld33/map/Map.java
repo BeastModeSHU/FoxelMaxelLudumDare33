@@ -1,5 +1,7 @@
 package com.foxel.maxel.ld33.map;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
@@ -81,6 +83,20 @@ public class Map implements TileBasedMap {
 		return isFree;
 	}
 
+	public boolean isPointFree(Vector2f point) {
+		boolean isFree = true;
+		for (int i = 0; i < map.getHeight(); ++i) {
+			for (int j = 0; j < map.getWidth(); ++j) {
+				if (blockedMap[j][i] == 1) {
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE).contains(
+							point.x, point.y))
+						isFree = false;
+				}
+			}
+		}
+		return false;
+	}
+
 	public int getWidth() {
 		return map.getWidth() * TILESIZE;
 	}
@@ -124,16 +140,38 @@ public class Map implements TileBasedMap {
 	public Vector2f getTenantStart() {
 		return new Vector2f(map.getObjectX(0, 1) / TILESIZE, map.getObjectY(0, 1) / TILESIZE);
 	}
-	
+
 	public Vector2f getSpot(String name) {
 		Vector2f spot = new Vector2f(0, 0);
 		int group = 1;
 		for (int i = 0; i < map.getObjectCount(group); i++) {
 			if (map.getObjectName(group, i).equals(name)) {
-				spot = new Vector2f(map.getObjectX(group, i) / TILESIZE, map.getObjectY(group, i) / TILESIZE);
+				spot = new Vector2f(map.getObjectX(group, i) / TILESIZE, map.getObjectY(group, i)
+						/ TILESIZE);
 			}
 		}
-		
+
 		return spot;
 	}
+
+	public ArrayList<Interactable> getInteractables() {
+		ArrayList<Interactable> list = new ArrayList<Interactable>();
+		int interact = Constants.INTERACTABLES_OBJECT_LAYER;
+
+		for (int i = 0; i < map.getObjectCount(interact); ++i) {
+			switch (map.getObjectName(interact, i)) {
+			case Constants.NOISEMAKER_OBJECT:
+				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i),
+						400f));
+				break;
+			case Constants.HIDINGSPOT_OBJECT:
+				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i)));
+				break;
+			}
+
+		}
+		return list;
+
+	}
+
 }

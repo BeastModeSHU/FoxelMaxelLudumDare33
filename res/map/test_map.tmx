@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="15" height="15" tilewidth="64" tileheight="64">
  <tileset firstgid="1" name="tileset" tilewidth="64" tileheight="64">
-  <image source="tileset.png" width="384" height="64"/>
+  <image source="tileset.png" width="448" height="64"/>
   <tile id="1">
    <properties>
     <property name="blocked" value="true"/>
@@ -18,13 +18,19 @@
    H4sIAAAAAAAAC2NmQAXMBPjI4oTU0ksvsYAZDZOqnlJ7sYnTSi8+N+MSQ1ZPib9pEVbI8qToZcbBpoVecjEAQQIwgYQDAAA=
   </data>
  </layer>
- <objectgroup name="Object Layer 1" width="0" height="0">
+ <objectgroup name="player_start" width="0" height="0" visible="0">
   <object x="128" y="768" width="64" height="64"/>
   <object x="640" y="128" width="64" height="64"/>
  </objectgroup>
- <objectgroup name="tenant_spots" width="15" height="15">
+ <objectgroup name="tenant_spots" width="15" height="15" visible="0">
   <object name="fridge" type="spot" x="704" y="768" width="64" height="64"/>
   <object name="bed" type="spot" x="128" y="128" width="64" height="64"/>
   <object name="chair" type="spot" x="128" y="512" width="64" height="64"/>
+ </objectgroup>
+ <objectgroup name="interactable_objects" width="15" height="15">
+  <object name="noisemaker" x="715" y="181" width="29" height="33"/>
+  <object name="noisemaker" x="137" y="165" width="37" height="61"/>
+  <object name="noisemaker" x="683" y="773" width="111" height="60"/>
+  <object name="noisemaker" x="172" y="469" width="37" height="72"/>
  </objectgroup>
 </map>

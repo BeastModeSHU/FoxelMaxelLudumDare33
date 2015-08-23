@@ -15,11 +15,7 @@ public class SortZAxis {
 		this.player = player;
 		this.map = map;
 	}
-
-	public void renameMethod() {
-
-	}
-
+	
 	public int[] getBelowPlayer() {
 
 		float playerY = player.getPixelLocation().y + player.getEntityDimensions().y;
