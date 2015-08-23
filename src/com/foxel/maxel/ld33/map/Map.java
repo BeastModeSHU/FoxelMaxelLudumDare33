@@ -31,8 +31,10 @@ public class Map implements TileBasedMap {
 
 		for (int x = 0; x < map.getWidth(); ++x) {
 			for (int y = 0; y < map.getWidth(); ++y) {
-				int tileID = map.getTileId(x, y, WALL_LAYER_ID); // Collisions detected from
-														// wall tile layer
+				int tileID = map.getTileId(x, y, WALL_LAYER_ID); // Collisions
+																	// detected
+																	// from
+				// wall tile layer
 				String value = map.getTileProperty(tileID, "blocked", "false");
 				if ("true".equals(value)) {
 					blockedMap[x][y] = 1;
@@ -58,15 +60,17 @@ public class Map implements TileBasedMap {
 		map.render(0, 0, FLOOR_LAYER_ID);
 	}
 
-	public void renderWallLayer() throws SlickException{
-		map.render(0,0,WALL_LAYER_ID);
+	public void renderWallLayer() throws SlickException {
+		map.render(0, 0, WALL_LAYER_ID);
 	}
 
-	public void renderLayerSection(int x, int y, int startX, int startY, int width, int height, int layer) {
+	public void renderLayerSection(int x, int y, int startX, int startY, int width, int height,
+			int layer) {
 		/*
 		 * Function which will render a portion of the ceiling tiles to allow
-		 * for split rendering for z-sorting */
-		
+		 * for split rendering for z-sorting
+		 */
+
 		map.render(x, y, startX, startY, width, height, layer, false);
 	}
 
@@ -77,6 +81,20 @@ public class Map implements TileBasedMap {
 				if (blockedMap[j][i] == 1) {
 					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE)
 							.intersects(collider))
+						isFree = false;
+				}
+			}
+		}
+		return isFree;
+	}
+
+	public boolean isPointFree(float[] point) {
+		boolean isFree = true;
+		for (int i = 0; i < map.getHeight(); ++i) {
+			for (int j = 0; j < map.getWidth(); ++j) {
+				if (blockedMap[j][i] == 1) {
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE).contains(
+							point[0], point[1]))
 						isFree = false;
 				}
 			}

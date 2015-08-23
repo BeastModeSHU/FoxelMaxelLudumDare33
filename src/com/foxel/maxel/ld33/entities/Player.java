@@ -45,12 +45,11 @@ public class Player extends Entity {
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
-		System.out.println(x);
-
+		
 		interactables = new ArrayList<Interactable>();
 
-		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), animation.getCurrentFrame()
-				.getWidth(), animation.getCurrentFrame().getHeight());
+		collider = new Rectangle((x * TILESIZE), (y * TILESIZE),
+				animation.getCurrentFrame().getWidth(), animation.getCurrentFrame().getHeight());
 	}
 
 	@Override

@@ -22,5 +22,7 @@ public class Constants {
 	public static final String TEMP_TENANT_LOC = "res//tenants//temp_tenant.png";
 	public static final String TENANT_SPRITESHEET_LOC = "res//tenants//tenant.png";
 	public static final String PLAYER_SPRITESHEET_LOC = "res//player//monster.png";
+	public static final String VISIONCONE_LOC = "res//cone_tex.png";
+	public static final String TENANT_BEHAVIOURS_LOC = "res//tenants//tenant_behaviours.xml";
 	public static final String TILESET_LOCATION = "res//map//tileset.png";
 }

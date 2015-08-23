@@ -2,17 +2,18 @@ package com.foxel.maxel.ld33.states;
 
 import java.util.ArrayList;
 
-import javafx.scene.shape.Shape;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
+import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.entities.Entity;
 import com.foxel.maxel.ld33.entities.Player;
 import com.foxel.maxel.ld33.entities.Tenant;
@@ -20,7 +21,10 @@ import com.foxel.maxel.ld33.map.Interactable;
 import com.foxel.maxel.ld33.map.NoiseMaker;
 import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.resources.Camera;
+import com.foxel.maxel.ld33.resources.VisionCone;
+import com.foxel.maxel.ld33.resources.XMLData;
 import com.foxel.maxel.ld33.rendering.Renderer;
+
 
 public class StateOne extends BasicGameState {
 
@@ -30,8 +34,13 @@ public class StateOne extends BasicGameState {
 	private Camera camera;
 	private Player player;
 	private ArrayList<Interactable> interactables;
-	private Tenant tenant;
+	private ArrayList<Interactable> playerInteractables;
+	private Tenant tenant;	
+	private VisionCone vis;
+	private Polygon[] polys;
+	private Image tex;
 	private Renderer renderer;
+
 
 	public StateOne(int STATE_ID) {
 		this.STATE_ID = STATE_ID;
@@ -39,10 +48,12 @@ public class StateOne extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		
 		renderable = new ArrayList<Entity>();
 
 		map = new Map();
 		map.init();
+		XMLData.init(map);
 		camera = new Camera(map.getWidth(), map.getHeight());
 
 		player = new Player(map);
@@ -54,6 +65,7 @@ public class StateOne extends BasicGameState {
 		Tenant snep = new Tenant(map, 10, 10);
 		snep.init(gc, sbg);
 
+
 		renderable.add(player);
 		renderable.add(tenant);
 		renderable.add(snep);
@@ -61,6 +73,11 @@ public class StateOne extends BasicGameState {
 		//zSort = new SortZAxis(player, map);
 
 		interactables = new ArrayList<Interactable>();
+		
+		vis = new VisionCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y, tenant.angle, (float)(Math.PI / 2), 30, 32f, 4f, map);
+		polys = vis.updateCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y, tenant.angle);
+		tex = new Image(Constants.VISIONCONE_LOC, false, Image.FILTER_NEAREST);
+
 		interactables = map.getInteractables();
 		
 		renderer = new Renderer(player, map, renderable);
@@ -72,6 +89,7 @@ public class StateOne extends BasicGameState {
 
 		camera.translate(g, player);
 		renderer.render(gc,sbg, g);
+
 	}
 
 	@Override
@@ -84,6 +102,8 @@ public class StateOne extends BasicGameState {
 				renderable.get(i).update(gc, sbg, delta);
 		}
 		checkInteractables();
+		
+		polys = vis.updateCone(tenant.getPixelLocation().x + 32f, tenant.getPixelLocation().y + 32f, tenant.angle);
 	}
 
 	private void checkInteractables() {
