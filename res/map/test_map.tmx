@@ -23,7 +23,7 @@
   <object x="640" y="128" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="tenant_spots" width="15" height="15">
-  <object name="fridge" type="spot" x="704" y="768" width="64" height="64"/>
+  <object name="fridge" type="spot" x="832" y="576" width="64" height="64"/>
   <object name="bed" type="spot" x="128" y="128" width="64" height="64"/>
   <object name="chair" type="spot" x="64" y="512" width="64" height="64"/>
  </objectgroup>

@@ -26,7 +26,7 @@ public class XMLData {
 		map = _map;
 	}
 	
-	public static ArrayList<Action> getSchedule(int id) {
+	public static ArrayList<Action> getSchedule(String name) {
 		
 		ArrayList<Action> schedule = new ArrayList<Action>();
 		
@@ -34,8 +34,8 @@ public class XMLData {
 		for (int i = 0; i < behaviours.size(); i++)
 		{
 			XMLElement behaviour = behaviours.get(i);
-			int ident = Integer.parseInt(behaviour.getAttribute("id"));
-			if (ident == id) {
+			String ident = behaviour.getAttribute("id");
+			if (ident.equals(name)) {
 				
 				XMLElementList actions = behaviour.getChildren();
 				for (int k = 0; k < actions.size(); k++) {

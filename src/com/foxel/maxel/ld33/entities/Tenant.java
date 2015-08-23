@@ -78,7 +78,7 @@ public class Tenant extends Entity {
 		pathFinder = new AStarPathFinder(map, 100, false);
 		pathIndex = 0;
 		
-		schedule = XMLData.getSchedule(1);
+		schedule = XMLData.getSchedule("lad");
 		overrideActions = new ArrayList<Action>();
 		//schedule.add(new Action(2f, map.getSpot("fridge"), false));
 		//schedule.add(new Action(5f, map.getSpot("bed"), false));
