@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="15" height="15" tilewidth="64" tileheight="64">
  <tileset firstgid="1" name="tileset" tilewidth="64" tileheight="64">
-  <image source="tileset.png" width="384" height="64"/>
+  <image source="tileset.png" width="448" height="64"/>
   <tile id="1">
    <properties>
     <property name="blocked" value="true"/>
@@ -25,6 +25,6 @@
  <objectgroup name="tenant_spots" width="15" height="15">
   <object name="fridge" type="spot" x="704" y="768" width="64" height="64"/>
   <object name="bed" type="spot" x="128" y="128" width="64" height="64"/>
-  <object name="chair" type="spot" x="128" y="512" width="64" height="64"/>
+  <object name="chair" type="spot" x="64" y="512" width="64" height="64"/>
  </objectgroup>
 </map>

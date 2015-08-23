@@ -23,6 +23,7 @@ import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.resources.Camera;
 import com.foxel.maxel.ld33.resources.SortZAxis;
 import com.foxel.maxel.ld33.resources.VisionCone;
+import com.foxel.maxel.ld33.resources.XMLData;
 
 public class StateOne extends BasicGameState {
 
@@ -48,10 +49,12 @@ public class StateOne extends BasicGameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		
 		renderable = new ArrayList<Entity>();
 
 		map = new Map();
 		map.init();
+		XMLData.init(map);
 		camera = new Camera(map.getWidth(), map.getHeight());
 		player = new Player(map);
 		player.init(gc, sbg);
@@ -68,7 +71,7 @@ public class StateOne extends BasicGameState {
 		bep = new Noisemaker(96f, 96f, 300f);
 		interactables.add(bep);
 		
-		vis = new VisionCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y, tenant.angle, (float)(Math.PI / 2), 20, 32f, 4f, map);
+		vis = new VisionCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y, tenant.angle, (float)(Math.PI / 2), 30, 32f, 4f, map);
 		polys = vis.updateCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y, tenant.angle);
 		tex = new Image(Constants.VISIONCONE_LOC, false, Image.FILTER_NEAREST);
 	}
@@ -105,7 +108,7 @@ public class StateOne extends BasicGameState {
 		
 		checkInteractables();
 		
-		polys = vis.updateCone(tenant.getPixelLocation().x + 32f, tenant.getPixelLocation().y + 48f, tenant.angle);
+		polys = vis.updateCone(tenant.getPixelLocation().x + 32f, tenant.getPixelLocation().y + 32f, tenant.angle);
 	}
 	
 	private void checkInteractables()
