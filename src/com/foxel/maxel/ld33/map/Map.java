@@ -27,7 +27,8 @@ public class Map implements TileBasedMap {
 	}
 
 	public void init() throws SlickException {
-		map = new TiledMap(Constants.TEST_MAP_LOC);
+		//map = new TiledMap(Constants.TEST_MAP_LOC);
+		map = new TiledMap(Constants.BIG_MAP_LOC);
 		blockedMap = new int[map.getHeight()][map.getWidth()];
 
 		for (int x = 0; x < map.getWidth(); ++x) {
@@ -62,7 +63,7 @@ public class Map implements TileBasedMap {
 		 * for split rendering for z-sorting
 		 */
 
-		map.render(x, y, startX, startY, width, height, layer, false);
+		map.render(x, y, startX, startY, map.getWidth(), height, layer, false);
 	}
 
 	public boolean isTileFree(Rectangle collider) {
@@ -169,7 +170,6 @@ public class Map implements TileBasedMap {
 		int interact = Constants.INTERACTABLES_OBJECT_LAYER;
 
 		for (int i = 0; i < map.getObjectCount(interact); ++i) {
-			System.out.println(map.getObjectName(interact, i));
 			switch (map.getObjectName(interact, i)) {
 			case Constants.NOISEMAKER_OBJECT:
 				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i),
@@ -178,7 +178,6 @@ public class Map implements TileBasedMap {
 			case Constants.HIDINGPLACE_OBJECT:
 				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i),
 						Constants.HIDINGPLACE_OBJECT));
-				System.out.println("Hey");
 				break;
 			}
 

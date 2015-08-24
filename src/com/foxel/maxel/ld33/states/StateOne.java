@@ -131,7 +131,6 @@ public class StateOne extends BasicGameState {
 							temp.getDistractionCircle(), i);
 					break;
 				case Constants.HIDINGPLACE_OBJECT:
-					System.out.println("Hey");
 					hidePlayer(i);
 					break;
 				}

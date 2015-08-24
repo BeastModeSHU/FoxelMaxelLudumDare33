@@ -25,7 +25,7 @@ public class Tenant extends Entity {
 	/*
 	 * Tenants of each house will use this class ### MACE ###
 	 */
-
+	private final float startX, startY;
 	private double turnSpeed;
 	private double PI = Math.PI;
 	private double R2D = 180d / PI;
@@ -54,13 +54,13 @@ public class Tenant extends Entity {
 	private boolean idle = false;
 	private boolean turning = false;
 	private boolean overrideTrigger = false;
-
+	
 	public Tenant(Map map, String ENTITY_TYPE, float x, float y, String name) {
 		super(map, ENTITY_TYPE);
 
 		tileSize = Constants.TILESIZE;
-		this.x = x;
-		this.y = y;
+		this.startX = x;
+		this.startY = y;
 		this.name = name;
 		turnSpeed = Constants.TENANT_TURN_SPEED;
 		spriteSheets = new String[] {Constants.TENANT01_SPRITESHEET_LOC,
@@ -73,6 +73,9 @@ public class Tenant extends Entity {
 			int spriteNum = XMLData.getSpriteSheetIndex(name);
 			sprites = new SpriteSheet(new Image(spriteSheets[spriteNum - 1]), TILESIZE, 96);
 		}
+		x = startX;
+		y = startY;
+
 		// Loading Tenant idle images
 		if (leftIdle == null)
 			leftIdle = sprites.getSubImage(10, 0);
