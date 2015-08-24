@@ -5,7 +5,10 @@ import java.util.Arrays;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 import com.foxel.maxel.ld33.constants.Constants;
@@ -22,15 +25,23 @@ public class Renderer {
 	private Player player;
 	private Map map;
 	private ArrayList<Entity> renderable;
+	private ArrayList<Polygon> cones;
 	private final int TILESIZE;
 	private final int CEILING_LAYER;
+	private Image tex;
 
-	public Renderer(Player player, Map map, ArrayList<Entity> renderable) {
+	public Renderer(Player player, Map map, ArrayList<Entity> renderable, ArrayList<Polygon> cones) {
 		this.player = player;
 		this.map = map;
 		this.renderable = renderable;
 		this.TILESIZE = Constants.TILESIZE;
 		this.CEILING_LAYER = Constants.CEILING_LAYER_ID;
+		try {
+			tex = new Image(Constants.VISIONCONE_LOC, false, Image.FILTER_NEAREST);
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
@@ -60,9 +71,13 @@ public class Renderer {
 		renderable.set(index2, temp);
 	}
 
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g, ArrayList<Polygon> cones) throws SlickException {
+		this.cones = cones;
+		
 		// Will handle map rendering & renderable rendering
 		map.renderFloorLayer();
+		for (int i = 0; i < cones.size(); i++)
+			g.texture(cones.get(i), tex, true);
 		map.renderWallLayer();
 		sortRenderableByZ();
 		renderMapLayers(gc, sbg, g);
@@ -90,9 +105,9 @@ public class Renderer {
 			}
 
 			map.renderLayerSection(0, currentLayerY - TILESIZE, 0, i, 15, 1, CEILING_LAYER);
-			System.out.println("Render Map Layer");
+			//System.out.println("Render Map Layer");
 		}
-		System.out.println();
+		//System.out.println();
 	}
 
 }

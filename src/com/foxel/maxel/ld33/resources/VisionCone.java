@@ -4,6 +4,7 @@ import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.geom.Polygon;
 
 import com.foxel.maxel.ld33.map.Map;
+import com.foxel.maxel.ld33.constants.Constants;
 
 public class VisionCone
 {
@@ -11,8 +12,8 @@ public class VisionCone
 	private int rays;
 	private float resolution;
 	private float secondaryResolution = 2f;
-	private float range = 300f;
-	private float sqrRange = range * range;
+	private float range;
+	private float sqrRange;
 	private Map map;
 	private Point[] hits;
 	private Polygon[] polys;
@@ -26,6 +27,8 @@ public class VisionCone
 		this.rays = rays;
 		this.resolution = res1;
 		this.secondaryResolution = res2;
+		range = Constants.TENANT_VISION_RANGE;
+		sqrRange = range * range;
 		this.map = map;
 		
 		hits = new Point[rays];

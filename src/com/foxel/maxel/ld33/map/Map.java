@@ -10,6 +10,7 @@ import org.newdawn.slick.util.pathfinding.PathFindingContext;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
 import com.foxel.maxel.ld33.constants.Constants;
+import com.foxel.maxel.ld33.entities.Tenant;
 
 public class Map implements TileBasedMap {
 
@@ -64,8 +65,8 @@ public class Map implements TileBasedMap {
 		map.render(0, 0, WALL_LAYER_ID);
 	}
 
-	public void renderLayerSection(int x, int y, int startX, int startY, int width, int height,
-			int layer) {
+	public void renderLayerSection(int x, int y, int startX, int startY,
+			int width, int height, int layer) {
 		/*
 		 * Function which will render a portion of the ceiling tiles to allow
 		 * for split rendering for z-sorting
@@ -79,8 +80,8 @@ public class Map implements TileBasedMap {
 		for (int i = 0; i < map.getHeight(); ++i) {
 			for (int j = 0; j < map.getWidth(); ++j) {
 				if (blockedMap[j][i] == 1) {
-					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE)
-							.intersects(collider))
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE,
+							TILESIZE).intersects(collider))
 						isFree = false;
 				}
 			}
@@ -93,8 +94,8 @@ public class Map implements TileBasedMap {
 		for (int i = 0; i < map.getHeight(); ++i) {
 			for (int j = 0; j < map.getWidth(); ++j) {
 				if (blockedMap[j][i] == 1) {
-					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE).contains(
-							point[0], point[1]))
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE,
+							TILESIZE).contains(point[0], point[1]))
 						isFree = false;
 				}
 			}
@@ -107,8 +108,8 @@ public class Map implements TileBasedMap {
 		for (int i = 0; i < map.getHeight(); ++i) {
 			for (int j = 0; j < map.getWidth(); ++j) {
 				if (blockedMap[j][i] == 1) {
-					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE).contains(
-							point.x, point.y))
+					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE,
+							TILESIZE).contains(point.x, point.y))
 						isFree = false;
 				}
 			}
@@ -153,11 +154,13 @@ public class Map implements TileBasedMap {
 	}
 
 	public Vector2f getPlayerStart() {
-		return new Vector2f(map.getObjectX(0, 0) / TILESIZE, map.getObjectY(0, 0) / TILESIZE);
+		return new Vector2f(map.getObjectX(0, 0) / TILESIZE, map.getObjectY(0,
+				0) / TILESIZE);
 	}
 
 	public Vector2f getTenantStart() {
-		return new Vector2f(map.getObjectX(0, 1) / TILESIZE, map.getObjectY(0, 1) / TILESIZE);
+		return new Vector2f(map.getObjectX(0, 1) / TILESIZE, map.getObjectY(0,
+				1) / TILESIZE);
 	}
 
 	public Vector2f getSpot(String name) {
@@ -165,8 +168,8 @@ public class Map implements TileBasedMap {
 		int group = 1;
 		for (int i = 0; i < map.getObjectCount(group); i++) {
 			if (map.getObjectName(group, i).equals(name)) {
-				spot = new Vector2f(map.getObjectX(group, i) / TILESIZE, map.getObjectY(group, i)
-						/ TILESIZE);
+				spot = new Vector2f(map.getObjectX(group, i) / TILESIZE,
+						map.getObjectY(group, i) / TILESIZE);
 			}
 		}
 
@@ -180,11 +183,12 @@ public class Map implements TileBasedMap {
 		for (int i = 0; i < map.getObjectCount(interact); ++i) {
 			switch (map.getObjectName(interact, i)) {
 			case Constants.NOISEMAKER_OBJECT:
-				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i),
-						400f));
+				list.add(new NoiseMaker(map.getObjectX(interact, i), map
+						.getObjectY(interact, i), 400f));
 				break;
 			case Constants.HIDINGSPOT_OBJECT:
-				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i)));
+				list.add(new HidingPlace(map.getObjectX(interact, i), map
+						.getObjectY(interact, i)));
 				break;
 			}
 
@@ -193,4 +197,17 @@ public class Map implements TileBasedMap {
 
 	}
 
+	public ArrayList<Tenant> getTenants() {
+		ArrayList<Tenant> tenants = new ArrayList<Tenant>();
+		int tenantLayer = Constants.TENANT_STARTINGPOINTS_LAYER;
+
+		for (int i = 0; i < map.getObjectCount(tenantLayer); i++) {
+			Vector2f position = new Vector2f(map.getObjectX(tenantLayer, i)
+					/ TILESIZE, map.getObjectY(tenantLayer, i) / TILESIZE);
+			String name = map.getObjectName(tenantLayer, i);
+			tenants.add(new Tenant(this, position.x, position.y, name));
+		}
+
+		return tenants;
+	}
 }
