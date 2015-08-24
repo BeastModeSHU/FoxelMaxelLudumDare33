@@ -22,14 +22,13 @@ public class Player extends Entity {
 	 * Player Class -> Handles all player interactions with the game
 	 */
 	private final float MOVE_SPEED; // Players moveement speed
-	public ArrayList<Interactable> interactables; // List of all interactable
-													// objects in game
-
 	private SpriteSheet sprites; // animation sprites
 	private Animation animation;
+	private boolean isPlayerHidden = false;
 
-	public Player(Map map) {
-		super(map);
+
+	public Player(Map map, String ENTITTY_TYPE) {
+		super(map, ENTITTY_TYPE);
 		this.MOVE_SPEED = Constants.MOVE_SPEED;
 	}
 
@@ -45,16 +44,14 @@ public class Player extends Entity {
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
-		
-		interactables = new ArrayList<Interactable>();
-
-		collider = new Rectangle((x * TILESIZE), (y * TILESIZE),
-				animation.getCurrentFrame().getWidth(), animation.getCurrentFrame().getHeight());
+		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), animation.getCurrentFrame()
+				.getWidth(), animation.getCurrentFrame().getHeight());
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
+		if (!isPlayerHidden)
+			g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
 	}
 
 	@Override
@@ -62,27 +59,22 @@ public class Player extends Entity {
 
 		Input input = gc.getInput();
 		Vector2f move = new Vector2f(); // Player moveement vector
+		if (!isPlayerHidden) {
+			// Player controls
+			if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
+				move.x = -MOVE_SPEED;
+			}
 
-		// Player controls
-		if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
-			move.x = -MOVE_SPEED;
-		}
+			if (input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)) {
+				move.x = MOVE_SPEED;
+			}
 
-		if (input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)) {
-			move.x = MOVE_SPEED;
-		}
+			if (input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
+				move.y = -MOVE_SPEED;
+			}
 
-		if (input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
-			move.y = -MOVE_SPEED;
-		}
-
-		if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
-			move.y = MOVE_SPEED;
-		}
-
-		if (input.isKeyPressed(Input.KEY_X)) {
-			if (interactables.size() > 0) {
-				interactables.get(0).activate();
+			if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
+				move.y = MOVE_SPEED;
 			}
 		}
 
@@ -170,16 +162,16 @@ public class Player extends Entity {
 			isDown = true;
 
 		if (isLeft)
-			moveByVector.x = -absMove.x * 2;
+			moveByVector.x = -absMove.x;
 
 		if (isRight)
-			moveByVector.x = absMove.x * 2;
+			moveByVector.x = absMove.x;
 
 		if (isUp)
-			moveByVector.y = -absMove.y * 2;
+			moveByVector.y = -absMove.y;
 
 		if (isDown)
-			moveByVector.y = absMove.y * 2;
+			moveByVector.y = absMove.y;
 
 		return moveByVector;
 	}
@@ -194,10 +186,18 @@ public class Player extends Entity {
 	private void updateAnimation(int delta) {
 		animation.update(delta);
 	}
+
 	@Override
-	public float getMaxY(){
+	public float getMaxY() {
 		return ((y * TILESIZE) + animation.getCurrentFrame().getHeight());
-		
+
 	}
-	
+
+	public void setHidden(boolean isPlayerHidden) {
+		this.isPlayerHidden = isPlayerHidden;
+	}
+
+	public boolean isPlayerHiding() {
+		return isPlayerHidden;
+	}
 }
