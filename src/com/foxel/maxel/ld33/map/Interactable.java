@@ -18,7 +18,8 @@ public abstract class Interactable {
 	protected boolean activated = false;
 	protected final int TILESIZE;
 	protected Image image;
-	
+	protected Image interactIcon;
+
 	public Interactable(float x, float y, int ID) {
 		this.x = x;
 		this.y = y;
@@ -36,10 +37,11 @@ public abstract class Interactable {
 		if (activated)
 			activated = false;
 	}
-	
-	public boolean isActivated(){ 
+
+	public boolean isActivated() {
 		return activated;
 	}
+
 	public Circle getActivationCircle() {
 		return activationCircle;
 	}
@@ -49,7 +51,8 @@ public abstract class Interactable {
 	public Vector2f getLocation() {
 		return new Vector2f(x, y);
 	}
-	public int getID(){ 
+
+	public int getID() {
 		return ID;
 	}
 }

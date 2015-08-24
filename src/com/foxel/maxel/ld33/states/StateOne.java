@@ -125,17 +125,6 @@ public class StateOne extends BasicGameState {
 		for (int i = 0; i < interactables.size(); ++i) {
 
 			if (interactables.get(i).getActivationCircle().intersects(player.getCollider())) {
-
-				/*switch (interactables.get(i).getID()) {
-				case Constants.NOISEMAKER_OBJECT:
-					NoiseMaker temp = (NoiseMaker) (interactables.get(i));
-					distractTenants(new Vector2f(temp.getLocation().x, temp.getLocation().y),
-							temp.getDistractionCircle(), i);
-					break;
-				case Constants.HIDINGPLACE_OBJECT:
-					hidePlayer(i);
-					break;
-				}*/
 				
 				if(interactables.get(i).getID() == Constants.TV_ID || interactables.get(i).getID() == Constants.RADIO_ID){ 
 					NoiseMaker temp = (NoiseMaker) (interactables.get(i));

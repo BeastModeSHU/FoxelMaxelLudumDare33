@@ -84,10 +84,12 @@ public class Player extends Entity {
 		colliderAdjustX = main.getCurrentFrame().getWidth() / 5.f;
 		colliderAdjustY = main.getCurrentFrame().getHeight() / 3.f;
 		/*
-		collider = new Rectangle((x * TILESIZE) + colliderAdjustX, colliderAdjustY, main
-				.getCurrentFrame().getWidth() / 1.5f, main.getCurrentFrame().getHeight() / 1.5f);*/ 
-		collider = new Rectangle((x * TILESIZE),(y * TILESIZE) + colliderAdjustY, main
-				.getCurrentFrame().getWidth(), main.getCurrentFrame().getHeight() / 1.5f );
+		 * collider = new Rectangle((x * TILESIZE) + colliderAdjustX,
+		 * colliderAdjustY, main .getCurrentFrame().getWidth() / 1.5f,
+		 * main.getCurrentFrame().getHeight() / 1.5f);
+		 */
+		collider = new Rectangle((x * TILESIZE), (y * TILESIZE) + colliderAdjustY, main
+				.getCurrentFrame().getWidth(), main.getCurrentFrame().getHeight() / 1.5f);
 
 		spotted = false;
 		isPlayerHidden = false;
@@ -150,8 +152,8 @@ public class Player extends Entity {
 		move.x *= (delta / 1000.f) * MOVE_SPEED;
 		move.y *= (delta / 1000.f) * MOVE_SPEED;
 
-		 float newX = (x + move.x) * TILESIZE;
-		 float newY = (y + move.y) * TILESIZE;
+		float newX = (x + move.x) * TILESIZE;
+		float newY = (y + move.y) * TILESIZE;
 
 		collider.setLocation(newX, newY);
 

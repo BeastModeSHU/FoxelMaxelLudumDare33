@@ -45,7 +45,7 @@
  </layer>
  <layer name="ceiling_layer" width="25" height="25">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2U3QrAIAiFvXRrvv/rbjACGUfJobFBB4Qw5evnFNGt/YojEI3ikuL6rzI2ip+b7on2vtlTtHcmA3mzgXwDvaMMVC8gL8bYU79LLmR4QgztL7SuDEa2/sTo3kRvFjG0l6PvvNK7vQ79R5zMGJ1fDFvPe2JnzoqM/2Bpnk4c14hOxAkAAA==
+   H4sIAAAAAAAAC+2VwQ6AIAiGOVrG3fd/0jzkRu0HxehQi+2fTWRfImgholK1Vm0O5SPOIyaf8UcYC/nzJmNkbOSetNhIxp38NQaqzQzmZW69DLSewbzc9yijnWV6kGEZYsj6Qv8VwYi2NzFabaKeRQxZy54+l2OPwcp3j6HdR0lhzPag5Y9ijN5Jb2VczykZPk2pw0Bm+TSbfT9+nbUDSakavcQJAAA=
   </data>
  </layer>
  <objectgroup name="player_start" width="25" height="25" visible="0">
