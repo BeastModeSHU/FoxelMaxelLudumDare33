@@ -9,13 +9,12 @@ import org.newdawn.slick.geom.Circle;
 import com.foxel.maxel.ld33.constants.Constants;
 
 public class HidingPlace extends Interactable {
-	private Image image;
 
-	public HidingPlace(float x, float y, String ID) {
+	public HidingPlace(float x, float y, int ID) {
 		super(x, y, ID);
 		activationCircle = new Circle(x,y,50.f);
 		try {
-			image = new SpriteSheet(Constants.TILESET_LOCATION, TILESIZE, TILESIZE).getSubImage(6,
+			image = new SpriteSheet(Constants.OBJECT_SPRITESEET_LOC, TILESIZE, TILESIZE*2).getSubImage(ID,
 					0);
 		} catch (SlickException e) {
 			e.printStackTrace();

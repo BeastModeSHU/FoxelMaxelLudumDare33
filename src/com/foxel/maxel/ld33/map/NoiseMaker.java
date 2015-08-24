@@ -16,11 +16,11 @@ public class NoiseMaker extends Interactable {
 	private Image image;
 	private final int MAX_RANGE = 200;
 
-	public NoiseMaker(float x, float y, String ID) {
+	public NoiseMaker(float x, float y, int ID) {
 		super(x, y, ID);
 		distractionCircle = new Circle(x, y, MAX_RANGE);
 		try {
-			image = new SpriteSheet(Constants.TILESET_LOCATION, TILESIZE, TILESIZE).getSubImage(5,
+			image = new SpriteSheet(Constants.OBJECT_SPRITESEET_LOC, TILESIZE, TILESIZE * 2).getSubImage(ID,
 					0);
 		} catch (SlickException e) {
 			e.printStackTrace();

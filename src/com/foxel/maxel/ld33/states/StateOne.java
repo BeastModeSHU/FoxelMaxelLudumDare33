@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Circle;
@@ -17,12 +16,10 @@ import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.entities.Entity;
 import com.foxel.maxel.ld33.entities.Player;
 import com.foxel.maxel.ld33.entities.Tenant;
-import com.foxel.maxel.ld33.map.HidingPlace;
 import com.foxel.maxel.ld33.map.Interactable;
 import com.foxel.maxel.ld33.map.NoiseMaker;
 import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.resources.Camera;
-import com.foxel.maxel.ld33.resources.VisionCone;
 import com.foxel.maxel.ld33.resources.XMLData;
 import com.foxel.maxel.ld33.rendering.Renderer;
 
@@ -34,7 +31,6 @@ public class StateOne extends BasicGameState {
 	private Camera camera;
 	private Player player;
 	private ArrayList<Interactable> interactables;
-	private ArrayList<Interactable> playerInteractables;
 	private ArrayList<Polygon> allPolys;
 	private Renderer renderer;
 	private float spottedTimer = 0;
@@ -130,7 +126,7 @@ public class StateOne extends BasicGameState {
 
 			if (interactables.get(i).getActivationCircle().intersects(player.getCollider())) {
 
-				switch (interactables.get(i).getClass().getSimpleName()) {
+				/*switch (interactables.get(i).getID()) {
 				case Constants.NOISEMAKER_OBJECT:
 					NoiseMaker temp = (NoiseMaker) (interactables.get(i));
 					distractTenants(new Vector2f(temp.getLocation().x, temp.getLocation().y),
@@ -139,8 +135,15 @@ public class StateOne extends BasicGameState {
 				case Constants.HIDINGPLACE_OBJECT:
 					hidePlayer(i);
 					break;
+				}*/
+				
+				if(interactables.get(i).getID() == Constants.TV_ID || interactables.get(i).getID() == Constants.RADIO_ID){ 
+					NoiseMaker temp = (NoiseMaker) (interactables.get(i));
+					distractTenants(new Vector2f(temp.getLocation().x, temp.getLocation().y),
+							temp.getDistractionCircle(), i);
+				}else{ 
+					hidePlayer(i);
 				}
-
 			}
 
 		}
