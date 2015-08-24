@@ -17,6 +17,7 @@ import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.entities.Entity;
 import com.foxel.maxel.ld33.entities.Player;
 import com.foxel.maxel.ld33.entities.Tenant;
+import com.foxel.maxel.ld33.map.HidingPlace;
 import com.foxel.maxel.ld33.map.Interactable;
 import com.foxel.maxel.ld33.map.NoiseMaker;
 import com.foxel.maxel.ld33.map.Map;
@@ -79,7 +80,6 @@ public class StateOne extends BasicGameState {
 		interactables = map.getInteractables();
 
 		renderer = new Renderer(player, map, renderable, interactables);
-		System.out.println(interactables.size());
 
 	}
 
@@ -108,33 +108,48 @@ public class StateOne extends BasicGameState {
 	}
 
 	private void checkInteractables() {
-		for (int i = 0; i < interactables.size(); i++) {
+
+		for (int i = 0; i < interactables.size(); ++i) {
+
 			if (interactables.get(i).getActivationCircle().intersects(player.getCollider())) {
+
 				switch (interactables.get(i).getClass().getSimpleName()) {
 				case Constants.NOISEMAKER_OBJECT:
 					NoiseMaker temp = (NoiseMaker) (interactables.get(i));
-					distractTenants(temp.getLocation(), temp.getDistractionCircle());
+					distractTenants(new Vector2f(temp.getLocation().x, temp.getLocation().y),
+							temp.getDistractionCircle(), i);
 					break;
 				case Constants.HIDINGSPOT_OBJECT:
+					System.out.println("Hey");
+					hidePlayer(i);
 					break;
 				}
+
 			}
 
 		}
 	}
 
-	private void distractTenants(Vector2f source, Circle collider) {
-		// TODO Fix function to cehck if an entity is a tenant, then to check
-		// for colliders
+	private void distractTenants(Vector2f source, Circle collider, int ID) {
+
 		for (int i = 0; i < renderable.size(); ++i) {
 			if (renderable.get(i).getClass().getSimpleName().equals(Constants.ENTITY_TENANT)) {
 
 				Tenant temp = (Tenant) renderable.get(i);
-				System.out.println(source);
 				if (collider.intersects(temp.getCollider())) {
-					temp.distract(source);
+					temp.distract(source, ID);
 				}
 			}
+		}
+	}
+
+	private void hidePlayer(int index) {
+		if (!player.isPlayerHiding() && !interactables.get(index).isActivated()) {
+			interactables.get(index).activate();
+			player.setHidden(true);
+		} else if (player.isPlayerHiding()) {
+			player.setHidden(false);
+			interactables.get(index).deactivate();
 		}
 	}
 

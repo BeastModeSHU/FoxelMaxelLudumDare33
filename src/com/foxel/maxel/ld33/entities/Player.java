@@ -24,6 +24,8 @@ public class Player extends Entity {
 	private final float MOVE_SPEED; // Players moveement speed
 	private SpriteSheet sprites; // animation sprites
 	private Animation animation;
+	private boolean isPlayerHidden = false;
+
 
 	public Player(Map map, String ENTITTY_TYPE) {
 		super(map, ENTITTY_TYPE);
@@ -42,14 +44,14 @@ public class Player extends Entity {
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
-
-		collider = new Rectangle((x * TILESIZE), (y * TILESIZE),
-				animation.getCurrentFrame().getWidth(), animation.getCurrentFrame().getHeight());
+		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), animation.getCurrentFrame()
+				.getWidth(), animation.getCurrentFrame().getHeight());
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
+		if (!isPlayerHidden)
+			g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
 	}
 
 	@Override
@@ -57,22 +59,23 @@ public class Player extends Entity {
 
 		Input input = gc.getInput();
 		Vector2f move = new Vector2f(); // Player moveement vector
+		if (!isPlayerHidden) {
+			// Player controls
+			if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
+				move.x = -MOVE_SPEED;
+			}
 
-		// Player controls
-		if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
-			move.x = -MOVE_SPEED;
-		}
+			if (input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)) {
+				move.x = MOVE_SPEED;
+			}
 
-		if (input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)) {
-			move.x = MOVE_SPEED;
-		}
+			if (input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
+				move.y = -MOVE_SPEED;
+			}
 
-		if (input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
-			move.y = -MOVE_SPEED;
-		}
-
-		if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
-			move.y = MOVE_SPEED;
+			if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
+				move.y = MOVE_SPEED;
+			}
 		}
 
 		moveEntity(move, delta);
@@ -159,16 +162,16 @@ public class Player extends Entity {
 			isDown = true;
 
 		if (isLeft)
-			moveByVector.x = -absMove.x * 2;
+			moveByVector.x = -absMove.x;
 
 		if (isRight)
-			moveByVector.x = absMove.x * 2;
+			moveByVector.x = absMove.x;
 
 		if (isUp)
-			moveByVector.y = -absMove.y * 2;
+			moveByVector.y = -absMove.y;
 
 		if (isDown)
-			moveByVector.y = absMove.y * 2;
+			moveByVector.y = absMove.y;
 
 		return moveByVector;
 	}
@@ -183,10 +186,18 @@ public class Player extends Entity {
 	private void updateAnimation(int delta) {
 		animation.update(delta);
 	}
+
 	@Override
-	public float getMaxY(){
+	public float getMaxY() {
 		return ((y * TILESIZE) + animation.getCurrentFrame().getHeight());
-		
+
 	}
-	
+
+	public void setHidden(boolean isPlayerHidden) {
+		this.isPlayerHidden = isPlayerHidden;
+	}
+
+	public boolean isPlayerHiding() {
+		return isPlayerHidden;
+	}
 }

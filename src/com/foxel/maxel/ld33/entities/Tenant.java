@@ -43,7 +43,7 @@ public class Tenant extends Entity {
 	private int actionTimer = 0;
 	private int actionTime = 0;
 
-	public Tenant(Map map, String ENTITY_TYPE,float x, float y) {
+	public Tenant(Map map, String ENTITY_TYPE, float x, float y) {
 		super(map, ENTITY_TYPE);
 		tileSize = Constants.TILESIZE;
 		this.x = x;
@@ -73,7 +73,7 @@ public class Tenant extends Entity {
 
 		pathFinder = new AStarPathFinder(map, 100, false);
 		pathIndex = 0;
-
+		
 		schedule = XMLData.getSchedule("lad");
 
 		// schedule = new ArrayList<Action>();
@@ -82,6 +82,8 @@ public class Tenant extends Entity {
 		// schedule.add(new Action(5f, map.getSpot("bed"), false));
 		currentAction = schedule.get(0);
 		actionTime = (int) (currentAction.time * 1000f);
+		
+		path = new Path();
 		getActionPath();
 	}
 
@@ -92,6 +94,7 @@ public class Tenant extends Entity {
 			g.drawImage(mainIdle, x * TILESIZE, y * TILESIZE - 32);
 		else
 			g.drawAnimation(main, x * TILESIZE, y * TILESIZE - 32);
+		g.fill(collider);
 	}
 
 	@Override
@@ -152,7 +155,8 @@ public class Tenant extends Entity {
 		if (overrideTrigger) {
 			getNextOverride();
 		}
-
+		
+		//System.out.println(path.getLength());
 		// Update main animation
 		main.update(delta);
 	}
@@ -200,7 +204,9 @@ public class Tenant extends Entity {
 
 		Vector2f entityLocation = new Vector2f(x, y);
 		Vector2f pathLocation = new Vector2f(path.getX(pathIndex), path.getY(pathIndex));
+		
 		Vector2f pathVector = new Vector2f();
+
 
 		if (pathIndex < (path.getLength() - 1) && pathLocation.distance(entityLocation) < 0.1f) {
 			++pathIndex;
@@ -235,9 +241,7 @@ public class Tenant extends Entity {
 
 	@Override
 	protected void moveEntity(Vector2f move, int delta) {
-
-		// System.out.println("X = " + move.x * 0.003f * delta + " - Y = " +
-		// move.y * 0.003f * delta);
+		///XXX Redundant 
 	}
 
 	private void moveTowards(Vector2f move, Vector2f dest, int delta) {
@@ -257,15 +261,18 @@ public class Tenant extends Entity {
 		y += moveYBy;
 	}
 
-	public void distract(Vector2f source) {
+	public void distract(Vector2f source, int ID) {
 
 		if (source.x != currentAction.position.x && source.y != currentAction.position.y) {
+			if(source.x/64.f >= 1.f && source.y / 64.f >= 1.f){
 			source.x /= tileSize;
 			source.y /= tileSize;
+
 			overrideActions.clear();
 			overrideTrigger = true;
 			overrideActions.add(new Action(0.5f, new Vector2f(x, y), true));
 			overrideActions.add(new Action(4f, source, true));
+			}
 		}
 	}
 
