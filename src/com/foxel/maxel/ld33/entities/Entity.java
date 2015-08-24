@@ -16,14 +16,16 @@ public abstract class Entity {
 	 * ###MACE### Default entity which all entities will extend from
 	 */
 	protected final int TILESIZE;
+	protected final String ENTITY_TYPE;
 	protected float x, y;
 	protected Map map;
-	public Rectangle collider;
+	protected Rectangle collider;
 	
 	
-	public Entity(Map map) {
+	public Entity(Map map, String ENTITY_TYPE) {
 		this.map = map;
 		this.TILESIZE = Constants.TILESIZE;
+		this.ENTITY_TYPE = ENTITY_TYPE;
 	}
 
 	public abstract void init(GameContainer gc, StateBasedGame sbg) throws SlickException;
@@ -44,4 +46,11 @@ public abstract class Entity {
 		return new Vector2f( Math.round(x), Math.round(y));
 	}
 	public abstract float getMaxY(); 
+	
+	public Rectangle getCollider(){ 
+		return collider;
+	}
+	public String getEntityType(){ 
+		return ENTITY_TYPE;
+	}
 }

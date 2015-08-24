@@ -19,7 +19,9 @@ public class Constants {
 	public static final int TENANT_STARTINGPOINTS_LAYER = 3;
 	public static final String NOISEMAKER_OBJECT = "NoiseMaker";
 	public static final String HIDINGSPOT_OBJECT = "HidingPlace";
-
+	public static final String ENTITY_PLAYER = "Player";
+	public static final String ENTITY_TENANT = "Tenant";
+	
 	public static final String TEST_MAP_LOC = "res//map//test_map.tmx";
 	public static final String TEMP_PLAYER_LOC = "res//player//temp_player.png";
 	public static final String TEMP_TENANT_LOC = "res//tenants//temp_tenant.png";

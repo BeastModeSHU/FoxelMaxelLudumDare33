@@ -52,10 +52,11 @@ public class Tenant extends Entity {
 	private ArrayList<Action> overrideActions;
 	private int actionTimer = 0;
 	private int actionTime = 0;
-	private String name = "defoolt";
+	private String name;
 
-	public Tenant(Map map, float x, float y, String name) {
-		super(map);
+	public Tenant(Map map, String ENTITY_TYPE, float x, float y, String name) {
+		super(map, ENTITY_TYPE);
+
 		tileSize = Constants.TILESIZE;
 		this.x = x;
 		this.y = y;
@@ -64,11 +65,9 @@ public class Tenant extends Entity {
 	}
 
 	@Override
-	public void init(GameContainer gc, StateBasedGame sbg)
-			throws SlickException {
+	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
-		sprites = new SpriteSheet(new Image(Constants.TENANT_SPRITESHEET_LOC),
-				TILESIZE, 96);
+		sprites = new SpriteSheet(new Image(Constants.TENANT_SPRITESHEET_LOC), TILESIZE, 96);
 		// Loading Tenant idle images
 		leftIdle = sprites.getSubImage(10, 0);
 		rightIdle = sprites.getSubImage(15, 0);
@@ -97,27 +96,26 @@ public class Tenant extends Entity {
 		// schedule.add(new Action(5f, map.getSpot("bed"), false));
 		currentAction = schedule.get(0);
 		actionTime = (int) (currentAction.time * 1000f);
+
+		path = new Path();
 		getActionPath();
 
-		vision = new VisionCone(x, y, (float)(degAngle * D2R), (float)(PI * 0.5d), 30, 32f,
-				4f, map);
-		polys = vision.updateCone(x, y, (float)(degAngle * D2R));
+		vision = new VisionCone(x, y, (float) (degAngle * D2R), (float) (PI * 0.5d), 30, 32f, 4f,
+				map);
+		polys = vision.updateCone(x, y, (float) (degAngle * D2R));
 	}
 
 	@Override
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g)
-			throws SlickException {
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
 		if (idle)
 			g.drawImage(mainIdle, x * TILESIZE, y * TILESIZE - 32);
 		else
 			g.drawAnimation(main, x * TILESIZE, y * TILESIZE - 32);
+		
 	}
 
-	@Override
-	public void update(GameContainer gc, StateBasedGame sbg, int delta)
-			throws SlickException {
-		
+	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (!idle) {
 			move = getPathVector();
 
@@ -126,8 +124,8 @@ public class Tenant extends Entity {
 				idle = true;
 			else {
 				idle = false;
-				
-				//Turn entity towards move vector
+
+				// Turn entity towards move vector
 				turnTowards(move, delta);
 
 				// Check which direction the tenant is moving and animate
@@ -155,9 +153,7 @@ public class Tenant extends Entity {
 
 			// Move entity by move vector
 			if (!turning) {
-				moveTowards(move,
-						new Vector2f(path.getX(pathIndex), path.getY(pathIndex)),
-						delta);
+				moveTowards(move, new Vector2f(path.getX(pathIndex), path.getY(pathIndex)), delta);
 			}
 
 			collider.setLocation(x * TILESIZE, y * TILESIZE);
@@ -166,7 +162,7 @@ public class Tenant extends Entity {
 			if (actionTimer > actionTime) {
 				if (overrideActions.size() > 0)
 					getNextOverride();
-				
+
 				else {
 					if (currentAction.override)
 						currentActionIndex--;
@@ -181,19 +177,19 @@ public class Tenant extends Entity {
 
 		// Update main animation
 		main.update(delta);
-		
+
 		if (degAngle < -180d)
 			degAngle += 360d;
 		else if (degAngle > 180d)
 			degAngle -= 360d;
-		//System.out.println(degAngle);
+		// System.out.println(degAngle);
 		angle = degAngle * D2R;
-		
-		polys = vision.updateCone(x * TILESIZE
-				+ main.getCurrentFrame().getWidth() / 2, y * TILESIZE
-				+ main.getCurrentFrame().getHeight() * .5f, (float)(angle));
+
+		polys = vision.updateCone(x * TILESIZE + main.getCurrentFrame().getWidth() / 2, y
+				* TILESIZE + main.getCurrentFrame().getHeight() * .5f, (float) (angle));
 	}
 
+	// end
 	private void getNextAction() {
 
 		currentActionIndex++;
@@ -222,8 +218,7 @@ public class Tenant extends Entity {
 			idle = true;
 		} else {
 			path = pathFinder.findPath(null, (int) (x), (int) (y),
-					(int) (currentAction.position.x),
-					(int) (currentAction.position.y));
+					(int) (currentAction.position.x), (int) (currentAction.position.y));
 			pathIndex = 0;
 		}
 	}
@@ -237,12 +232,10 @@ public class Tenant extends Entity {
 	private Vector2f getPathVector() {
 
 		Vector2f entityLocation = new Vector2f(x, y);
-		Vector2f pathLocation = new Vector2f(path.getX(pathIndex),
-				path.getY(pathIndex));
+		Vector2f pathLocation = new Vector2f(path.getX(pathIndex), path.getY(pathIndex));
 		Vector2f pathVector = new Vector2f();
 
-		if (pathIndex < (path.getLength() - 1)
-				&& pathLocation.distance(entityLocation) < 0.1f) {
+		if (pathIndex < (path.getLength() - 1) && pathLocation.distance(entityLocation) < 0.1f) {
 			++pathIndex;
 			pathLocation.x = path.getX(pathIndex);
 			pathLocation.y = path.getY(pathIndex);
@@ -262,8 +255,8 @@ public class Tenant extends Entity {
 	@Override
 	public Vector2f getEntityDimensions() {
 
-		Vector2f dimensions = new Vector2f(main.getCurrentFrame().getWidth(),
-				main.getCurrentFrame().getHeight());
+		Vector2f dimensions = new Vector2f(main.getCurrentFrame().getWidth(), main
+				.getCurrentFrame().getHeight());
 
 		if (idle) {
 			dimensions.x = mainIdle.getWidth();
@@ -275,9 +268,7 @@ public class Tenant extends Entity {
 
 	@Override
 	protected void moveEntity(Vector2f move, int delta) {
-
-		// System.out.println("X = " + move.x * 0.003f * delta + " - Y = " +
-		// move.y * 0.003f * delta);
+		// /XXX Redundant
 	}
 
 	private void moveTowards(Vector2f move, Vector2f dest, int delta) {
@@ -298,62 +289,77 @@ public class Tenant extends Entity {
 	}
 
 	private boolean turnTowards(Vector2f move, int delta) {
-		
+
 		boolean turning = false;
-		
+
 		double tgtAngle = Math.atan2(move.y, move.x) * R2D;
 		double deltaAngle = Math.abs(degAngle - tgtAngle);
-		
+
 		if (deltaAngle > 0.05d) {
 			turning = true;
-			float dir = getAngleDir((float)(degAngle), (float)(tgtAngle));
+			float dir = getAngleDir((float) (degAngle), (float) (tgtAngle));
 			double toTurn = turnSpeed * (delta / 1000f);
 			if (deltaAngle < toTurn) {
-				//System.out.println("flatten angle");
+				// System.out.println("flatten angle");
 				degAngle = flattenAngle(degAngle);
 				turning = false;
 			}
 			degAngle += toTurn * dir;
 		}
-		
+
 		return turning;
 	}
-	
+
 	private float getAngleDir(float start, float target) {
-		
+
 		float deltaAngle = Math.abs(start - target);
-		
+
 		if (start < target) {
-			if (deltaAngle < 180d) return 1f;
-			else return -1f;
+			if (deltaAngle < 180d)
+				return 1f;
+			else
+				return -1f;
 		}
-		if (deltaAngle < 180d) return -1f;
-		else return 1f;
+		if (deltaAngle < 180d)
+			return -1f;
+		else
+			return 1f;
 	}
-	
+
 	private int flattenAngle(double ang) {
-		
+
 		if (ang > 0d) {
-			if (ang < 45d) return 0;
-			else if (ang < 135d) return 90;
-			else return 180;
+			if (ang < 45d)
+				return 0;
+			else if (ang < 135d)
+				return 90;
+			else
+				return 180;
 		} else {
-			if (ang > -45d) return 0;
-			else if (ang > -135d) return -90;
-			else return -180;
+			if (ang > -45d)
+				return 0;
+			else if (ang > -135d)
+				return -90;
+			else
+				return -180;
 		}
 	}
-	
+
 	public void distract(Vector2f source) {
 
-		if (source.x != currentAction.position.x
-				&& source.y != currentAction.position.y) {
-			source.x /= tileSize;
-			source.y /= tileSize;
-			overrideActions.clear();
-			overrideTrigger = true;
-			overrideActions.add(new Action(0.5f, new Vector2f(x, y), true));
-			overrideActions.add(new Action(4f, source, true));
+		if (source.x != currentAction.position.x && source.y != currentAction.position.y) {
+
+			if (source.x != currentAction.position.x && source.y != currentAction.position.y) {
+				if (source.x / 64.f >= 1.f && source.y / 64.f >= 1.f) {
+					source.x /= tileSize;
+					source.y /= tileSize;
+
+					overrideActions.clear();
+					overrideTrigger = true;
+					overrideActions.add(new Action(0.5f, new Vector2f(x, y), true));
+					overrideActions.add(new Action(4f, source, true));
+				}
+			}
 		}
 	}
 
