@@ -169,16 +169,16 @@ public class Map implements TileBasedMap {
 		int interact = Constants.INTERACTABLES_OBJECT_LAYER;
 
 		for (int i = 0; i < map.getObjectCount(interact); ++i) {
+			System.out.println(map.getObjectName(interact, i));
 			switch (map.getObjectName(interact, i)) {
 			case Constants.NOISEMAKER_OBJECT:
-
 				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i),
 						Constants.NOISEMAKER_OBJECT));
 				break;
-			case Constants.HIDINGSPOT_OBJECT:
+			case Constants.HIDINGPLACE_OBJECT:
 				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i),
-						Constants.HIDINGSPOT_OBJECT));
-
+						Constants.HIDINGPLACE_OBJECT));
+				System.out.println("Hey");
 				break;
 			}
 

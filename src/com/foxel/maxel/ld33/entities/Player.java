@@ -31,7 +31,7 @@ public class Player extends Entity {
 		super(map, ENTITTY_TYPE);
 		this.MOVE_SPEED = Constants.MOVE_SPEED;
 	}
-
+	//TODO Hidden boolean to prevent player from being spotted in a bin
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 
@@ -79,7 +79,7 @@ public class Player extends Entity {
 		}
 
 		moveEntity(move, delta);
-		
+
 		spotted = false;
 	}
 
