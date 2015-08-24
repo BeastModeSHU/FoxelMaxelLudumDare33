@@ -27,6 +27,7 @@ public class Player extends Entity {
 
 	private SpriteSheet sprites; // animation sprites
 	private Animation animation;
+	private boolean spotted = false;
 
 	public Player(Map map) {
 		super(map);
@@ -87,7 +88,8 @@ public class Player extends Entity {
 		}
 
 		moveEntity(move, delta);
-
+		
+		spotted = false;
 	}
 
 	@Override
@@ -183,7 +185,11 @@ public class Player extends Entity {
 
 		return moveByVector;
 	}
-
+	
+	public void spotted() {
+		spotted = true;
+	}
+	
 	@Override
 	public Vector2f getEntityDimensions() {
 
@@ -194,6 +200,7 @@ public class Player extends Entity {
 	private void updateAnimation(int delta) {
 		animation.update(delta);
 	}
+	
 	@Override
 	public float getMaxY(){
 		return ((y * TILESIZE) + animation.getCurrentFrame().getHeight());

@@ -1,0 +1,26 @@
+<behaviours>
+	<tenant id="guy">
+		<moveTo>
+			<spot>fridge</spot>
+			<time>5</time>
+		</moveTo>
+		<moveTo>
+			<spot>bed</spot>
+			<time>2</time>
+		</moveTo>
+		<moveTo>
+			<spot>chair</spot>
+			<time>1</time>
+		</moveTo>
+	</tenant>
+	<tenant id="lad">
+		<moveTo>
+			<spot>bed</spot>
+			<time>1</time>
+		</moveTo>
+		<moveTo>
+			<spot>chair</spot>
+			<time>1</time>
+		</moveTo>
+	</tenant>
+</behaviours>
