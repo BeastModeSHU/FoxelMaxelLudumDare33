@@ -24,28 +24,32 @@ public class Player extends Entity {
 	private final float MOVE_SPEED; // Players moveement speed
 	private SpriteSheet sprites; // animation sprites
 	private Animation animation;
-	private boolean spotted = false;
-	private boolean isPlayerHidden = false;
+	private boolean spotted;
+	private boolean isPlayerHidden;
 
 	public Player(Map map, String ENTITTY_TYPE) {
 		super(map, ENTITTY_TYPE);
 		this.MOVE_SPEED = Constants.MOVE_SPEED;
 	}
-	//TODO Hidden boolean to prevent player from being spotted in a bin
+
+	// TODO Hidden boolean to prevent player from being spotted in a bin
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-
-		sprites = new SpriteSheet(
-				new Image(Constants.PLAYER_SPRITESHEET_LOC).getScaledCopy(64.f / 96.f), TILESIZE,
-				TILESIZE);
-
-		animation = new Animation(sprites, 0, 0, 3, 0, true, 180, false);
+		if (sprites == null)
+			sprites = new SpriteSheet(
+					new Image(Constants.PLAYER_SPRITESHEET_LOC).getScaledCopy(64.f / 96.f),
+					TILESIZE, TILESIZE);
+		if (animation == null)
+			animation = new Animation(sprites, 0, 0, 3, 0, true, 180, false);
 
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
 		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), animation.getCurrentFrame()
 				.getWidth(), animation.getCurrentFrame().getHeight());
+		
+		spotted = false; 
+		isPlayerHidden = false;
 	}
 
 	@Override
@@ -79,8 +83,9 @@ public class Player extends Entity {
 		}
 
 		moveEntity(move, delta);
-
-		spotted = false;
+		
+		System.out.println(spotted);
+			
 	}
 
 	@Override
@@ -179,6 +184,9 @@ public class Player extends Entity {
 
 	public void spotted() {
 		spotted = true;
+	}
+	public boolean isSpotted(){
+		return spotted;
 	}
 
 	@Override

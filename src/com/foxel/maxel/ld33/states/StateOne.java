@@ -49,9 +49,9 @@ public class StateOne extends BasicGameState {
 
 		map = new Map();
 		map.init();
-		
+
 		XMLData.init(map);
-	
+
 		camera = new Camera(map.getWidth(), map.getHeight());
 
 		player = new Player(map, Constants.ENTITY_PLAYER);
@@ -69,7 +69,6 @@ public class StateOne extends BasicGameState {
 
 		interactables = new ArrayList<Interactable>();
 		interactables = map.getInteractables();
-	
 
 		allPolys = new ArrayList<Polygon>();
 
@@ -90,7 +89,6 @@ public class StateOne extends BasicGameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
 			gc.exit();
-
 		allPolys.clear();
 		for (int i = 0; i < renderable.size(); ++i) {
 			renderable.get(i).update(gc, sbg, delta);
@@ -100,13 +98,16 @@ public class StateOne extends BasicGameState {
 			if (t != null) {
 				for (int j = 0; j < t.polys.length; j++) {
 					allPolys.add(t.polys[j]);
-					if (t.polys[j].intersects(player.getCollider())) {
+					if (t.polys[j].intersects(player.getCollider()) && !player.isPlayerHiding()) {
 						player.spotted();
 						// ADD TENANT REACTION TO SPOTTING PLAYER HERE
 					}
 				}
 			}
 		}
+
+		if (player.isSpotted())
+			debugResetEntities(gc, sbg);
 
 		for (int i = 0; i < renderable.size(); ++i) {
 			renderable.get(i).update(gc, sbg, delta);
@@ -167,5 +168,11 @@ public class StateOne extends BasicGameState {
 	public int getID() {
 		// TODO Auto-generated method stub
 		return STATE_ID;
+	}
+
+	private void debugResetEntities(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		for (Entity e : renderable) {
+			e.init(gc, sbg);
+		}
 	}
 }

@@ -26,33 +26,33 @@ public class Tenant extends Entity {
 	 * Tenants of each house will use this class ### MACE ###
 	 */
 
-	private AStarPathFinder pathFinder;
-	private Path path;
-	private int pathIndex;
-	private int tileSize;
-	private SpriteSheet sprites;
-	private Animation main, left, right, up, down;
-	private Image mainIdle, leftIdle, rightIdle, upIdle, downIdle;
-	private Vector2f move = new Vector2f();
-	private boolean idle = false;
+	private double turnSpeed;
 	private double PI = Math.PI;
 	private double R2D = 180d / PI;
 	private double D2R = PI / 180d;
 	private double degAngle = 0d;
 	public double angle = 0d;
-	private boolean turning = false;
-	private double turnSpeed;
-	private VisionCone vision;
-	public Polygon[] polys;
 	private float movementSpeed = Constants.TENANT_MOVE_SPEED;
-	private ArrayList<Action> schedule;
-	private Action currentAction;
-	private int currentActionIndex;
-	private boolean overrideTrigger = false;
-	private ArrayList<Action> overrideActions;
+	private int pathIndex;
+	private int tileSize;
 	private int actionTimer = 0;
 	private int actionTime = 0;
+	private int currentActionIndex;
+	private AStarPathFinder pathFinder;
+	private Path path;
+	private SpriteSheet sprites;
+	private Animation main, left, right, up, down;
+	private Image mainIdle, leftIdle, rightIdle, upIdle, downIdle;
+	private Vector2f move = new Vector2f();
+	private VisionCone vision;
+	public Polygon[] polys;
+	private ArrayList<Action> schedule;
+	private Action currentAction;
+	private ArrayList<Action> overrideActions;
 	private String name;
+	private boolean idle = false;
+	private boolean turning = false;
+	private boolean overrideTrigger = false;
 
 	public Tenant(Map map, String ENTITY_TYPE, float x, float y, String name) {
 		super(map, ENTITY_TYPE);
@@ -66,26 +66,34 @@ public class Tenant extends Entity {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-
-		sprites = new SpriteSheet(new Image(Constants.TENANT_SPRITESHEET_LOC), TILESIZE, 96);
+		if (sprites == null)
+			sprites = new SpriteSheet(new Image(Constants.TENANT01_SPRITESHEET_LOC), TILESIZE, 96);
 		// Loading Tenant idle images
-		leftIdle = sprites.getSubImage(10, 0);
-		rightIdle = sprites.getSubImage(15, 0);
-		upIdle = sprites.getSubImage(5, 0);
-		downIdle = sprites.getSubImage(0, 0);
+		if (leftIdle == null)
+			leftIdle = sprites.getSubImage(10, 0);
+		if (rightIdle == null)
+			rightIdle = sprites.getSubImage(15, 0);
+		if (upIdle == null)
+			upIdle = sprites.getSubImage(5, 0);
+		if (downIdle == null)
+			downIdle = sprites.getSubImage(0, 0);
 
 		mainIdle = downIdle;
 		// Loading all animations
-		left = new Animation(sprites, 11, 0, 14, 0, true, 240, false);
-		right = new Animation(sprites, 16, 0, 19, 0, true, 240, false);
-		up = new Animation(sprites, 6, 0, 9, 0, true, 240, false);
-		down = new Animation(sprites, 1, 0, 4, 0, true, 240, false);
+		if (left == null)
+			left = new Animation(sprites, 11, 0, 14, 0, true, 240, false);
+		if (right == null)
+			right = new Animation(sprites, 16, 0, 19, 0, true, 240, false);
+		if (up == null)
+			up = new Animation(sprites, 6, 0, 9, 0, true, 240, false);
+		if (down == null)
+			down = new Animation(sprites, 1, 0, 4, 0, true, 240, false);
 
 		main = down;
 
 		collider = new Rectangle(x, y, 64, 96);
-
-		pathFinder = new AStarPathFinder(map, 100, false);
+		if (pathFinder == null)
+			pathFinder = new AStarPathFinder(map, 100, false);
 		pathIndex = 0;
 
 		schedule = XMLData.getSchedule(name);
@@ -112,7 +120,7 @@ public class Tenant extends Entity {
 			g.drawImage(mainIdle, x * TILESIZE, y * TILESIZE - 32);
 		else
 			g.drawAnimation(main, x * TILESIZE, y * TILESIZE - 32);
-		
+
 	}
 
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
