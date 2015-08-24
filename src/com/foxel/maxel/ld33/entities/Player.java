@@ -22,10 +22,13 @@ public class Player extends Entity {
 	 * Player Class -> Handles all player interactions with the game
 	 */
 	private final float MOVE_SPEED; // Players moveement speed
+	private final String LEFT = "left", RIGHT = "right", UP = "up", DOWN = "down";
 	private SpriteSheet sprites; // animation sprites
 	private Animation main, left, right, up, down, leftIdle, rightIdle, upIdle, downIdle;
 	private boolean spotted;
 	private boolean isPlayerHidden;
+	private String lastDirection;
+	private boolean isIdle = true;
 
 	public Player(Map map, String ENTITTY_TYPE) {
 		super(map, ENTITTY_TYPE);
@@ -45,30 +48,32 @@ public class Player extends Entity {
 
 		// animation = new Animation(sprites, 0, 0, 3, 0, true, 180, false);
 		if (left == null)
-			left = new Animation();
+			left = new Animation(sprites, 14, 0, 17, 0, true, 250, false);
 
 		if (right == null)
-			right = new Animation();
+			right = new Animation(sprites, 20, 0, 23, 0, true, 250, false);
 
 		if (up == null)
-			up = new Animation();
+			up = new Animation(sprites, 8, 0, 11, 0, true, 250, false);
 
 		if (down == null)
-			down = new Animation();
+			down = new Animation(sprites, 2, 0, 5, 0, true, 250, false);
 
 		if (leftIdle == null)
-			leftIdle = new Animation(sprites, 12,0, 14,0, true, 500, false);
+			leftIdle = new Animation(sprites, 12, 0, 13, 0, true, 500, false);
 
 		if (rightIdle == null)
-			rightIdle = new Animation();
+			rightIdle = new Animation(sprites, 18, 0, 19, 0, true, 500, false);
 
 		if (upIdle == null)
-			upIdle = new Animation();
+			upIdle = new Animation(sprites, 6, 0, 7, 0, true, 500, false);
 
 		if (downIdle == null)
-			downIdle = new Animation();
+			downIdle = new Animation(sprites, 0, 0, 1, 0, true, 500, false);
 
-		main = leftIdle;
+		main = downIdle;
+
+		lastDirection = DOWN;
 
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
@@ -95,23 +100,38 @@ public class Player extends Entity {
 			// Player controls
 			if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)) {
 				move.x = -MOVE_SPEED;
+				lastDirection = LEFT;
 			}
 
 			if (input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)) {
 				move.x = MOVE_SPEED;
+				lastDirection = RIGHT;
 			}
 
 			if (input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)) {
 				move.y = -MOVE_SPEED;
+				lastDirection = UP;
 			}
 
 			if (input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
 				move.y = MOVE_SPEED;
+				lastDirection = DOWN;
 			}
+
+			if (input.isKeyDown(Input.KEY_LEFT) || input.isKeyDown(Input.KEY_A)
+					|| input.isKeyDown(Input.KEY_RIGHT) || input.isKeyDown(Input.KEY_D)
+					|| input.isKeyDown(Input.KEY_UP) || input.isKeyDown(Input.KEY_W)
+					|| input.isKeyDown(Input.KEY_DOWN) || input.isKeyDown(Input.KEY_S)) {
+				isIdle = false;
+			} else {
+				isIdle = true;
+			}
+
 		}
+
 		moveEntity(move, delta);
-		
 		updateAnimation(delta);
+
 	}
 
 	@Override
@@ -121,12 +141,8 @@ public class Player extends Entity {
 
 		move.x *= (delta / 1000.f) * MOVE_SPEED;
 		move.y *= (delta / 1000.f) * MOVE_SPEED;
-
-		if (move.x != 0 || move.y != 0)
-			updateAnimation(delta);
-		else
-			main.setCurrentFrame(0);
-
+		
+		
 		float newX = (x + move.x) * TILESIZE;
 		float newY = (y + move.y) * TILESIZE;
 
@@ -148,14 +164,11 @@ public class Player extends Entity {
 
 	private Vector2f moveBy(Vector2f move) {
 
-		Vector2f moveByVector = new Vector2f(); // Vector to be returned at the
-												// end, initialised as (0,0)
-		Vector2f absMove = new Vector2f(Math.abs(move.x), Math.abs(move.y)); // Absolute
-																				// values
-																				// of
-																				// the
-																				// move
-																				// vector
+		// Vector to be returned at the end, initialised as (0,0)
+		Vector2f moveByVector = new Vector2f();
+		// Absolute values of the move vector
+		Vector2f absMove = new Vector2f(Math.abs(move.x), Math.abs(move.y));
+
 		Vector2f tempMove = new Vector2f(absMove.x * TILESIZE, absMove.y * TILESIZE); // Move
 																						// vector
 																						// scaled
@@ -223,6 +236,49 @@ public class Player extends Entity {
 	}
 
 	private void updateAnimation(int delta) {
+
+		if (isIdle) {
+			switch (lastDirection) {
+			case LEFT:
+				if (!main.equals(leftIdle))
+					main = leftIdle;
+				break;
+			case RIGHT:
+				if (!main.equals(rightIdle))
+					main = rightIdle;
+				break;
+			case UP:
+				if (!main.equals(upIdle))
+					main = upIdle;
+				break;
+			case DOWN:
+				if (!main.equals(downIdle))
+					main = downIdle;
+				break;
+
+			}
+		} else {
+			switch (lastDirection) {
+			case LEFT:
+				if (!main.equals(left))
+					main = left;
+				break;
+			case RIGHT:
+				if (!main.equals(right))
+					main = right;
+				break;
+			case UP:
+				if (!main.equals(up))
+					main = up;
+				break;
+			case DOWN:
+				if (!main.equals(down))
+					main = down;
+				break;
+
+			}
+
+		}
 		main.update(delta);
 	}
 

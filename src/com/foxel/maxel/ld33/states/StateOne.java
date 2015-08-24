@@ -37,6 +37,7 @@ public class StateOne extends BasicGameState {
 	private ArrayList<Interactable> playerInteractables;
 	private ArrayList<Polygon> allPolys;
 	private Renderer renderer;
+	private float spottedTimer = 0;
 
 	public StateOne(int STATE_ID) {
 		this.STATE_ID = STATE_ID;
@@ -106,8 +107,13 @@ public class StateOne extends BasicGameState {
 			}
 		}
 
-		if (player.isSpotted())
-			debugResetEntities(gc, sbg);
+		if (player.isSpotted()) {
+			spottedTimer += (delta / 1000.f);
+			if (spottedTimer > 0.4f){
+				debugResetEntities(gc, sbg);
+				spottedTimer = 0.f;
+			}
+		}
 
 		for (int i = 0; i < renderable.size(); ++i) {
 			renderable.get(i).update(gc, sbg, delta);
