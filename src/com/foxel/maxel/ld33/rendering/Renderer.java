@@ -4,7 +4,10 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Polygon;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.StateBasedGame;
 
 import com.foxel.maxel.ld33.constants.Constants;
@@ -18,23 +21,32 @@ public class Renderer {
 	 * ### MACE ### Will z-sort the map & entity list and render each thing at
 	 * the right location
 	 */
+	private final int MAP_SECTION_WIDTH = 15;
+	private final int MAP_SECTION_HEIGHT = 1;
+	private final int TILESIZE;
+	private final int CEILING_LAYER;
 	private Player player;
 	private Map map;
 	private ArrayList<Entity> renderable;
+	private ArrayList<Polygon> cones;
+	private Image tex;
 	private ArrayList<Interactable> interactables;
-	private final int TILESIZE;
-	private final int CEILING_LAYER;
-	private final int MAP_SECTION_WIDTH = 15;
-	private final int MAP_SECTION_HEIGHT = 1;
 
 	public Renderer(Player player, Map map, ArrayList<Entity> renderable,
-			ArrayList<Interactable> interactables) {
+			ArrayList<Interactable> interactables, ArrayList<Polygon> cones) {
 		this.player = player;
 		this.map = map;
 		this.renderable = renderable;
 		this.TILESIZE = Constants.TILESIZE;
 		this.CEILING_LAYER = Constants.CEILING_LAYER_ID;
+		try {
+			tex = new Image(Constants.VISIONCONE_LOC, false, Image.FILTER_NEAREST);
+		} catch (SlickException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.interactables = interactables;
+
 	}
 
 	public void sortRenderableByZ() {
@@ -76,10 +88,17 @@ public class Renderer {
 		renderable.set(index2, temp);
 	}
 
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g, ArrayList<Polygon> cones) throws SlickException {
+		this.cones = cones;
+		
 		// Will handle map rendering & renderable rendering
 		map.renderFloorLayer();
+		
+		for (int i = 0; i < cones.size(); i++)
+			g.texture(cones.get(i), tex, true);
+		
 		map.renderWallLayer();
+		
 		for(Interactable i : interactables){ 
 			i.render(g);
 		}

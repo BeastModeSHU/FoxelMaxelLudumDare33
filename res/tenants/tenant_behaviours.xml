@@ -22,9 +22,5 @@
 			<spot>chair</spot>
 			<time>1</time>
 		</moveTo>
-		<moveTo>
-			<spot>chair</spot>
-			<time>1</time>
-		</moveTo>
 	</tenant>
 </behaviours>

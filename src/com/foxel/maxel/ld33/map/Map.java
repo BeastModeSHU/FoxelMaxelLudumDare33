@@ -10,6 +10,7 @@ import org.newdawn.slick.util.pathfinding.PathFindingContext;
 import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
 import com.foxel.maxel.ld33.constants.Constants;
+import com.foxel.maxel.ld33.entities.Tenant;
 
 public class Map implements TileBasedMap {
 
@@ -45,6 +46,7 @@ public class Map implements TileBasedMap {
 		}
 
 	}
+
 	public void renderFloorLayer() throws SlickException {
 		map.render(0, 0, FLOOR_LAYER_ID);
 	}
@@ -169,10 +171,14 @@ public class Map implements TileBasedMap {
 		for (int i = 0; i < map.getObjectCount(interact); ++i) {
 			switch (map.getObjectName(interact, i)) {
 			case Constants.NOISEMAKER_OBJECT:
-				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i), Constants.NOISEMAKER_OBJECT));
+
+				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i),
+						Constants.NOISEMAKER_OBJECT));
 				break;
 			case Constants.HIDINGSPOT_OBJECT:
-				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i), Constants.HIDINGSPOT_OBJECT));
+				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i),
+						Constants.HIDINGSPOT_OBJECT));
+
 				break;
 			}
 
@@ -181,4 +187,17 @@ public class Map implements TileBasedMap {
 
 	}
 
+	public ArrayList<Tenant> getTenants() {
+		ArrayList<Tenant> tenants = new ArrayList<Tenant>();
+		int tenantLayer = Constants.TENANT_STARTINGPOINTS_LAYER;
+
+		for (int i = 0; i < map.getObjectCount(tenantLayer); i++) {
+			Vector2f position = new Vector2f(map.getObjectX(tenantLayer, i) / TILESIZE,
+					map.getObjectY(tenantLayer, i) / TILESIZE);
+			String name = map.getObjectName(tenantLayer, i);
+			tenants.add(new Tenant(this, Constants.ENTITY_TENANT, position.x, position.y, name));
+		}
+
+		return tenants;
+	}
 }

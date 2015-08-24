@@ -34,10 +34,8 @@ public class StateOne extends BasicGameState {
 	private Camera camera;
 	private Player player;
 	private ArrayList<Interactable> interactables;
-	private Tenant tenant;
-	private VisionCone vis;
-	private Polygon[] polys;
-	private Image tex;
+	private ArrayList<Interactable> playerInteractables;
+	private ArrayList<Polygon> allPolys;
 	private Renderer renderer;
 
 	public StateOne(int STATE_ID) {
@@ -57,37 +55,31 @@ public class StateOne extends BasicGameState {
 		player = new Player(map, Constants.ENTITY_PLAYER);
 		player.init(gc, sbg);
 
-		tenant = new Tenant(map, Constants.ENTITY_TENANT, 2, 2);
-		tenant.init(gc, sbg);
-
-		Tenant snep = new Tenant(map, Constants.ENTITY_TENANT, 10, 10);
-		snep.init(gc, sbg);
+		ArrayList<Tenant> tenants = map.getTenants();
+		for (int i = 0; i < tenants.size(); i++) {
+			tenants.get(i).init(gc, sbg);
+			renderable.add(tenants.get(i));
+		}
 
 		renderable.add(player);
-		renderable.add(tenant);
-		renderable.add(snep);
 
 		// zSort = new SortZAxis(player, map);
 
 		interactables = new ArrayList<Interactable>();
-
-		vis = new VisionCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y,
-				tenant.angle, (float) (Math.PI / 2), 30, 32f, 4f, map);
-		polys = vis.updateCone(tenant.getPixelLocation().x, tenant.getPixelLocation().y,
-				tenant.angle);
-		tex = new Image(Constants.VISIONCONE_LOC, false, Image.FILTER_NEAREST);
-
 		interactables = map.getInteractables();
 
-		renderer = new Renderer(player, map, renderable, interactables);
+		allPolys = new ArrayList<Polygon>();
 
+		renderer = new Renderer(player, map, renderable, interactables, allPolys);
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 
 		camera.translate(g, player);
-		renderer.render(gc, sbg, g);
+
+		renderer.render(gc, sbg, g, allPolys);
+		// renderer.render(gc, sbg, g);
 
 	}
 
@@ -96,6 +88,23 @@ public class StateOne extends BasicGameState {
 		if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
 			gc.exit();
 
+		allPolys.clear();
+		for (int i = 0; i < renderable.size(); ++i) {
+			renderable.get(i).update(gc, sbg, delta);
+			Tenant t = null;
+			if (renderable.get(i) instanceof Tenant)
+				t = (Tenant) renderable.get(i);
+			if (t != null) {
+				for (int j = 0; j < t.polys.length; j++) {
+					allPolys.add(t.polys[j]);
+					if (t.polys[j].intersects(player.getCollider())) {
+						player.spotted();
+						// ADD TENANT REACTION TO SPOTTING PLAYER HERE
+					}
+				}
+			}
+		}
+
 		for (int i = 0; i < renderable.size(); ++i) {
 			renderable.get(i).update(gc, sbg, delta);
 		}
@@ -103,8 +112,6 @@ public class StateOne extends BasicGameState {
 		if (gc.getInput().isKeyPressed(Input.KEY_X))
 			checkInteractables();
 
-		polys = vis.updateCone(tenant.getPixelLocation().x + 32f,
-				tenant.getPixelLocation().y + 32f, tenant.angle);
 	}
 
 	private void checkInteractables() {
@@ -137,7 +144,7 @@ public class StateOne extends BasicGameState {
 
 				Tenant temp = (Tenant) renderable.get(i);
 				if (collider.intersects(temp.getCollider())) {
-					temp.distract(source, ID);
+					temp.distract(source);
 				}
 			}
 		}

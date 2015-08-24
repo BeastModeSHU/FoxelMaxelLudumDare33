@@ -24,8 +24,8 @@ public class Player extends Entity {
 	private final float MOVE_SPEED; // Players moveement speed
 	private SpriteSheet sprites; // animation sprites
 	private Animation animation;
+	private boolean spotted = false;
 	private boolean isPlayerHidden = false;
-
 
 	public Player(Map map, String ENTITTY_TYPE) {
 		super(map, ENTITTY_TYPE);
@@ -79,7 +79,8 @@ public class Player extends Entity {
 		}
 
 		moveEntity(move, delta);
-
+		
+		spotted = false;
 	}
 
 	@Override
@@ -174,6 +175,10 @@ public class Player extends Entity {
 			moveByVector.y = absMove.y;
 
 		return moveByVector;
+	}
+
+	public void spotted() {
+		spotted = true;
 	}
 
 	@Override

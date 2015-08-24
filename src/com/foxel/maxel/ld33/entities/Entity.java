@@ -50,4 +50,7 @@ public abstract class Entity {
 	public Rectangle getCollider(){ 
 		return collider;
 	}
+	public String getEntityType(){ 
+		return ENTITY_TYPE;
+	}
 }
