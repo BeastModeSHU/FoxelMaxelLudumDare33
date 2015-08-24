@@ -56,22 +56,9 @@ public class Renderer {
 		while (swapped) {
 			swapped = false; // set flag to false awaiting a possible swap
 			for (j = 0; j < renderable.size() - 1; j++) {
-				float num1, num2;
+				float num1 = renderable.get(j).getMaxY(), num2 = renderable.get(j+1).getMaxY();
 
-				if (renderable.get(j).equals(player)) {
-					num1 = renderable.get(j).getPixelLocation().y
-							+ renderable.get(j).getEntityDimensions().y;
-				} else {
-					num1 = renderable.get(j).getPixelLocation().y
-							+ renderable.get(j).getEntityDimensions().y - 48.f;
-				}
-				if (renderable.get(j + 1).equals(player)) {
-					num2 = renderable.get(j + 1).getPixelLocation().y
-							+ renderable.get(j + 1).getEntityDimensions().y;
-				} else {
-					num2 = renderable.get(j + 1).getPixelLocation().y
-							+ renderable.get(j + 1).getEntityDimensions().y - 48.f;
-				}
+			
 				if (num1 > num2) // change to > for ascending sort
 				{
 					swapEntities(j, (j + 1));

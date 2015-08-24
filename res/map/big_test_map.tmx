@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="25" height="25" tilewidth="64" tileheight="64">
  <tileset firstgid="1" name="tileset" tilewidth="64" tileheight="64">
-  <image source="tileset.png" width="1280" height="64"/>
+  <image source="tileset.png" width="1536" height="64"/>
   <tile id="1">
    <properties>
-    <property name="blocked" value="true"/>
+    <property name="" value=""/>
    </properties>
   </tile>
   <tile id="2">
@@ -12,20 +12,40 @@
     <property name="" value=""/>
    </properties>
   </tile>
+  <tile id="19">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="blocked" value="true"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="floor_layer" width="25" height="25">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgoC9gJAGP2kF7O8i1dzjagUsOn5tGkh3E2E9vO6iNqe1WbGYNlB3oYDDagQuM2jG47BgFgwcAADfRCwPECQAA
+   H4sIAAAAAAAAC2NgoC9gJgGP2kF7O8i1dzjagUsOn5tGkh3E2E9vO6iNqe1WbGYNlB3oYDDagQuM2jG47BgFgwcAAOpixgzECQAA
   </data>
  </layer>
  <layer name="wall_layer" width="25" height="25">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NgoB9gIgOTYwct1Q9mO0gNN0rCnBw/kaqXnnaQkybJsQObHLo4uXbgij9q2UGM/bjcRCs7qA2o7VZi44MedlCSz2mddrG5D5dbKbGDWPlRO/DL4ysTaVW3jwLsAADW913WxAkAAA==
+   H4sIAAAAAAAAC+2VXQoAIQiEO8SS97/pPixBiEpOkxDsgC+ZfJU/tVanBzCEcXJ/JaMb5qm3/LvpmEwscqdsbCUDqUmEYfn0OsIYuZSDjEgWY64v61wMBlssRtRP3lut9PkOY6fPrXnEqquxz5pHQmas+m9m6BzNPsa/q/Mkgc8zxjz49ekFGwhZc8QJAAA=
   </data>
  </layer>
  <layer name="ceiling_layer" width="25" height="25">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC2NggABmMjCpgFQ9w8kOUsONkjAnx0+k6qWnHeSkSXLswCaHLk6uHbjij1p2EGM/LjfRyg5qg6FkBzlxTm4+p3XaxeY+XG6lxA5i5UftwC+Pr0ykVd0+CgYOAADRTjv/xAkAAA==
+   H4sIAAAAAAAAC+2VwQ6AIAiGOVrG3fd/0jzkRu0HxehQi+2fTWRfImgholK1Vm0O5SPOIyaf8UcYC/nzJmNkbOSetNhIxp38NQaqzQzmZW69DLSewbzc9yijnWV6kGEZYsj6Qv8VwYi2NzFabaKeRQxZy54+l2OPwcp3j6HdR0lhzPag5Y9ijN5Jb2VczykZPk2pw0Bm+TSbfT9+nbUDSakavcQJAAA=
   </data>
  </layer>
  <objectgroup name="player_start" width="25" height="25" visible="0">
@@ -36,11 +56,11 @@
   <object name="chair" x="128" y="1152" width="64" height="64"/>
   <object name="fridge" x="320" y="128" width="64" height="64"/>
  </objectgroup>
- <objectgroup name="interactable_objects" width="25" height="25" visible="0">
-  <object name="NoiseMaker" x="702" y="128" width="64" height="64"/>
-  <object name="NoiseMaker" x="120" y="646" width="64" height="64"/>
-  <object name="NoiseMaker" x="1346" y="830" width="64" height="64"/>
-  <object name="HidingPlace" x="514" y="970" width="64" height="64"/>
+ <objectgroup name="interactable_objects" width="25" height="25">
+  <object name="tv" x="702" y="128" width="64" height="64"/>
+  <object name="radio" x="120" y="646" width="64" height="64"/>
+  <object name="fridge" x="1346" y="830" width="64" height="64"/>
+  <object name="bin" x="514" y="970" width="64" height="64"/>
  </objectgroup>
  <objectgroup name="tenant_startingpoints" width="25" height="25" visible="0">
   <object name="guy" x="768" y="128" width="64" height="64"/>

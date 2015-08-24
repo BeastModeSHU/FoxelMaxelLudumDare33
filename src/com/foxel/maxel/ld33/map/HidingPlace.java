@@ -9,14 +9,16 @@ import org.newdawn.slick.geom.Circle;
 import com.foxel.maxel.ld33.constants.Constants;
 
 public class HidingPlace extends Interactable {
-	private Image image;
+	private Image hiding;
 
-	public HidingPlace(float x, float y, String ID) {
+	public HidingPlace(float x, float y, int ID) {
 		super(x, y, ID);
-		activationCircle = new Circle(x,y,50.f);
+		activationCircle = new Circle(x, y, 0);
 		try {
-			image = new SpriteSheet(Constants.TILESET_LOCATION, TILESIZE, TILESIZE).getSubImage(6,
-					0);
+			image = new SpriteSheet(Constants.OBJECT_SPRITESEET_LOC, TILESIZE, TILESIZE * 2)
+					.getSubImage(ID, 0);
+			hiding = new Image(Constants.HIDING_ICON);
+			activationCircle.setRadius(image.getWidth());
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -25,8 +27,11 @@ public class HidingPlace extends Interactable {
 
 	@Override
 	public void render(Graphics g) throws SlickException {
-		g.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2);
+		g.drawImage(image, x + image.getWidth() / 2, y - image.getHeight() / 4);
 		g.draw(this.activationCircle);
+		if (this.activated) {
+			g.drawImage(hiding, x+hiding.getWidth()/2,y + hiding.getHeight()/2);
+		}
 	}
 
 }
