@@ -18,7 +18,7 @@
    H4sIAAAAAAAAC2NgoB9gIgOTYwct1Q9mO0gNN0rCnBw/kaqXnnaQkybJsQObHLo4uXbgij9q2UGM/bjcRCs7qA2o7VZi44MedlCSz2mddrG5D5dbKbGDWPlRO/DL4ysTaVW3jwLsAADW913WxAkAAA==
   </data>
  </layer>
- <layer name="ceiling_layer" width="25" height="25" opacity="0.43">
+ <layer name="ceiling_layer" width="25" height="25">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC2NggABmMjCpgFQ9w8kOUsONkjAnx0+k6qWnHeSkSXLswCaHLk6uHbjij1p2EGM/LjfRyg5qg6FkBzlxTm4+p3XaxeY+XG6lxA5i5UftwC+Pr0ykVd0+CgYOAADRTjv/xAkAAA==
   </data>
@@ -26,12 +26,12 @@
  <objectgroup name="player_start" width="25" height="25" visible="0">
   <object x="960" y="1152" width="64" height="64"/>
  </objectgroup>
- <objectgroup name="tenant_spots" width="25" height="25">
+ <objectgroup name="tenant_spots" width="25" height="25" visible="0">
   <object name="bed" x="1280" y="512" width="64" height="64"/>
   <object name="chair" x="128" y="1152" width="64" height="64"/>
   <object name="fridge" x="320" y="128" width="64" height="64"/>
  </objectgroup>
- <objectgroup name="interactable_objects" width="25" height="25">
+ <objectgroup name="interactable_objects" width="25" height="25" visible="0">
   <object name="NoiseMaker" x="702" y="128" width="64" height="64"/>
   <object name="NoiseMaker" x="120" y="646" width="64" height="64"/>
   <object name="NoiseMaker" x="1346" y="830" width="64" height="64"/>
