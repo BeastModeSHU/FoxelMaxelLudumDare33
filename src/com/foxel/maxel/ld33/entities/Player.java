@@ -23,7 +23,7 @@ public class Player extends Entity {
 	 */
 	private final float MOVE_SPEED; // Players moveement speed
 	private SpriteSheet sprites; // animation sprites
-	private Animation animation;
+	private Animation main, left, right, up, down, leftIdle, rightIdle, upIdle, downIdle;
 	private boolean spotted;
 	private boolean isPlayerHidden;
 
@@ -39,23 +39,51 @@ public class Player extends Entity {
 			sprites = new SpriteSheet(
 					new Image(Constants.PLAYER_SPRITESHEET_LOC).getScaledCopy(64.f / 96.f),
 					TILESIZE, TILESIZE);
-		if (animation == null)
-			animation = new Animation(sprites, 0, 0, 3, 0, true, 180, false);
+
+		if (main == null)
+			main = new Animation();
+
+		// animation = new Animation(sprites, 0, 0, 3, 0, true, 180, false);
+		if (left == null)
+			left = new Animation();
+
+		if (right == null)
+			right = new Animation();
+
+		if (up == null)
+			up = new Animation();
+
+		if (down == null)
+			down = new Animation();
+
+		if (leftIdle == null)
+			leftIdle = new Animation(sprites, 12,0, 14,0, true, 500, false);
+
+		if (rightIdle == null)
+			rightIdle = new Animation();
+
+		if (upIdle == null)
+			upIdle = new Animation();
+
+		if (downIdle == null)
+			downIdle = new Animation();
+
+		main = leftIdle;
 
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
-		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), animation.getCurrentFrame()
-				.getWidth(), animation.getCurrentFrame().getHeight());
-		
-		spotted = false; 
+		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), main.getCurrentFrame().getWidth(),
+				main.getCurrentFrame().getHeight());
+
+		spotted = false;
 		isPlayerHidden = false;
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		if (!isPlayerHidden)
-			g.drawAnimation(animation, x * TILESIZE, y * TILESIZE);
+			g.drawAnimation(main, x * TILESIZE, y * TILESIZE);
 	}
 
 	@Override
@@ -81,11 +109,8 @@ public class Player extends Entity {
 				move.y = MOVE_SPEED;
 			}
 		}
-
 		moveEntity(move, delta);
-		
-		System.out.println(spotted);
-			
+		updateAnimation(delta);
 	}
 
 	@Override
@@ -99,7 +124,7 @@ public class Player extends Entity {
 		if (move.x != 0 || move.y != 0)
 			updateAnimation(delta);
 		else
-			animation.setCurrentFrame(0);
+			main.setCurrentFrame(0);
 
 		float newX = (x + move.x) * TILESIZE;
 		float newY = (y + move.y) * TILESIZE;
@@ -185,24 +210,24 @@ public class Player extends Entity {
 	public void spotted() {
 		spotted = true;
 	}
-	public boolean isSpotted(){
+
+	public boolean isSpotted() {
 		return spotted;
 	}
 
 	@Override
 	public Vector2f getEntityDimensions() {
 
-		return new Vector2f(animation.getCurrentFrame().getWidth(), animation.getCurrentFrame()
-				.getHeight());
+		return new Vector2f(main.getCurrentFrame().getWidth(), main.getCurrentFrame().getHeight());
 	}
 
 	private void updateAnimation(int delta) {
-		animation.update(delta);
+		main.update(delta);
 	}
 
 	@Override
 	public float getMaxY() {
-		return ((y * TILESIZE) + animation.getCurrentFrame().getHeight());
+		return ((y * TILESIZE) + main.getCurrentFrame().getHeight());
 
 	}
 

@@ -25,7 +25,7 @@ public class Tenant extends Entity {
 	/*
 	 * Tenants of each house will use this class ### MACE ###
 	 */
-
+	private final float startX, startY;
 	private double turnSpeed;
 	private double PI = Math.PI;
 	private double R2D = 180d / PI;
@@ -53,19 +53,21 @@ public class Tenant extends Entity {
 	private boolean idle = false;
 	private boolean turning = false;
 	private boolean overrideTrigger = false;
-
+	
 	public Tenant(Map map, String ENTITY_TYPE, float x, float y, String name) {
 		super(map, ENTITY_TYPE);
 
 		tileSize = Constants.TILESIZE;
-		this.x = x;
-		this.y = y;
+		this.startX = x;
+		this.startY = y;
 		this.name = name;
 		turnSpeed = Constants.TENANT_TURN_SPEED;
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		x = startX;
+		y = startY;
 		if (sprites == null)
 			sprites = new SpriteSheet(new Image(Constants.TENANT01_SPRITESHEET_LOC), TILESIZE, 96);
 		// Loading Tenant idle images
