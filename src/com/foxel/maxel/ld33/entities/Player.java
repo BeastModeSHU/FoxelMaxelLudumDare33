@@ -110,6 +110,7 @@ public class Player extends Entity {
 			}
 		}
 		moveEntity(move, delta);
+		
 		updateAnimation(delta);
 	}
 
