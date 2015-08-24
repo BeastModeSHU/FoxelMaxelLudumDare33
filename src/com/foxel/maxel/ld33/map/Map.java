@@ -29,13 +29,14 @@ public class Map implements TileBasedMap {
 	public void init() throws SlickException {
 		// map = new TiledMap(Constants.TEST_MAP_LOC);
 		map = new TiledMap(Constants.BIG_MAP_LOC);
-		blockedMap = new int[map.getHeight()][map.getWidth()];
+
+		blockedMap = new int[map.getWidth()][map.getHeight()];
 
 		for (int x = 0; x < map.getWidth(); ++x) {
-			for (int y = 0; y < map.getWidth(); ++y) {
+			for (int y = 0; y < map.getHeight(); ++y) {
 				int tileID = map.getTileId(x, y, WALL_LAYER_ID); // Collisions
-																	// detected
-																	// from
+				// detected
+				// from
 				// wall tile layer
 				String value = map.getTileProperty(tileID, "blocked", "false");
 				if ("true".equals(value)) {
@@ -45,7 +46,6 @@ public class Map implements TileBasedMap {
 				}
 			}
 		}
-
 	}
 
 	public void renderFloorLayer() throws SlickException {
