@@ -81,15 +81,15 @@ public class Player extends Entity {
 
 		// collider = new Rectangle(0, 0, 0, 0);
 
-		colliderAdjustX = main.getCurrentFrame().getWidth() / 5.f;
+		colliderAdjustX = 2;
 		colliderAdjustY = main.getCurrentFrame().getHeight() / 3.f;
 		/*
 		 * collider = new Rectangle((x * TILESIZE) + colliderAdjustX,
 		 * colliderAdjustY, main .getCurrentFrame().getWidth() / 1.5f,
 		 * main.getCurrentFrame().getHeight() / 1.5f);
 		 */
-		collider = new Rectangle((x * TILESIZE), (y * TILESIZE) + colliderAdjustY, main
-				.getCurrentFrame().getWidth(), main.getCurrentFrame().getHeight() / 1.5f);
+		collider = new Rectangle((x * TILESIZE)+colliderAdjustX, (y * TILESIZE) + colliderAdjustY, main
+				.getCurrentFrame().getWidth() -4, main.getCurrentFrame().getHeight() / 1.5f);
 
 		spotted = false;
 		isPlayerHidden = false;
@@ -99,6 +99,7 @@ public class Player extends Entity {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		if (!isPlayerHidden)
 			g.drawAnimation(main, x * TILESIZE, y * TILESIZE);
+		g.fill(collider);
 	}
 
 	@Override
@@ -161,7 +162,7 @@ public class Player extends Entity {
 			// If the location is free move onto it
 			x += move.x;
 			y += move.y;
-			collider.setLocation((x * TILESIZE), (y * TILESIZE) + colliderAdjustY);
+			collider.setLocation((x * TILESIZE) + colliderAdjustX, (y * TILESIZE) + colliderAdjustY);
 		} else {
 			// else wall slide
 			Vector2f tempMove = moveBy(move);

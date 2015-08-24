@@ -38,7 +38,6 @@ public class Constants {
 	public static final String ENTITY_TENANT = "Tenant";
 	
 	//Asset file locations
-	
 	public static final String TEST_MAP_LOC = "res//map//test_map.tmx";
 	public static final String BIG_MAP_LOC = "res//map//big_test_map.tmx";
 	public static final String TENANT01_SPRITESHEET_LOC = "res//tenants//tenant_01.png";
@@ -47,6 +46,7 @@ public class Constants {
 	public static final String VISIONCONE_LOC = "res//cone_tex.png";
 	public static final String TENANT_BEHAVIOURS_LOC = "res//tenants//tenant_behaviours.xml";
 	public static final String TILESET_LOCATION = "res//map//tileset.png";
+	public static final String TARGET_SPRITESHEET_LOC = "res//target//target.png";
 	public static final String OBJECT_SPRITESEET_LOC = "res//map//objects.png";
 	public static final String HIDING_ICON = "res//icons//icon0001.png";
 	

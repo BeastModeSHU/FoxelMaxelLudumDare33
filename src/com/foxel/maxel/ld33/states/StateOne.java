@@ -54,7 +54,7 @@ public class StateOne extends BasicGameState {
 		player = new Player(map, Constants.ENTITY_PLAYER);
 		player.init(gc, sbg);
 
-		ArrayList<Tenant> tenants = map.getTenants();
+		ArrayList<Tenant> tenants = map.getTenants(camera);
 		for (int i = 0; i < tenants.size(); i++) {
 			tenants.get(i).init(gc, sbg);
 			renderable.add(tenants.get(i));

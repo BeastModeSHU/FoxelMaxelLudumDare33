@@ -12,12 +12,15 @@ public class Camera {
 	private int x, y; // The X & Y position of the viewport
 	private int mapWidth, mapHeight; // The width & height of the map
 	private Rectangle viewPort; // viewport rectangle
+	private Rectangle largeViewPort;
 
 	public Camera(int mapWidth, int mapHeight) {
 		x = 0;
 		y = 0;
 		// initialise viewport at 0,0 with dimensions of the screen
 		viewPort = new Rectangle(0, 0, Display.getWidth(), Display.getHeight());
+		largeViewPort = new Rectangle(viewPort.getX() - viewPort.getWidth() / 2, viewPort.getY()
+				- viewPort.getHeight() / 2, Display.getWidth() + 100, Display.getHeight() + 100);
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
 
@@ -53,10 +56,20 @@ public class Camera {
 		g.translate(x, y);
 		viewPort.setX(-x);
 		viewPort.setY(-y);
+		largeViewPort.setLocation(viewPort.getX() - viewPort.getWidth() / 2, viewPort.getY()
+				- viewPort.getHeight() / 2);
+
 	}
 
 	public Vector2f getTranslation() {
 		return new Vector2f(viewPort.getX(), viewPort.getY());
+	}
+
+	public boolean isInLargeView(Vector2f point) {
+		if (largeViewPort.contains(point.x, point.y)) {
+			return true;
+		}
+		return false;
 	}
 
 }

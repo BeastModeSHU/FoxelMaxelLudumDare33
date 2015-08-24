@@ -18,6 +18,7 @@ import org.newdawn.slick.util.pathfinding.Path;
 import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.map.Map;
 import com.foxel.maxel.ld33.resources.Action;
+import com.foxel.maxel.ld33.resources.Camera;
 import com.foxel.maxel.ld33.resources.VisionCone;
 import com.foxel.maxel.ld33.resources.XMLData;
 
@@ -49,22 +50,24 @@ public class Tenant extends Entity {
 	private ArrayList<Action> schedule;
 	private Action currentAction;
 	private ArrayList<Action> overrideActions;
+	private Camera camera;
 	private String name;
 	private String[] spriteSheets;
 	private boolean idle = false;
 	private boolean turning = false;
 	private boolean overrideTrigger = false;
-	
-	public Tenant(Map map, String ENTITY_TYPE, float x, float y, String name) {
+
+	public Tenant(Map map, String ENTITY_TYPE, float x, float y, String name, Camera camera) {
 		super(map, ENTITY_TYPE);
 
 		tileSize = Constants.TILESIZE;
 		this.startX = x;
 		this.startY = y;
 		this.name = name;
+		this.camera = camera;
 		turnSpeed = Constants.TENANT_TURN_SPEED;
-		spriteSheets = new String[] {Constants.TENANT01_SPRITESHEET_LOC,
-				Constants.TENANT02_SPRITESHEET_LOC};
+		spriteSheets = new String[] { Constants.TENANT01_SPRITESHEET_LOC,
+				Constants.TENANT02_SPRITESHEET_LOC };
 	}
 
 	@Override
@@ -200,9 +203,9 @@ public class Tenant extends Entity {
 			degAngle -= 360d;
 		// System.out.println(degAngle);
 		angle = degAngle * D2R;
-
-		polys = vision.updateCone(x * TILESIZE + main.getCurrentFrame().getWidth() / 2, y
-				* TILESIZE + main.getCurrentFrame().getHeight() * .5f, (float) (angle));
+		if (camera.isInLargeView(this.getPixelLocation()))
+			polys = vision.updateCone(x * TILESIZE + main.getCurrentFrame().getWidth() / 2, y
+					* TILESIZE + main.getCurrentFrame().getHeight() * .5f, (float) (angle));
 	}
 
 	// end

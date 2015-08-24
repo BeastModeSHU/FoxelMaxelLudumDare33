@@ -11,6 +11,7 @@ import org.newdawn.slick.util.pathfinding.TileBasedMap;
 
 import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.entities.Tenant;
+import com.foxel.maxel.ld33.resources.Camera;
 
 public class Map implements TileBasedMap {
 
@@ -197,7 +198,7 @@ public class Map implements TileBasedMap {
 
 	}
 
-	public ArrayList<Tenant> getTenants() {
+	public ArrayList<Tenant> getTenants(Camera camera) {
 		ArrayList<Tenant> tenants = new ArrayList<Tenant>();
 		int tenantLayer = Constants.TENANT_STARTINGPOINTS_LAYER;
 
@@ -205,7 +206,7 @@ public class Map implements TileBasedMap {
 			Vector2f position = new Vector2f(map.getObjectX(tenantLayer, i) / TILESIZE,
 					map.getObjectY(tenantLayer, i) / TILESIZE);
 			String name = map.getObjectName(tenantLayer, i);
-			tenants.add(new Tenant(this, Constants.ENTITY_TENANT, position.x, position.y, name));
+			tenants.add(new Tenant(this, Constants.ENTITY_TENANT, position.x, position.y, name, camera));
 		}
 
 		return tenants;
