@@ -81,11 +81,7 @@ public class Player extends Entity {
 				move.y = MOVE_SPEED;
 			}
 		}
-
-		moveEntity(move, delta);
-		
-		System.out.println(spotted);
-			
+		moveEntity(move, delta);		
 	}
 
 	@Override

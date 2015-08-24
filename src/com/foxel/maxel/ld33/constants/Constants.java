@@ -10,7 +10,7 @@ public class Constants {
 	public static final float MOVE_SPEED = 3f;
 	public static final float TENANT_MOVE_SPEED = 1f;
 	public static final float TENANT_TURN_SPEED = 360f;
-	public static final float TENANT_VISION_RANGE = 250f;
+	public static final float TENANT_VISION_RANGE = 180f;
 	public static final float ACTIVATION_RANGE = 100f;
 	public static final int FLOOR_LAYER_ID = 0;
 	public static final int WALL_LAYER_ID = 1;
@@ -23,6 +23,7 @@ public class Constants {
 	public static final String ENTITY_TENANT = "Tenant";
 	
 	public static final String TEST_MAP_LOC = "res//map//test_map.tmx";
+	public static final String BIG_MAP_LOC = "res//map//big_test_map.tmx";
 	public static final String TENANT01_SPRITESHEET_LOC = "res//tenants//tenant_01.png";
 	public static final String TENANT02_SPRITESHEET_LOC = "res//tenants//tenant_02.png";
 	public static final String PLAYER_SPRITESHEET_LOC = "res//player//monster.png";
