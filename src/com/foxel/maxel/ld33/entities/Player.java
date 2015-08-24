@@ -84,7 +84,7 @@ public class Player extends Entity {
 
 		moveEntity(move, delta);
 		
-		System.out.println(spotted);
+		//sssssssSystem.out.println(spotted);
 			
 	}
 

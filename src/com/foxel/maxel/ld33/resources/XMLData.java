@@ -26,6 +26,29 @@ public class XMLData {
 		map = _map;
 	}
 	
+	public static int getSpriteSheetIndex(String name) {
+		
+		int index = 1;
+		
+		XMLElementList behaviours = tenantRoot.getChildren();
+		for (int i = 0; i < behaviours.size(); i++) {
+			
+			XMLElement behaviour = behaviours.get(i);
+			String ident = behaviour.getAttribute("id");
+			if (ident.equals(name)) {
+				
+				XMLElementList actions = behaviour.getChildren();
+				for (int j = 0; j < actions.size(); j++) {
+					
+					XMLElement action = actions.get(j);
+					if (action.getName().equals("graphic"))
+						index = Integer.parseInt(action.getContent());
+				}
+			}
+		}
+		return index;
+	}
+	
 	public static ArrayList<Action> getSchedule(String name) {
 		
 		ArrayList<Action> schedule = new ArrayList<Action>();

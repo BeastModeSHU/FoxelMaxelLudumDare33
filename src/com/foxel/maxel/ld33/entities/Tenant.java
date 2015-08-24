@@ -50,6 +50,7 @@ public class Tenant extends Entity {
 	private Action currentAction;
 	private ArrayList<Action> overrideActions;
 	private String name;
+	private String[] spriteSheets;
 	private boolean idle = false;
 	private boolean turning = false;
 	private boolean overrideTrigger = false;
@@ -62,12 +63,16 @@ public class Tenant extends Entity {
 		this.y = y;
 		this.name = name;
 		turnSpeed = Constants.TENANT_TURN_SPEED;
+		spriteSheets = new String[] {Constants.TENANT01_SPRITESHEET_LOC,
+				Constants.TENANT02_SPRITESHEET_LOC};
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		if (sprites == null)
-			sprites = new SpriteSheet(new Image(Constants.TENANT01_SPRITESHEET_LOC), TILESIZE, 96);
+		if (sprites == null) {
+			int spriteNum = XMLData.getSpriteSheetIndex(name);
+			sprites = new SpriteSheet(new Image(spriteSheets[spriteNum - 1]), TILESIZE, 96);
+		}
 		// Loading Tenant idle images
 		if (leftIdle == null)
 			leftIdle = sprites.getSubImage(10, 0);

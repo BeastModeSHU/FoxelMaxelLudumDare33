@@ -1,6 +1,7 @@
 <!--XML AI Behaviours, details which locations the AI walks between-->
 <behaviours>
 	<tenant id="guy">
+		<graphic>1</graphic>
 		<moveTo>
 			<spot>fridge</spot>
 			<time>5</time>
@@ -15,6 +16,7 @@
 		</moveTo>
 	</tenant>
 	<tenant id="lad">
+		<graphic>2</graphic>
 		<moveTo>
 			<spot>bed</spot>
 			<time>1</time>
