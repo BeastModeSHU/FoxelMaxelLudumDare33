@@ -49,7 +49,9 @@ public class StateOne extends BasicGameState {
 
 		map = new Map();
 		map.init();
+		
 		XMLData.init(map);
+	
 		camera = new Camera(map.getWidth(), map.getHeight());
 
 		player = new Player(map, Constants.ENTITY_PLAYER);
@@ -67,6 +69,7 @@ public class StateOne extends BasicGameState {
 
 		interactables = new ArrayList<Interactable>();
 		interactables = map.getInteractables();
+	
 
 		allPolys = new ArrayList<Polygon>();
 
@@ -126,7 +129,7 @@ public class StateOne extends BasicGameState {
 					distractTenants(new Vector2f(temp.getLocation().x, temp.getLocation().y),
 							temp.getDistractionCircle(), i);
 					break;
-				case Constants.HIDINGSPOT_OBJECT:
+				case Constants.HIDINGPLACE_OBJECT:
 					System.out.println("Hey");
 					hidePlayer(i);
 					break;
