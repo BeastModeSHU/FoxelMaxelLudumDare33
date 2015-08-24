@@ -29,6 +29,8 @@ public class Player extends Entity {
 	private boolean isPlayerHidden;
 	private String lastDirection;
 	private boolean isIdle = true;
+	private Rectangle rect;
+	private float colliderAdjustX, colliderAdjustY;
 
 	public Player(Map map, String ENTITTY_TYPE) {
 		super(map, ENTITTY_TYPE);
@@ -78,8 +80,16 @@ public class Player extends Entity {
 		x = map.getPlayerStart().x;
 		y = map.getPlayerStart().y;
 
-		collider = new Rectangle((x * TILESIZE), (y * TILESIZE), main.getCurrentFrame().getWidth(),
-				main.getCurrentFrame().getHeight());
+		// collider = new Rectangle(0, 0, 0, 0);
+
+		colliderAdjustX = main.getCurrentFrame().getWidth() / 5.f;
+		colliderAdjustY = main.getCurrentFrame().getHeight() / 3.f;
+
+		rect = new Rectangle((x * TILESIZE) + colliderAdjustX, colliderAdjustY, main
+				.getCurrentFrame().getWidth() / 1.5f, main.getCurrentFrame().getHeight() / 1.5f);
+
+		collider = new Rectangle((x * TILESIZE) + colliderAdjustX, colliderAdjustY, main
+				.getCurrentFrame().getWidth() / 1.5f, main.getCurrentFrame().getHeight() / 1.5f);
 
 		spotted = false;
 		isPlayerHidden = false;
@@ -141,10 +151,16 @@ public class Player extends Entity {
 
 		move.x *= (delta / 1000.f) * MOVE_SPEED;
 		move.y *= (delta / 1000.f) * MOVE_SPEED;
-		
-		
-		float newX = (x + move.x) * TILESIZE;
-		float newY = (y + move.y) * TILESIZE;
+
+		/*
+		 * (x * TILESIZE) + main.getCurrentFrame().getWidth() / 5f, (y *
+		 * TILESIZE) + main.getCurrentFrame().getHeight() / 3.f,
+		 * main.getCurrentFrame() .getWidth() / 1.5f,
+		 * main.getCurrentFrame().getHeight() / 1.5f)
+		 */
+
+		 float newX = (x + move.x) * TILESIZE;
+		 float newY = (y + move.y) * TILESIZE;
 
 		collider.setLocation(newX, newY);
 
@@ -152,7 +168,7 @@ public class Player extends Entity {
 			// If the location is free move onto it
 			x += move.x;
 			y += move.y;
-			collider.setLocation((x * TILESIZE), (y * TILESIZE));
+			collider.setLocation((x * TILESIZE) + colliderAdjustX, (y * TILESIZE) + colliderAdjustY);
 		} else {
 			// else wall slide
 			Vector2f tempMove = moveBy(move);

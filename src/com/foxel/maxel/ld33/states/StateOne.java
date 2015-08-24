@@ -109,7 +109,7 @@ public class StateOne extends BasicGameState {
 
 		if (player.isSpotted()) {
 			spottedTimer += (delta / 1000.f);
-			if (spottedTimer > 0.4f){
+			if (spottedTimer > 0.4f) {
 				debugResetEntities(gc, sbg);
 				spottedTimer = 0.f;
 			}
