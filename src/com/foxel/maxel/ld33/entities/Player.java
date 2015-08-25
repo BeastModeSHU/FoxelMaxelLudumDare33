@@ -100,7 +100,6 @@ public class Player extends Entity {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		if (!isPlayerHidden)
 			g.drawAnimation(main, x * TILESIZE, y * TILESIZE);
-		g.fill(collider);
 	}
 
 	@Override

@@ -251,7 +251,7 @@ public class Tenant extends Entity {
 	private Vector2f getPathVector() {
 
 		Vector2f entityLocation = new Vector2f(x, y);
-		Vector2f pathLocation = new Vector2f(path.getX(pathIndex), path.getY(pathIndex));
+		Vector2f pathLocation = new Vector2f();
 		Vector2f pathVector = new Vector2f();
 
 		if (pathIndex < (path.getLength() - 1) && pathLocation.distance(entityLocation) < 0.1f) {
@@ -367,17 +367,14 @@ public class Tenant extends Entity {
 	public void distract(Vector2f source) {
 
 		if (source.x != currentAction.position.x && source.y != currentAction.position.y) {
+			if (source.x / 64.f >= 1.f && source.y / 64.f >= 1.f) {
+				source.x /= tileSize;
+				source.y /= tileSize;
 
-			if (source.x != currentAction.position.x && source.y != currentAction.position.y) {
-				if (source.x / 64.f >= 1.f && source.y / 64.f >= 1.f) {
-					source.x /= tileSize;
-					source.y /= tileSize;
-
-					overrideActions.clear();
-					overrideTrigger = true;
-					overrideActions.add(new Action(0.5f, new Vector2f(x, y), true));
-					overrideActions.add(new Action(4f, source, true));
-				}
+				overrideActions.clear();
+				overrideTrigger = true;
+				overrideActions.add(new Action(0.5f, new Vector2f(x, y), true));
+				overrideActions.add(new Action(4f, source, true));
 			}
 		}
 	}

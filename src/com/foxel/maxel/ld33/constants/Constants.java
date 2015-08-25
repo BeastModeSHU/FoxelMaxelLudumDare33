@@ -43,7 +43,7 @@ public class Constants {
 	public static final String OPENING_WINDOW_LOC = "res//splash0001.png";
 	public static final String WIN_SCREEN_LOC = "res//splash0002.png";
 	public static final String TEST_MAP_LOC = "res//map//test_map.tmx";
-	public static final String BIG_MAP_LOC = "res//map//big_test_map.tmx";
+	public static final String BIG_MAP_LOC = "res//map//level_1.tmx";
 	public static final String TENANT01_SPRITESHEET_LOC = "res//tenants//tenant_01.png";
 	public static final String TENANT02_SPRITESHEET_LOC = "res//tenants//tenant_02.png";
 	public static final String PLAYER_SPRITESHEET_LOC = "res//player//monster.png";

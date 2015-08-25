@@ -14,14 +14,14 @@ public class NoiseMaker extends Interactable {
 	 */
 	private Circle distractionCircle;
 	private Image image;
-	private final int MAX_RANGE = 200;
+	private final int MAX_RANGE = 300;
 
 	public NoiseMaker(float x, float y, int ID) {
-		super(x, y, ID);
-		distractionCircle = new Circle(x, y, MAX_RANGE);
+		super(x + Constants.TILESIZE, y, ID);
+		distractionCircle = new Circle(x + Constants.TILESIZE, y, MAX_RANGE);
 		try {
-			image = new SpriteSheet(Constants.OBJECT_SPRITESEET_LOC, TILESIZE, TILESIZE * 2).getSubImage(ID,
-					0);
+			image = new SpriteSheet(Constants.OBJECT_SPRITESEET_LOC, TILESIZE, TILESIZE * 2)
+					.getSubImage(ID, 0);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
@@ -33,9 +33,14 @@ public class NoiseMaker extends Interactable {
 
 	@Override
 	public void render(Graphics g) throws SlickException {
-		g.drawImage(image, x - image.getWidth()/2, y - image.getHeight()/2.5f); // Render the radio centre at the point
-		g.draw(distractionCircle);
-//		g.draw(this.activationCircle);
+		g.drawImage(image, x - image.getWidth() / 2, y - image.getHeight() / 2.5f); // Render
+																					// the
+																					// radio
+																					// centre
+																					// at
+																					// the
+																					// point
+		// g.draw(this.activationCircle);
 
 	}
 }

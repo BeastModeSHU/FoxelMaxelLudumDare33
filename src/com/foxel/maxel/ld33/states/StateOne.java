@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -35,18 +36,20 @@ public class StateOne extends BasicGameState {
 	private ArrayList<Polygon> allPolys;
 	private Renderer renderer;
 	private float spottedTimer = 0;
-	private int targetCount = 0; 
-	private Sound sound;
-	
+	private int targetCount = 0;
+	private Image splash;
+	private boolean hasBegun;
+
 	public StateOne(int STATE_ID) {
 		this.STATE_ID = STATE_ID;
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		
+		splash = new Image(Constants.OPENING_WINDOW_LOC);
+		hasBegun = false;
 		renderable = new ArrayList<Entity>();
-		
+
 		map = new Map();
 		map.init();
 
@@ -69,9 +72,9 @@ public class StateOne extends BasicGameState {
 
 		interactables = new ArrayList<Interactable>();
 		interactables = map.getInteractables();
-		
-		for(int i =0; i < interactables.size(); ++i){ 
-			if(interactables.get(i).getID() == -1)
+
+		for (int i = 0; i < interactables.size(); ++i) {
+			if (interactables.get(i).getID() == -1)
 				++targetCount;
 		}
 
@@ -82,84 +85,98 @@ public class StateOne extends BasicGameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		if (hasBegun) {
+			camera.translate(g, player);
 
-		camera.translate(g, player);
-
-		renderer.render(gc, sbg, g, allPolys);
-
+			renderer.render(gc, sbg, g, allPolys);
+		} else {
+			g.drawImage(splash, 0, 0);
+		}
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
-			gc.exit();
-		allPolys.clear();
-		for (int i = 0; i < renderable.size(); ++i) {
-			renderable.get(i).update(gc, sbg, delta);
-			Tenant t = null;
-			if (renderable.get(i) instanceof Tenant)
-				t = (Tenant) renderable.get(i);
-			if (t != null) {
-				for (int j = 0; j < t.polys.length; j++) {
-					allPolys.add(t.polys[j]);
-					if (t.polys[j].intersects(player.getCollider()) && !player.isPlayerHiding()) {
-						player.spotted();
-						// ADD TENANT REACTION TO SPOTTING PLAYER HERE
+		if (hasBegun) {
+			if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
+				gc.exit();
+			allPolys.clear();
+			for (int i = 0; i < renderable.size(); ++i) {
+				renderable.get(i).update(gc, sbg, delta);
+				Tenant t = null;
+				if (renderable.get(i) instanceof Tenant)
+					t = (Tenant) renderable.get(i);
+				if (t != null) {
+					for (int j = 0; j < t.polys.length; j++) {
+						allPolys.add(t.polys[j]);
+						if (t.polys[j].intersects(player.getCollider()) && !player.isPlayerHiding()) {
+							player.spotted();
+							// ADD TENANT REACTION TO SPOTTING PLAYER HERE
+						}
 					}
 				}
 			}
-		}
 
-		if (player.isSpotted()) {
-			spottedTimer += (delta / 1000.f);
-			if (spottedTimer > 0.2f) {
-				resetGame(gc, sbg);
+			if (player.isSpotted()) {
+				spottedTimer += (delta / 1000.f);
+				if (spottedTimer > 0.2f) {
+					// resetGame(gc, sbg);
+					spottedTimer = 0.f;
+				}
+			} else {
 				spottedTimer = 0.f;
 			}
+
+			for (int i = 0; i < renderable.size(); ++i) {
+				renderable.get(i).update(gc, sbg, delta);
+			}
+
+			if (gc.getInput().isKeyPressed(Input.KEY_X))
+				checkInteractables();
+
+			if (targetCount <= 0)
+				sbg.enterState(Constants.WIN_STATE_ID);
 		} else {
-			spottedTimer = 0.f;
+			if (gc.getInput().isKeyPressed(Input.KEY_X))
+				hasBegun = true;
 		}
-
-		for (int i = 0; i < renderable.size(); ++i) {
-			renderable.get(i).update(gc, sbg, delta);
-		}
-
-		if (gc.getInput().isKeyPressed(Input.KEY_X))
-			checkInteractables();
-		
-		if(targetCount <= 0)
-			sbg.enterState(Constants.WIN_STATE_ID);
-		
-
 	}
 
 	private void checkInteractables() {
 
 		for (int i = 0; i < interactables.size(); ++i) {
-
 			if (interactables.get(i).getActivationCircle().intersects(player.getCollider())) {
 
 				if (interactables.get(i).getID() == Constants.TV_ID
 						|| interactables.get(i).getID() == Constants.RADIO_ID) {
 					NoiseMaker temp = (NoiseMaker) (interactables.get(i));
-					distractTenants(new Vector2f(temp.getLocation().x, temp.getLocation().y),
-							temp.getDistractionCircle(), i);
-				} else if (interactables.get(i).getID() == Constants.BIN_ID
+					distractTenants(
+							new Vector2f(temp.getLocation().x + Constants.TILESIZE,
+									temp.getLocation().y), temp.getDistractionCircle(), i);
+				}
+
+				if (interactables.get(i).getID() == Constants.BIN_ID
 						|| interactables.get(i).getID() == Constants.FRIDGE_ID
 						|| interactables.get(i).getID() == Constants.CHAIR_ID
 						|| interactables.get(i).getID() == Constants.CLOSET_ID) {
 					hidePlayer(i);
-				} else {
+				}
+
+				if (interactables.get(i).getID() == -1) {
 					killTarget(i);
 				}
 			}
 
 		}
 	}
-	private void killTarget(int index){ 
-		targetCount -= 1; 
-		interactables.get(index).activate();
+
+	private void killTarget(int index) {
+		
+		if (interactables.get(index).getID() == -1) {
+			targetCount -= 1;
+			interactables.get(index).activate();
+		}
 	}
+
 	private void distractTenants(Vector2f source, Circle collider, int ID) {
 
 		for (int i = 0; i < renderable.size(); ++i) {

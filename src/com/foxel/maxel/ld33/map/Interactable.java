@@ -19,14 +19,21 @@ public abstract class Interactable {
 	protected final int TILESIZE;
 	protected Image image;
 	protected Image interactIcon;
+	protected boolean buttonShow = false;
 
 	public Interactable(float x, float y, int ID) {
 		this.TILESIZE = Constants.TILESIZE;
-		this.x = x;;
+		this.x = x;
+		;
 		this.y = y;
 		this.ID = ID;
-		
+
 		activationCircle = new Circle(x, y, Constants.ACTIVATION_RANGE);
+		try {
+			interactIcon = new Image(Constants.PRESS_BUTTON_ICON);
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void activate() {
@@ -55,5 +62,9 @@ public abstract class Interactable {
 
 	public int getID() {
 		return ID;
+	}
+
+	public void isShowingButton(boolean button) {
+		buttonShow = button;
 	}
 }

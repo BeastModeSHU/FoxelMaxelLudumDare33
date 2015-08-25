@@ -1,29 +1,106 @@
 <!--XML AI Behaviours, details which locations the AI walks between-->
 <behaviours>
-	<tenant id="guy">
+	<tenant id="tenant1">
 		<graphic>1</graphic>
 		<moveTo>
-			<spot>fridge</spot>
-			<time>5</time>
+			<spot>patrol_1_2</spot>
+			<time>.1</time>
 		</moveTo>
 		<moveTo>
-			<spot>bed</spot>
+			<spot>patrol_1_3</spot>
+			<time>.1</time>
+		</moveTo>
+		<moveTo>
+			<spot>patrol_1_4</spot>
+			<time>.1</time>
+		</moveTo>
+		<moveTo>
+			<spot>patrol_1_1</spot>
+			<time>.1</time>
+		</moveTo>
+	</tenant>
+	<tenant id="tenant2">
+		<graphic>2</graphic>
+		<moveTo>
+			<spot>patrol_2_1</spot>
+			<time>0.1</time>
+		</moveTo>
+		<moveTo>
+			<spot>patrol_2_2</spot>
+			<time>3</time>
+		</moveTo>
+	</tenant>
+	<tenant id="tenant3">
+		<graphic>1</graphic>
+		<moveTo>
+			<spot>patrol_3_1</spot>
+			<time>3</time>
+		</moveTo>
+		<moveTo>
+			<spot>patrol_3_2</spot>
+			<time>.1</time>
+		</moveTo>
+	</tenant>
+	<tenant id="tenant4">
+		<graphic>2</graphic>
+		<moveTo>
+			<spot>patrol_4_1</spot>
+			<time>3</time>
+		</moveTo>
+		<moveTo>
+			<spot>patrol_4_2</spot>
+			<time>3</time>
+		</moveTo>
+	</tenant>
+	<tenant id="tenant5">
+		<graphic>1</graphic>
+		<moveTo>
+			<spot>patrol_5_2</spot>
+			<time>3</time>
+		</moveTo>
+		<moveTo>
+			<spot>patrol_5_1</spot>
+			<time>3</time>
+		</moveTo>
+	</tenant>
+	<tenant id="tenant6">
+		<graphic>1</graphic>
+		<moveTo>
+			<spot>patrol_6_2</spot>
 			<time>2</time>
 		</moveTo>
 		<moveTo>
-			<spot>chair</spot>
-			<time>1</time>
+			<spot>patrol_6_1</spot>
+			<time>2</time>
 		</moveTo>
 	</tenant>
-	<tenant id="lad">
+	<tenant id="tenant7">
 		<graphic>2</graphic>
 		<moveTo>
-			<spot>bed</spot>
-			<time>1</time>
+			<spot>patrol_7_1</spot>
+			<time>5</time>
+		</moveTo>
+	</tenant>
+	<tenant id="tenant8">
+		<graphic>2</graphic>
+		<moveTo>
+			<spot>patrol_8_2</spot>
+			<time>2</time>
 		</moveTo>
 		<moveTo>
-			<spot>chair</spot>
-			<time>1</time>
+			<spot>patrol_8_1</spot>
+			<time>2</time>
+		</moveTo>
+	</tenant>
+	<tenant id="tenant9">
+		<graphic>1</graphic>
+		<moveTo>
+			<spot>patrol_9_1</spot>
+			<time>3</time>
+		</moveTo>
+		<moveTo>
+			<spot>patrol_9_2</spot>
+			<time>3</time>
 		</moveTo>
 	</tenant>
 </behaviours>
