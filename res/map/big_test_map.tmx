@@ -61,6 +61,7 @@
   <object name="radio" x="120" y="646" width="64" height="64"/>
   <object name="fridge" x="1346" y="830" width="64" height="64"/>
   <object name="bin" x="514" y="970" width="64" height="64"/>
+  <object name="target" x="820" y="632" width="48" height="128"/>
  </objectgroup>
  <objectgroup name="tenant_startingpoints" width="25" height="25" visible="0">
   <object name="guy" x="768" y="128" width="64" height="64"/>

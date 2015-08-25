@@ -8,6 +8,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 
 import com.foxel.maxel.ld33.constants.Constants;
@@ -15,6 +16,7 @@ import com.foxel.maxel.ld33.entities.Entity;
 import com.foxel.maxel.ld33.entities.Player;
 import com.foxel.maxel.ld33.map.Interactable;
 import com.foxel.maxel.ld33.map.Map;
+import com.foxel.maxel.ld33.resources.Camera;
 
 public class Renderer {
 	/*
@@ -31,14 +33,17 @@ public class Renderer {
 	private ArrayList<Polygon> cones;
 	private Image tex;
 	private ArrayList<Interactable> interactables;
+	private Camera camera;
 
-	public Renderer(Player player, Map map, ArrayList<Entity> renderable,
+	public Renderer(Camera camera, Player player, Map map, ArrayList<Entity> renderable,
 			ArrayList<Interactable> interactables, ArrayList<Polygon> cones) {
 		this.player = player;
 		this.map = map;
 		this.renderable = renderable;
 		this.TILESIZE = Constants.TILESIZE;
 		this.CEILING_LAYER = Constants.CEILING_LAYER_ID;
+		this.camera = camera;
+
 		try {
 			tex = new Image(Constants.VISIONCONE_LOC, false, Image.FILTER_NEAREST);
 		} catch (SlickException e) {
@@ -56,9 +61,8 @@ public class Renderer {
 		while (swapped) {
 			swapped = false; // set flag to false awaiting a possible swap
 			for (j = 0; j < renderable.size() - 1; j++) {
-				float num1 = renderable.get(j).getMaxY(), num2 = renderable.get(j+1).getMaxY();
+				float num1 = renderable.get(j).getMaxY(), num2 = renderable.get(j + 1).getMaxY();
 
-			
 				if (num1 > num2) // change to > for ascending sort
 				{
 					swapEntities(j, (j + 1));
@@ -81,8 +85,10 @@ public class Renderer {
 		// Will handle map rendering & renderable rendering
 		map.renderFloorLayer();
 		
-		for (int i = 0; i < cones.size(); i++)
-			g.texture(cones.get(i), tex, true);
+		for (int i = 0; i < cones.size(); i++){
+			if(camera.isInLargeView((new Vector2f(cones.get(i).getLocation().x, cones.get(i).getLocation().y))))
+					g.texture(cones.get(i), tex, true);
+		}
 		
 		map.renderWallLayer();
 		

@@ -13,9 +13,9 @@ public class Target extends Interactable {
 	public Target(float x, float y, int ID) {
 		super(x, y, ID);
 		try {
-			SpriteSheet temp = new SpriteSheet(Constants.TARGET_SPRITESHEET_LOC, TILESIZE, TILESIZE);
+			SpriteSheet temp = new SpriteSheet(Constants.TARGET_SPRITESHEET_LOC, TILESIZE, 96);
 			alive = temp.getSubImage(0, 0);
-			dead = temp.getSubImage(0, 1);
+			dead = temp.getSubImage(1, 0);
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}

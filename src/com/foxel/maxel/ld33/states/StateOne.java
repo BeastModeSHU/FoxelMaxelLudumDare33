@@ -69,7 +69,7 @@ public class StateOne extends BasicGameState {
 
 		allPolys = new ArrayList<Polygon>();
 
-		renderer = new Renderer(player, map, renderable, interactables, allPolys);
+		renderer = new Renderer(camera, player, map, renderable, interactables, allPolys);
 	}
 
 	@Override
@@ -78,6 +78,7 @@ public class StateOne extends BasicGameState {
 		camera.translate(g, player);
 
 		renderer.render(gc, sbg, g, allPolys);
+
 		// renderer.render(gc, sbg, g);
 
 	}

@@ -19,8 +19,7 @@ public class Camera {
 		y = 0;
 		// initialise viewport at 0,0 with dimensions of the screen
 		viewPort = new Rectangle(0, 0, Display.getWidth(), Display.getHeight());
-		largeViewPort = new Rectangle(viewPort.getX() - viewPort.getWidth() / 2, viewPort.getY()
-				- viewPort.getHeight() / 2, Display.getWidth() + 100, Display.getHeight() + 100);
+		largeViewPort = new Rectangle(viewPort.getCenterX(),viewPort.getCenterY() , Display.getWidth() + 100, Display.getHeight() + 100);
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
 
@@ -54,10 +53,11 @@ public class Camera {
 		}
 
 		g.translate(x, y);
+		g.fill(largeViewPort);
 		viewPort.setX(-x);
 		viewPort.setY(-y);
-		largeViewPort.setLocation(viewPort.getX() - viewPort.getWidth() / 2, viewPort.getY()
-				- viewPort.getHeight() / 2);
+		largeViewPort.setCenterX(viewPort.getCenterX());
+		largeViewPort.setCenterY(viewPort.getCenterY());
 
 	}
 

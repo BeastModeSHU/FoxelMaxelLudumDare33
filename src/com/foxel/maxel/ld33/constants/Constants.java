@@ -33,6 +33,7 @@ public class Constants {
 	public static final String CHAIR_OBJECT = "chair";
 	public static final String TV_OBJECT = "tv";
 	public static final String RADIO_OBJECT = "radio";
+	public static final String TARGET_OBJECT = "target";
 	public static final String HIDINGPLACE_OBJECT = "HidingPlace";
 	public static final String ENTITY_PLAYER = "Player";
 	public static final String ENTITY_TENANT = "Tenant";
