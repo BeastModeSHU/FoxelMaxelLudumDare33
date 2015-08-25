@@ -171,33 +171,36 @@ public class Map implements TileBasedMap {
 		int interact = Constants.INTERACTABLES_OBJECT_LAYER;
 
 		for (int i = 0; i < map.getObjectCount(interact); ++i) {
+			float tileX = map.getObjectX(interact, i) - TILESIZE /2 ; 
+			float tileY = map.getObjectY(interact, i) - TILESIZE/2;
+			
 			switch (map.getObjectName(interact, i)) {
 			case Constants.BIN_OBJECT:
-				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i),
+				list.add(new HidingPlace(tileX, tileY,
 						Constants.BIN_ID));
 				break;
 			case Constants.CLOSET_OBJECT:
-				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i),
+				list.add(new HidingPlace(tileX, tileY,
 						Constants.CLOSET_ID));
 				break;
 			case Constants.FRIDGE_OBJECT:
-				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i),
+				list.add(new HidingPlace(tileX, tileY,
 						Constants.FRIDGE_ID));
 				break;
 			case Constants.CHAIR_OBJECT:
-				list.add(new HidingPlace(map.getObjectX(interact, i), map.getObjectY(interact, i),
+				list.add(new HidingPlace(tileX, tileY,
 						Constants.CHAIR_ID));
 				break;
 			case Constants.TV_OBJECT:
-				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i),
+				list.add(new NoiseMaker(tileX, tileY,
 						Constants.TV_ID));
 				break;
 			case Constants.RADIO_OBJECT:
-				list.add(new NoiseMaker(map.getObjectX(interact, i), map.getObjectY(interact, i),
+				list.add(new NoiseMaker(tileX, tileY,
 						Constants.RADIO_ID));
 				break;
 			case Constants.TARGET_OBJECT:
-				list.add(new Target(map.getObjectX(interact, i), map.getObjectY(interact, i), -1));
+				list.add(new Target(tileX, tileY, -1));
 				break;
 			}
 

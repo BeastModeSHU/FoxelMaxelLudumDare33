@@ -21,10 +21,11 @@ public abstract class Interactable {
 	protected Image interactIcon;
 
 	public Interactable(float x, float y, int ID) {
-		this.x = x;
+		this.TILESIZE = Constants.TILESIZE;
+		this.x = x;;
 		this.y = y;
 		this.ID = ID;
-		this.TILESIZE = Constants.TILESIZE;
+		
 		activationCircle = new Circle(x, y, Constants.ACTIVATION_RANGE);
 	}
 
