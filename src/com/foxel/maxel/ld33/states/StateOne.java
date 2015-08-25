@@ -6,6 +6,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Polygon;
 import org.newdawn.slick.geom.Vector2f;
@@ -34,16 +35,18 @@ public class StateOne extends BasicGameState {
 	private ArrayList<Polygon> allPolys;
 	private Renderer renderer;
 	private float spottedTimer = 0;
-
+	private int targetCount = 0; 
+	private Sound sound;
+	
 	public StateOne(int STATE_ID) {
 		this.STATE_ID = STATE_ID;
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-
+		
 		renderable = new ArrayList<Entity>();
-
+		
 		map = new Map();
 		map.init();
 
@@ -66,6 +69,11 @@ public class StateOne extends BasicGameState {
 
 		interactables = new ArrayList<Interactable>();
 		interactables = map.getInteractables();
+		
+		for(int i =0; i < interactables.size(); ++i){ 
+			if(interactables.get(i).getID() == -1)
+				++targetCount;
+		}
 
 		allPolys = new ArrayList<Polygon>();
 
@@ -78,8 +86,6 @@ public class StateOne extends BasicGameState {
 		camera.translate(g, player);
 
 		renderer.render(gc, sbg, g, allPolys);
-
-		// renderer.render(gc, sbg, g);
 
 	}
 
@@ -106,10 +112,12 @@ public class StateOne extends BasicGameState {
 
 		if (player.isSpotted()) {
 			spottedTimer += (delta / 1000.f);
-			if (spottedTimer > 0.4f) {
-				debugResetEntities(gc, sbg);
+			if (spottedTimer > 0.2f) {
+				resetGame(gc, sbg);
 				spottedTimer = 0.f;
 			}
+		} else {
+			spottedTimer = 0.f;
 		}
 
 		for (int i = 0; i < renderable.size(); ++i) {
@@ -118,6 +126,10 @@ public class StateOne extends BasicGameState {
 
 		if (gc.getInput().isKeyPressed(Input.KEY_X))
 			checkInteractables();
+		
+		if(targetCount <= 0)
+			sbg.enterState(Constants.WIN_STATE_ID);
+		
 
 	}
 
@@ -126,19 +138,28 @@ public class StateOne extends BasicGameState {
 		for (int i = 0; i < interactables.size(); ++i) {
 
 			if (interactables.get(i).getActivationCircle().intersects(player.getCollider())) {
-				
-				if(interactables.get(i).getID() == Constants.TV_ID || interactables.get(i).getID() == Constants.RADIO_ID){ 
+
+				if (interactables.get(i).getID() == Constants.TV_ID
+						|| interactables.get(i).getID() == Constants.RADIO_ID) {
 					NoiseMaker temp = (NoiseMaker) (interactables.get(i));
 					distractTenants(new Vector2f(temp.getLocation().x, temp.getLocation().y),
 							temp.getDistractionCircle(), i);
-				}else{ 
+				} else if (interactables.get(i).getID() == Constants.BIN_ID
+						|| interactables.get(i).getID() == Constants.FRIDGE_ID
+						|| interactables.get(i).getID() == Constants.CHAIR_ID
+						|| interactables.get(i).getID() == Constants.CLOSET_ID) {
 					hidePlayer(i);
+				} else {
+					killTarget(i);
 				}
 			}
 
 		}
 	}
-
+	private void killTarget(int index){ 
+		targetCount -= 1; 
+		interactables.get(index).activate();
+	}
 	private void distractTenants(Vector2f source, Circle collider, int ID) {
 
 		for (int i = 0; i < renderable.size(); ++i) {
@@ -168,9 +189,12 @@ public class StateOne extends BasicGameState {
 		return STATE_ID;
 	}
 
-	private void debugResetEntities(GameContainer gc, StateBasedGame sbg) throws SlickException {
+	private void resetGame(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		for (Entity e : renderable) {
 			e.init(gc, sbg);
 		}
+		interactables.clear();
+		interactables = map.getInteractables();
+		renderer.setInteractables(interactables);
 	}
 }

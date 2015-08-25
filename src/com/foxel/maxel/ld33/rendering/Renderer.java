@@ -79,20 +79,22 @@ public class Renderer {
 		renderable.set(index2, temp);
 	}
 
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g, ArrayList<Polygon> cones) throws SlickException {
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics g, ArrayList<Polygon> cones)
+			throws SlickException {
 		this.cones = cones;
-		
+
 		// Will handle map rendering & renderable rendering
 		map.renderFloorLayer();
-		
-		for (int i = 0; i < cones.size(); i++){
-			if(camera.isInLargeView((new Vector2f(cones.get(i).getLocation().x, cones.get(i).getLocation().y))))
-					g.texture(cones.get(i), tex, true);
+
+		for (int i = 0; i < cones.size(); i++) {
+			if (camera.isInLargeView((new Vector2f(cones.get(i).getLocation().x, cones.get(i)
+					.getLocation().y))))
+				g.texture(cones.get(i), tex, true);
 		}
-		
+
 		map.renderWallLayer();
-		
-		for(Interactable i : interactables){ 
+
+		for (Interactable i : interactables) {
 			i.render(g);
 		}
 		sortRenderableByZ();
@@ -126,4 +128,7 @@ public class Renderer {
 		}
 	}
 
+	public void setInteractables(ArrayList<Interactable> list) {
+		this.interactables = list;
+	}
 }

@@ -33,17 +33,17 @@
    </properties>
   </tile>
  </tileset>
- <layer name="floor_layer" width="25" height="25">
+ <layer name="floor_layer" width="25" height="25" visible="0">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC2NgoC9gJgGP2kF7O8i1dzjagUsOn5tGkh3E2E9vO6iNqe1WbGYNlB3oYDDagQuM2jG47BgFgwcAAOpixgzECQAA
   </data>
  </layer>
  <layer name="wall_layer" width="25" height="25">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAC+2VXQoAIQiEO8SS97/pPixBiEpOkxDsgC+ZfJU/tVanBzCEcXJ/JaMb5qm3/LvpmEwscqdsbCUDqUmEYfn0OsIYuZSDjEgWY64v61wMBlssRtRP3lut9PkOY6fPrXnEqquxz5pHQmas+m9m6BzNPsa/q/Mkgc8zxjz49ekFGwhZc8QJAAA=
+   H4sIAAAAAAAAC+2USwrAMAhEPUSJ979pFyVQRCVOJkKhA25i5CX+RPp0AYYwTt7vZAzHIg2p583GVGKRP1VjOxlITyIMz2fPEcaspR5kZPIY7/7y3sVgsMViZPMU5WplzncYO3Pu7SNWX8173j5SMmPV/2WGrRGbYeukiS8yxj749egG9sPR18QJAAA=
   </data>
  </layer>
- <layer name="ceiling_layer" width="25" height="25">
+ <layer name="ceiling_layer" width="25" height="25" opacity="0.26">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAC+2VwQ6AIAiGOVrG3fd/0jzkRu0HxehQi+2fTWRfImgholK1Vm0O5SPOIyaf8UcYC/nzJmNkbOSetNhIxp38NQaqzQzmZW69DLSewbzc9yijnWV6kGEZYsj6Qv8VwYi2NzFabaKeRQxZy54+l2OPwcp3j6HdR0lhzPag5Y9ijN5Jb2VczykZPk2pw0Bm+TSbfT9+nbUDSakavcQJAAA=
   </data>

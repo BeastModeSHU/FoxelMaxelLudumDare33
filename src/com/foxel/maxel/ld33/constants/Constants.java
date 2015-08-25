@@ -8,6 +8,7 @@ public class Constants {
 	
 	//Number type constants
 	public static final int STATE_ONE_ID = 1;
+	public static final int WIN_STATE_ID = 2;
 	public static final int TILESIZE = 64;
 	public static final float MOVE_SPEED = 3f;
 	public static final float TENANT_MOVE_SPEED = 1f;
@@ -39,6 +40,8 @@ public class Constants {
 	public static final String ENTITY_TENANT = "Tenant";
 	
 	//Asset file locations
+	public static final String OPENING_WINDOW_LOC = "res//splash0001.png";
+	public static final String WIN_SCREEN_LOC = "res//splash0002.png";
 	public static final String TEST_MAP_LOC = "res//map//test_map.tmx";
 	public static final String BIG_MAP_LOC = "res//map//big_test_map.tmx";
 	public static final String TENANT01_SPRITESHEET_LOC = "res//tenants//tenant_01.png";
@@ -50,5 +53,6 @@ public class Constants {
 	public static final String TARGET_SPRITESHEET_LOC = "res//target//target.png";
 	public static final String OBJECT_SPRITESEET_LOC = "res//map//objects.png";
 	public static final String HIDING_ICON = "res//icons//icon0001.png";
+	public static final String PRESS_BUTTON_ICON = "res//icons//icon0003.png";
 	
 }

@@ -207,6 +207,7 @@ public class Map implements TileBasedMap {
 	}
 
 	public ArrayList<Tenant> getTenants(Camera camera) {
+
 		ArrayList<Tenant> tenants = new ArrayList<Tenant>();
 		int tenantLayer = Constants.TENANT_STARTINGPOINTS_LAYER;
 
@@ -217,7 +218,6 @@ public class Map implements TileBasedMap {
 			tenants.add(new Tenant(this, Constants.ENTITY_TENANT, position.x, position.y, name,
 					camera));
 		}
-
 		return tenants;
 	}
 

@@ -19,6 +19,7 @@ public class Target extends Interactable {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
+		System.out.println("hey");
 	}
 
 	@Override
@@ -28,5 +29,7 @@ public class Target extends Interactable {
 		else
 			g.drawImage(dead, x + dead.getWidth() / 2, y + dead.getHeight() / 2);
 	}
-
+	public boolean isTargetAlive(){ 
+		return !activated; //return the opposite of activate to indicate entity is dead
+	}
 }

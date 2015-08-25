@@ -88,8 +88,9 @@ public class Player extends Entity {
 		 * colliderAdjustY, main .getCurrentFrame().getWidth() / 1.5f,
 		 * main.getCurrentFrame().getHeight() / 1.5f);
 		 */
-		collider = new Rectangle((x * TILESIZE)+colliderAdjustX, (y * TILESIZE) + colliderAdjustY, main
-				.getCurrentFrame().getWidth() -4, main.getCurrentFrame().getHeight() / 1.5f);
+		collider = new Rectangle((x * TILESIZE) + colliderAdjustX,
+				(y * TILESIZE) + colliderAdjustY, main.getCurrentFrame().getWidth() - 4, main
+						.getCurrentFrame().getHeight() / 1.5f);
 
 		spotted = false;
 		isPlayerHidden = false;
@@ -154,7 +155,7 @@ public class Player extends Entity {
 		move.y *= (delta / 1000.f) * MOVE_SPEED;
 
 		float newX = (x + move.x) * TILESIZE;
-		float newY = (y + move.y) * TILESIZE;
+		float newY = (y + move.y) * TILESIZE + colliderAdjustY;
 
 		collider.setLocation(newX, newY);
 
@@ -165,9 +166,12 @@ public class Player extends Entity {
 			collider.setLocation((x * TILESIZE) + colliderAdjustX, (y * TILESIZE) + colliderAdjustY);
 		} else {
 			// else wall slide
+
 			Vector2f tempMove = moveBy(move);
+
 			x += tempMove.x;
 			y += tempMove.y;
+			collider.setLocation((x * TILESIZE) + colliderAdjustX, (y * TILESIZE) + colliderAdjustY);
 
 		}
 	}
@@ -191,43 +195,47 @@ public class Player extends Entity {
 																				// check
 																				// each
 																				// direction
-		float oldX = collider.getX(), oldY = collider.getY(); // Colliders old
-																// location (in
-																// the wall) is
+		float oldX = collider.getX(), oldY = collider.getY(); // Colliders
+																// old
+																// location
+																// (in
+																// the wall)
+																// is
 																// checked
+		if (absMove.x > 0 && absMove.y > 0) {
 
-		// Try left
-		collider.setLocation((oldX - tempMove.x), oldY);
-		if (map.isTileFree(collider))
-			isLeft = true;
+			// Try left
+			collider.setLocation((oldX - tempMove.x), oldY);
+			if (map.isTileFree(collider))
+				isLeft = true;
 
-		// Try right
-		collider.setLocation((oldX + tempMove.x), oldY);
-		if (map.isTileFree(collider))
-			isRight = true;
+			// Try right
+			collider.setLocation((oldX + tempMove.x), oldY);
+			if (map.isTileFree(collider))
+				isRight = true;
 
-		// Try up
-		collider.setLocation(oldX, (oldY - tempMove.y));
-		if (map.isTileFree(collider))
-			isUp = true;
+			// Try up
+			collider.setLocation(oldX, (oldY - tempMove.y));
+			if (map.isTileFree(collider))
+				isUp = true;
 
-		// Try down
-		collider.setLocation(oldX, (oldY + tempMove.y));
-		if (map.isTileFree(collider))
-			isDown = true;
+			// Try down
+			collider.setLocation(oldX, (oldY + tempMove.y));
+			if (map.isTileFree(collider))
+				isDown = true;
 
-		if (isLeft)
-			moveByVector.x = -absMove.x;
+			if (isLeft)
+				moveByVector.x = -absMove.x;
 
-		if (isRight)
-			moveByVector.x = absMove.x;
+			if (isRight)
+				moveByVector.x = absMove.x;
 
-		if (isUp)
-			moveByVector.y = -absMove.y;
+			if (isUp)
+				moveByVector.y = -absMove.y;
 
-		if (isDown)
-			moveByVector.y = absMove.y;
-
+			if (isDown)
+				moveByVector.y = absMove.y;
+		}
 		return moveByVector;
 	}
 
