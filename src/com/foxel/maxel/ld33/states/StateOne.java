@@ -123,7 +123,7 @@ public class StateOne extends BasicGameState {
 			if (spotted) {
 				spottedTimer += (delta / 1000.f);
 				if (spottedTimer > 0.2f) {
-					resetGame(gc, sbg);
+//					resetGame(gc, sbg);
 					spottedTimer = 0.f;
 				}
 			} else {
@@ -241,6 +241,7 @@ public class StateOne extends BasicGameState {
 		}
 		interactables.clear();
 		interactables = map.getInteractables();
+		targetCount = 0;
 		for (int i = 0; i < interactables.size(); ++i) {
 			if (interactables.get(i).getID() == -1)
 				++targetCount;
