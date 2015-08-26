@@ -19,7 +19,6 @@ public class Target extends Interactable {
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		System.out.println("hey");
 	}
 
 	@Override

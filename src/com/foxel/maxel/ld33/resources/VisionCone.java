@@ -72,6 +72,9 @@ public class VisionCone
 		float dist = cur[0] * cur[0] + cur[1] * cur[1];
 		float addX = (float) (Math.cos(angle) * resolution);
 		float addY = (float) (Math.sin(angle) * resolution);
+		float secAddX = (float) (Math.cos(angle) * secondaryResolution);
+		float secAddY = (float) (Math.sin(angle) * secondaryResolution);
+		
 		
 		float[] newPoint = new float[] {0, 0};
 		while (dist < sqrRange && hit == null) {
@@ -85,13 +88,12 @@ public class VisionCone
 			{
 				cur[0] -= addX;
 				cur[1] -= addY;
-				addX = (float) (Math.cos(angle) * secondaryResolution);
-				addY = (float) (Math.sin(angle) * secondaryResolution);
+				
 				
 				while (hit == null)
 				{
-					cur[0] += addX;
-					cur[1] += addY;
+					cur[0] += secAddX;
+					cur[1] += secAddY;
 					newPoint[0] = start[0] + cur[0];
 					newPoint[1] = start[1] + cur[1];
 					

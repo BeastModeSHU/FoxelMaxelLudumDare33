@@ -87,8 +87,9 @@ public class Renderer {
 		map.renderFloorLayer();
 
 		for (int i = 0; i < cones.size(); i++) {
-			if (camera.isInLargeView((new Vector2f(cones.get(i).getLocation().x, cones.get(i)
-					.getLocation().y))))
+			
+			if (camera.isInLargeView((new Vector2f(cones.get(i).getCenterX(), cones.get(i)
+					.getCenterY()))))
 				g.texture(cones.get(i), tex, true);
 		}
 

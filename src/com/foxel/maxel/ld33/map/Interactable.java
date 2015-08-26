@@ -24,7 +24,6 @@ public abstract class Interactable {
 	public Interactable(float x, float y, int ID) {
 		this.TILESIZE = Constants.TILESIZE;
 		this.x = x;
-		;
 		this.y = y;
 		this.ID = ID;
 

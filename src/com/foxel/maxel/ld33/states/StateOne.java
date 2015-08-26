@@ -149,7 +149,7 @@ public class StateOne extends BasicGameState {
 						|| interactables.get(i).getID() == Constants.RADIO_ID) {
 					NoiseMaker temp = (NoiseMaker) (interactables.get(i));
 					distractTenants(
-							new Vector2f(temp.getLocation().x + Constants.TILESIZE,
+							new Vector2f(temp.getLocation().x,
 									temp.getLocation().y), temp.getDistractionCircle(), i);
 				}
 

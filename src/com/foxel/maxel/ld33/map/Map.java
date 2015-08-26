@@ -83,29 +83,10 @@ public class Map implements TileBasedMap {
 
 	public boolean isPointFree(float[] point) {
 		boolean isFree = true;
-		for (int i = 0; i < map.getHeight(); ++i) {
-			for (int j = 0; j < map.getWidth(); ++j) {
-				if (blockedMap[j][i] == 1) {
-					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE).contains(
-							point[0], point[1]))
-						isFree = false;
-				}
-			}
-		}
-		return isFree;
-	}
-
-	public boolean isPointFree(Vector2f point) {
-		boolean isFree = true;
-		for (int i = 0; i < map.getHeight(); ++i) {
-			for (int j = 0; j < map.getWidth(); ++j) {
-				if (blockedMap[j][i] == 1) {
-					if (new Rectangle(j * TILESIZE, i * TILESIZE, TILESIZE, TILESIZE).contains(
-							point.x, point.y))
-						isFree = false;
-				}
-			}
-		}
+		int pointX = (int) (point[0]/64.f), pointY = (int) (point[1]/64.f);
+	
+		if(pointX > 0 && pointY > 0)
+			isFree = !(blockedMap[pointX][pointY] == 1);
 		return isFree;
 	}
 

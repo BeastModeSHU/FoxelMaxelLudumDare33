@@ -27,6 +27,7 @@ public class Tenant extends Entity {
 	 * Tenants of each house will use this class ### MACE ###
 	 */
 	private final float startX, startY;
+	private final int TILESIZE;
 	private double turnSpeed;
 	private double PI = Math.PI;
 	private double R2D = 180d / PI;
@@ -35,7 +36,6 @@ public class Tenant extends Entity {
 	public double angle = 0d;
 	private float movementSpeed = Constants.TENANT_MOVE_SPEED;
 	private int pathIndex;
-	private int tileSize;
 	private int actionTimer = 0;
 	private int actionTime = 0;
 	private int currentActionIndex;
@@ -60,7 +60,7 @@ public class Tenant extends Entity {
 	public Tenant(Map map, String ENTITY_TYPE, float x, float y, String name, Camera camera) {
 		super(map, ENTITY_TYPE);
 
-		tileSize = Constants.TILESIZE;
+		TILESIZE = Constants.TILESIZE;
 		this.startX = x;
 		this.startY = y;
 		this.name = name;
@@ -119,7 +119,7 @@ public class Tenant extends Entity {
 		path = new Path();
 		getActionPath();
 
-		vision = new VisionCone(x, y, (float) (degAngle * D2R), (float) (PI * 0.5d), 30, 32f, 4f,
+		vision = new VisionCone(x, y, (float) (degAngle * D2R), (float) (PI * 0.5d), 16, 32f, 16f,
 				map);
 		polys = vision.updateCone(x, y, (float) (degAngle * D2R));
 	}
@@ -240,6 +240,10 @@ public class Tenant extends Entity {
 					(int) (currentAction.position.x), (int) (currentAction.position.y));
 			pathIndex = 0;
 		}
+		
+		if(path == null) {
+			
+		}
 	}
 
 	private void resetActionTimer() {
@@ -249,8 +253,8 @@ public class Tenant extends Entity {
 	}
 
 	private Vector2f getPathVector() {
-
-		Vector2f entityLocation = new Vector2f(x, y);
+		int happy = 0;
+		Vector2f entityLocation = new Vector2f(x + happy, y);
 		Vector2f pathLocation = new Vector2f(path.getX(pathIndex), path.getY(pathIndex));
 		Vector2f pathVector = new Vector2f();
 
@@ -366,11 +370,12 @@ public class Tenant extends Entity {
 
 	public void distract(Vector2f source) {
 
+		int sourceX = 0, sourceY = 0;
 		if (source.x != currentAction.position.x && source.y != currentAction.position.y) {
-			if (source.x / 64.f >= 1.f && source.y / 64.f >= 1.f) {
-				source.x /= tileSize;
-				source.y /= tileSize;
 
+			if (source.x / 64.f >= 1.f && source.y / 64.f >= 1.f) {
+				source.x = (float) Math.ceil(source.x / 64.f); 
+				source.y = (float) Math.ceil(source.y / 64.f);
 				overrideActions.clear();
 				overrideTrigger = true;
 				overrideActions.add(new Action(0.5f, new Vector2f(x, y), true));
