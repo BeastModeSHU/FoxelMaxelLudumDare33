@@ -251,7 +251,7 @@ public class Tenant extends Entity {
 	private Vector2f getPathVector() {
 
 		Vector2f entityLocation = new Vector2f(x, y);
-		Vector2f pathLocation = new Vector2f();
+		Vector2f pathLocation = new Vector2f(path.getX(pathIndex), path.getY(pathIndex));
 		Vector2f pathVector = new Vector2f();
 
 		if (pathIndex < (path.getLength() - 1) && pathLocation.distance(entityLocation) < 0.1f) {
