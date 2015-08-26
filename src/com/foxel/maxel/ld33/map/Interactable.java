@@ -3,7 +3,6 @@ package com.foxel.maxel.ld33.map;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.geom.Vector2f;
 

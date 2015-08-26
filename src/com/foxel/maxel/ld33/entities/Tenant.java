@@ -370,7 +370,6 @@ public class Tenant extends Entity {
 
 	public void distract(Vector2f source) {
 
-		int sourceX = 0, sourceY = 0;
 		if (source.x != currentAction.position.x && source.y != currentAction.position.y) {
 
 			if (source.x / 64.f >= 1.f && source.y / 64.f >= 1.f) {

@@ -1,7 +1,5 @@
 package com.foxel.maxel.ld33.entities;
 
-import java.util.ArrayList;
-
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -15,7 +13,6 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.map.Map;
-import com.foxel.maxel.ld33.map.Interactable;
 
 public class Player extends Entity {
 	/*
@@ -29,7 +26,7 @@ public class Player extends Entity {
 	private boolean isPlayerHidden;
 	private String lastDirection;
 	private boolean isIdle = true;
-	private float colliderAdjustX, colliderAdjustY;
+	private float colliderAdjustY;
 
 	public Player(Map map, String ENTITTY_TYPE) {
 		super(map, ENTITTY_TYPE);
@@ -81,16 +78,14 @@ public class Player extends Entity {
 
 		// collider = new Rectangle(0, 0, 0, 0);
 
-		colliderAdjustX = 2;
-		colliderAdjustY = main.getCurrentFrame().getHeight() / 3.f;
-		/*
-		 * collider = new Rectangle((x * TILESIZE) + colliderAdjustX,
-		 * colliderAdjustY, main .getCurrentFrame().getWidth() / 1.5f,
-		 * main.getCurrentFrame().getHeight() / 1.5f);
-		 */
-		collider = new Rectangle((x * TILESIZE) + colliderAdjustX,
-				(y * TILESIZE) + colliderAdjustY, main.getCurrentFrame().getWidth() - 4, main
-						.getCurrentFrame().getHeight() / 1.5f);
+		colliderAdjustY = 10;
+
+		collider = new Rectangle(0, 0, main.getCurrentFrame().getWidth() - 14, main
+				.getCurrentFrame().getHeight() - 28);
+
+		collider.setCenterX((x * TILESIZE) + main.getCurrentFrame().getWidth() / 2);
+		collider.setCenterY(((y * TILESIZE) + main.getCurrentFrame().getHeight() / 2)
+				+ colliderAdjustY);
 
 		spotted = false;
 		isPlayerHidden = false;
@@ -100,6 +95,7 @@ public class Player extends Entity {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		if (!isPlayerHidden)
 			g.drawAnimation(main, x * TILESIZE, y * TILESIZE);
+//		g.fill(collider);
 	}
 
 	@Override
@@ -156,13 +152,15 @@ public class Player extends Entity {
 		float newX = (x + move.x) * TILESIZE;
 		float newY = (y + move.y) * TILESIZE + colliderAdjustY;
 
-		collider.setLocation(newX, newY);
-
+		collider.setCenterX(newX + main.getCurrentFrame().getWidth() / 2);
+		collider.setCenterY((newY + main.getCurrentFrame().getHeight() / 2) + colliderAdjustY);
 		if (map.isTileFree(collider)) {
 			// If the location is free move onto it
 			x += move.x;
 			y += move.y;
-			collider.setLocation((x * TILESIZE) + colliderAdjustX, (y * TILESIZE) + colliderAdjustY);
+			collider.setCenterX((x * TILESIZE) + main.getCurrentFrame().getWidth() / 2);
+			collider.setCenterY(((y * TILESIZE) + main.getCurrentFrame().getHeight() / 2)
+					+ colliderAdjustY);
 		} else {
 			// else wall slide
 
@@ -170,8 +168,9 @@ public class Player extends Entity {
 
 			x += tempMove.x;
 			y += tempMove.y;
-			collider.setLocation((x * TILESIZE) + colliderAdjustX, (y * TILESIZE) + colliderAdjustY);
-
+			collider.setCenterX((x * TILESIZE) + main.getCurrentFrame().getWidth() / 2);
+			collider.setCenterY(((y * TILESIZE) + main.getCurrentFrame().getHeight() / 2)
+					+ colliderAdjustY);
 		}
 	}
 
@@ -242,6 +241,10 @@ public class Player extends Entity {
 		spotted = true;
 	}
 
+	public void resetSpotted() {
+		spotted = false;
+	}
+
 	public boolean isSpotted() {
 		return spotted;
 	}
@@ -302,6 +305,12 @@ public class Player extends Entity {
 	@Override
 	public float getMaxY() {
 		return ((y * TILESIZE) + main.getCurrentFrame().getHeight());
+
+	}
+
+	public void setPlayerLocation(float x, float y) {
+		this.x = (x / TILESIZE) + 0.5f;
+		this.y = y / TILESIZE + 0.2f;
 
 	}
 

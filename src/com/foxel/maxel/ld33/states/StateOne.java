@@ -17,9 +17,11 @@ import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.entities.Entity;
 import com.foxel.maxel.ld33.entities.Player;
 import com.foxel.maxel.ld33.entities.Tenant;
+import com.foxel.maxel.ld33.map.HidingPlace;
 import com.foxel.maxel.ld33.map.Interactable;
 import com.foxel.maxel.ld33.map.NoiseMaker;
 import com.foxel.maxel.ld33.map.Map;
+import com.foxel.maxel.ld33.map.Target;
 import com.foxel.maxel.ld33.resources.Camera;
 import com.foxel.maxel.ld33.resources.XMLData;
 import com.foxel.maxel.ld33.rendering.Renderer;
@@ -96,29 +98,33 @@ public class StateOne extends BasicGameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		if (hasBegun) {
+			boolean spotted = false;
 			if (gc.getInput().isKeyPressed(Input.KEY_ESCAPE))
 				gc.exit();
 			allPolys.clear();
+
 			for (int i = 0; i < renderable.size(); ++i) {
 				renderable.get(i).update(gc, sbg, delta);
 				Tenant t = null;
 				if (renderable.get(i) instanceof Tenant)
 					t = (Tenant) renderable.get(i);
 				if (t != null) {
+
 					for (int j = 0; j < t.polys.length; j++) {
 						allPolys.add(t.polys[j]);
 						if (t.polys[j].intersects(player.getCollider()) && !player.isPlayerHiding()) {
 							player.spotted();
+							spotted = true;
 							// ADD TENANT REACTION TO SPOTTING PLAYER HERE
 						}
 					}
 				}
 			}
 
-			if (player.isSpotted()) {
+			if (spotted) {
 				spottedTimer += (delta / 1000.f);
 				if (spottedTimer > 0.2f) {
-					// resetGame(gc, sbg);
+					resetGame(gc, sbg);
 					spottedTimer = 0.f;
 				}
 			} else {
@@ -141,42 +147,65 @@ public class StateOne extends BasicGameState {
 	}
 
 	private void checkInteractables() {
+		ArrayList<Interactable> tempList = new ArrayList<Interactable>();
 
 		for (int i = 0; i < interactables.size(); ++i) {
 			if (interactables.get(i).getActivationCircle().intersects(player.getCollider())) {
-
-				if (interactables.get(i).getID() == Constants.TV_ID
-						|| interactables.get(i).getID() == Constants.RADIO_ID) {
-					NoiseMaker temp = (NoiseMaker) (interactables.get(i));
-					distractTenants(
-							new Vector2f(temp.getLocation().x,
-									temp.getLocation().y), temp.getDistractionCircle(), i);
-				}
-
-				if (interactables.get(i).getID() == Constants.BIN_ID
-						|| interactables.get(i).getID() == Constants.FRIDGE_ID
-						|| interactables.get(i).getID() == Constants.CHAIR_ID
-						|| interactables.get(i).getID() == Constants.CLOSET_ID) {
-					hidePlayer(i);
-				}
-
-				if (interactables.get(i).getID() == -1) {
-					killTarget(i);
-				}
+				tempList.add(interactables.get(i));
 			}
 
 		}
-	}
+		Interactable tempInt = null;
 
-	private void killTarget(int index) {
-		
-		if (interactables.get(index).getID() == -1) {
-			targetCount -= 1;
-			interactables.get(index).activate();
+		if (tempList.size() > 0) {
+			float closestDistance = new Vector2f(tempList.get(0).getLocation().x + Constants.TILESIZE/2, tempList.get(0).getLocation().y)
+					.distanceSquared(player.getPixelLocation());
+			tempInt = tempList.get(0);
+
+			if (tempList.size() > 1) {
+				tempInt = tempList.get(0);
+
+				for (int i = 1; i < tempList.size(); ++i) {
+					float thisDistance = new Vector2f(tempList.get(i).getLocation().x + Constants.TILESIZE/2, tempList.get(i).getLocation().y)
+					.distanceSquared(player.getPixelLocation());
+					if (thisDistance < closestDistance) {
+						closestDistance = thisDistance;
+						tempInt = tempList.get(i);
+					}
+				}
+
+			}
+		}
+		if (tempInt != null) {
+			if (tempInt.getID() == Constants.TV_ID || tempInt.getID() == Constants.RADIO_ID) {
+
+				NoiseMaker temp = (NoiseMaker) (tempInt);
+				distractTenants(new Vector2f(temp.getLocation().x, temp.getLocation().y),
+						temp.getDistractionCircle());
+			}
+
+			if (tempInt.getID() == Constants.BIN_ID || tempInt.getID() == Constants.FRIDGE_ID
+					|| tempInt.getID() == Constants.CHAIR_ID
+					|| tempInt.getID() == Constants.CLOSET_ID) {
+
+				hidePlayer(tempInt);
+			}
+
+			if (tempInt.getID() == -1) {
+				killTarget((Target) tempInt);
+			}
 		}
 	}
 
-	private void distractTenants(Vector2f source, Circle collider, int ID) {
+	private void killTarget(Target target) {
+
+		if (target.isTargetAlive()) {
+			targetCount -= 1;
+			target.activate();
+		}
+	}
+
+	private void distractTenants(Vector2f source, Circle collider) {
 
 		for (int i = 0; i < renderable.size(); ++i) {
 			if (renderable.get(i).getClass().getSimpleName().equals(Constants.ENTITY_TENANT)) {
@@ -189,13 +218,15 @@ public class StateOne extends BasicGameState {
 		}
 	}
 
-	private void hidePlayer(int index) {
-		if (!player.isPlayerHiding() && !interactables.get(index).isActivated()) {
-			interactables.get(index).activate();
+	private void hidePlayer(Interactable hidingPlace) {
+		if (!player.isPlayerHiding() && !hidingPlace.isActivated()) {
+			hidingPlace.activate();
 			player.setHidden(true);
+			player.setPlayerLocation(hidingPlace.getLocation().x, hidingPlace.getLocation().y);
+
 		} else if (player.isPlayerHiding()) {
 			player.setHidden(false);
-			interactables.get(index).deactivate();
+			hidingPlace.deactivate();
 		}
 	}
 
@@ -211,6 +242,10 @@ public class StateOne extends BasicGameState {
 		}
 		interactables.clear();
 		interactables = map.getInteractables();
+		for (int i = 0; i < interactables.size(); ++i) {
+			if (interactables.get(i).getID() == -1)
+				++targetCount;
+		}
 		renderer.setInteractables(interactables);
 	}
 }

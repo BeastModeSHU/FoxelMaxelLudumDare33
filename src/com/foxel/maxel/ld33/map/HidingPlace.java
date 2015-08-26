@@ -27,10 +27,11 @@ public class HidingPlace extends Interactable {
 
 	@Override
 	public void render(Graphics g) throws SlickException {
-		g.drawImage(image, x + image.getWidth() / 2, y - image.getHeight() /2.5f);
+		g.drawImage(image, x + image.getWidth() / 2, y - image.getHeight() / 2.5f);
 		if (this.activated) {
-			g.drawImage(hiding, x+hiding.getWidth()/2,y + hiding.getHeight()/2);
+			g.drawImage(hiding, x + hiding.getWidth() / 2, y - image.getHeight() / 3);
 		}
+//		g.draw(this.activationCircle);
 	}
 
 }

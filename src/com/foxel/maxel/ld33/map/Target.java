@@ -4,6 +4,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.geom.Circle;
 
 import com.foxel.maxel.ld33.constants.Constants;
 
@@ -24,9 +25,10 @@ public class Target extends Interactable {
 	@Override
 	public void render(Graphics g) throws SlickException {
 		if (!activated)
-			g.drawImage(alive, x + alive.getWidth() / 2, y + alive.getHeight() / 2);
+			g.drawImage(alive, x + alive.getWidth()/2, y - alive.getHeight()/4);
 		else
-			g.drawImage(dead, x + dead.getWidth() / 2, y + dead.getHeight() / 2);
+			g.drawImage(dead, x + dead.getWidth() / 2, y);
+//		g.draw(activationCircle);
 	}
 	public boolean isTargetAlive(){ 
 		return !activated; //return the opposite of activate to indicate entity is dead
