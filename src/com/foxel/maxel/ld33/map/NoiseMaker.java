@@ -20,7 +20,7 @@ public class NoiseMaker extends Interactable {
 		super(x, y, ID);
 		distractionCircle = new Circle(x + Constants.TILESIZE, y, MAX_RANGE);
 		try {
-			image = new SpriteSheet(Constants.OBJECT_SPRITESEET_LOC, TILESIZE, TILESIZE * 2)
+			image = new SpriteSheet(Constants.OBJECT_SPRITESHEET_LOC, TILESIZE, TILESIZE * 2)
 					.getSubImage(ID, 0);
 			this.activationCircle = new Circle(x + Constants.TILESIZE,y+Constants.TILESIZE/2,Constants.ACTIVATION_RANGE);
 		} catch (SlickException e) {
@@ -36,6 +36,5 @@ public class NoiseMaker extends Interactable {
 	public void render(Graphics g) throws SlickException {
 		g.drawImage(image, (x - image.getWidth() / 2) + Constants.TILESIZE, y - image.getHeight()
 				/ 2.5f);
-		g.draw(distractionCircle);
 	}
 }

@@ -51,7 +51,7 @@ public class Constants {
 	public static final String TENANT_BEHAVIOURS_LOC = "res//tenants//tenant_behaviours.xml";
 	public static final String TILESET_LOCATION = "res//map//tileset.png";
 	public static final String TARGET_SPRITESHEET_LOC = "res//target//target.png";
-	public static final String OBJECT_SPRITESEET_LOC = "res//map//objects.png";
+	public static final String OBJECT_SPRITESHEET_LOC = "res//map//objects.png";
 	public static final String HIDING_ICON = "res//icons//icon0001.png";
 	public static final String PRESS_BUTTON_ICON = "res//icons//icon0003.png";
 	

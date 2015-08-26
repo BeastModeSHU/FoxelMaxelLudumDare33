@@ -15,7 +15,7 @@ public class HidingPlace extends Interactable {
 		super(x, y, ID);
 		activationCircle = new Circle(x, y, 0);
 		try {
-			image = new SpriteSheet(Constants.OBJECT_SPRITESEET_LOC, TILESIZE, TILESIZE * 2)
+			image = new SpriteSheet(Constants.OBJECT_SPRITESHEET_LOC, TILESIZE, TILESIZE * 2)
 					.getSubImage(ID, 0);
 			hiding = new Image(Constants.HIDING_ICON);
 			activationCircle.setRadius(image.getWidth());
