@@ -14,7 +14,7 @@ public class NoiseMaker extends Interactable {
 	 */
 	private Circle distractionCircle;
 	private Image image;
-	private final int MAX_RANGE = 300;
+	private final int MAX_RANGE = 320;
 
 	public NoiseMaker(float x, float y, int ID) {
 		super(x, y, ID);
@@ -36,5 +36,6 @@ public class NoiseMaker extends Interactable {
 	public void render(Graphics g) throws SlickException {
 		g.drawImage(image, (x - image.getWidth() / 2) + Constants.TILESIZE, y - image.getHeight()
 				/ 2.5f);
+		g.draw(distractionCircle);
 	}
 }
