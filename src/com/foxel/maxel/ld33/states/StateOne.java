@@ -17,7 +17,6 @@ import com.foxel.maxel.ld33.constants.Constants;
 import com.foxel.maxel.ld33.entities.Entity;
 import com.foxel.maxel.ld33.entities.Player;
 import com.foxel.maxel.ld33.entities.Tenant;
-import com.foxel.maxel.ld33.map.HidingPlace;
 import com.foxel.maxel.ld33.map.Interactable;
 import com.foxel.maxel.ld33.map.NoiseMaker;
 import com.foxel.maxel.ld33.map.Map;
@@ -124,7 +123,7 @@ public class StateOne extends BasicGameState {
 			if (spotted) {
 				spottedTimer += (delta / 1000.f);
 				if (spottedTimer > 0.2f) {
-					resetGame(gc, sbg);
+//					resetGame(gc, sbg);
 					spottedTimer = 0.f;
 				}
 			} else {
