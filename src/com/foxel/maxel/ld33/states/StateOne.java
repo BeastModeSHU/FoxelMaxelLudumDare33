@@ -123,7 +123,7 @@ public class StateOne extends BasicGameState {
 			if (spotted) {
 				spottedTimer += (delta / 1000.f);
 				if (spottedTimer > 0.2f) {
-//					resetGame(gc, sbg);
+					resetGame(gc, sbg);
 					spottedTimer = 0.f;
 				}
 			} else {
